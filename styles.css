@@ -1,0 +1,2873 @@
+/* ==========================================================================
+   MercyFiat MedSuite - Haute Couture Design System (3 Prestige Themes)
+   ========================================================================== */
+
+:root {
+    /* Couleurs Thème Zen Clinique Clair (Warm Alabaster) */
+    --bg-main: #f9f8f6;
+    --bg-sidebar: #eae6df; /* Teinte bois de bouleau doux */
+    --bg-card: rgba(255, 255, 255, 0.95);
+    --border-color: rgba(212, 207, 198, 0.8);
+    --text-primary: #2d3748;
+    --text-secondary: #718096;
+    
+    /* Accents */
+    --accent-blue: #1e3a8a; /* Royal Navy Blue */
+    --accent-teal: #4b807b;
+    --accent-coral: #d48b7b;
+    --accent-gold: #c3a17e;
+    
+    /* Alertes */
+    --success: #689f38;
+    --warning: #f57c00;
+    --danger: #d32f2f;
+    
+    /* Ombres & Arrondis */
+    --shadow-soft: 0 4px 20px -2px rgba(100, 100, 100, 0.08), 0 2px 8px -1px rgba(100, 100, 100, 0.04);
+    --shadow-hover: 0 20px 25px -5px rgba(100, 100, 100, 0.12), 0 10px 10px -5px rgba(100, 100, 100, 0.06);
+    --radius-lg: 16px;
+    --radius-md: 10px;
+    --radius-sm: 6px;
+    
+    /* Transitions */
+    --transition-fast: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-normal: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Thème Sombre Premium - Nuit Obsidienne (Obsidian Midnight) */
+body.dark-theme {
+    --bg-main: #060814; /* Deep charcoal blue-black */
+    --bg-sidebar: #0b0f19; /* Obsidian dark slate */
+    --bg-card: #111827; /* Dark anthracite backing */
+    --border-color: #1f293d; /* Slate border */
+    --text-primary: #f1f5f9;
+    --text-secondary: #94a3b8;
+    
+    --accent-blue: #38bdf8; /* Glowing light blue / teal */
+    --accent-teal: #2dd4bf;
+    --accent-coral: #fb7185;
+    --accent-gold: #f59e0b;
+    
+    --shadow-soft: 0 4px 20px -2px rgba(0, 0, 0, 0.6), 0 2px 8px -1px rgba(0, 0, 0, 0.4);
+    --shadow-hover: 0 20px 25px -5px rgba(0, 0, 0, 0.7), 0 10px 10px -5px rgba(0, 0, 0, 0.5);
+}
+
+/* Thème Émeraude Impérial (Forest & Gold) */
+body.emerald-theme {
+    --bg-main: #04100c; /* Luxurious deep forest green */
+    --bg-sidebar: #071712; /* Dark pine-emerald */
+    --bg-card: #0a221a; /* Royal emerald card backings */
+    --border-color: #11362b; /* Fine mint-emerald borders */
+    --text-primary: #e6f4f1; /* Soft minty white */
+    --text-secondary: #8ca8a0; /* Muted pine needles */
+    
+    --accent-blue: #fbbf24; /* Burnished Gold */
+    --accent-teal: #10b981; /* Radiant Emerald Mint */
+    --accent-coral: #f43f5e;
+    --accent-gold: #f59e0b;
+    
+    --shadow-soft: 0 4px 20px -2px rgba(0, 0, 0, 0.6), 0 2px 8px -1px rgba(0, 0, 0, 0.4);
+    --shadow-hover: 0 20px 25px -5px rgba(0, 0, 0, 0.7), 0 10px 10px -5px rgba(0, 0, 0, 0.5);
+}
+
+/* ==========================================================================
+   COORDINATION DE SPECIFICITE VISUELLE ET COMPOSANTS THÉMATISÉS
+   ========================================================================== */
+
+/* Overrides d'Inputs, Sélecteurs, et Textareas */
+body.dark-theme input,
+body.dark-theme select,
+body.dark-theme textarea,
+body.emerald-theme input,
+body.emerald-theme select,
+body.emerald-theme textarea {
+    background-color: rgba(17, 24, 39, 0.95) !important;
+    color: var(--text-primary) !important;
+    border-color: var(--border-color) !important;
+}
+
+body.emerald-theme input,
+body.emerald-theme select,
+body.emerald-theme textarea {
+    background-color: #071712 !important;
+}
+
+body.dark-theme input:focus,
+body.dark-theme select:focus,
+body.dark-theme textarea:focus,
+body.emerald-theme input:focus,
+body.emerald-theme select:focus,
+body.emerald-theme textarea:focus {
+    background-color: rgba(31, 41, 55, 0.95) !important;
+    border-color: var(--accent-blue) !important;
+    box-shadow: 0 0 0 3px rgba(56, 178, 172, 0.25) !important;
+}
+
+body.emerald-theme input:focus,
+body.emerald-theme select:focus,
+body.emerald-theme textarea:focus {
+    background-color: #0c2b21 !important;
+}
+
+body.dark-theme input::placeholder,
+body.dark-theme textarea::placeholder {
+    color: #475569 !important;
+}
+
+body.emerald-theme input::placeholder,
+body.emerald-theme textarea::placeholder {
+    color: #4c6c63 !important;
+}
+
+/* Raccords Éléments de structure */
+body.dark-theme .card,
+body.dark-theme aside,
+body.dark-theme main,
+body.emerald-theme .card,
+body.emerald-theme aside,
+body.emerald-theme main {
+    transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Registres, Tableaux et Entrées */
+body.dark-theme th,
+body.emerald-theme th {
+    background-color: var(--bg-sidebar) !important;
+    color: var(--text-primary) !important;
+}
+
+body.dark-theme td,
+body.emerald-theme td {
+    border-bottom: 1px solid var(--border-color) !important;
+    color: var(--text-primary) !important;
+}
+
+body.dark-theme tr:hover {
+    background-color: rgba(255, 255, 255, 0.02) !important;
+}
+
+body.emerald-theme tr:hover {
+    background-color: rgba(16, 185, 129, 0.05) !important;
+}
+
+/* Surcharges Menu Sidebar Navigation */
+body.dark-theme .nav-item,
+body.emerald-theme .nav-item {
+    color: var(--text-secondary) !important;
+    background-color: transparent !important;
+    border-left: 4px solid transparent !important;
+}
+
+body.dark-theme .nav-item:hover,
+body.emerald-theme .nav-item:hover {
+    background-color: rgba(255, 255, 255, 0.03) !important;
+    color: var(--accent-blue) !important;
+}
+
+body.dark-theme .nav-item.active {
+    background-color: rgba(56, 189, 248, 0.08) !important;
+    color: var(--accent-blue) !important;
+    border-left: 4px solid var(--accent-blue) !important;
+}
+
+body.emerald-theme .nav-item.active {
+    background-color: rgba(251, 191, 36, 0.08) !important;
+    color: var(--accent-blue) !important;
+    border-left: 4px solid var(--accent-blue) !important;
+}
+
+body.dark-theme .brand-text h2,
+body.emerald-theme .brand-text h2 {
+    color: var(--text-primary) !important;
+}
+
+body.dark-theme .doctor-profile,
+body.emerald-theme .doctor-profile {
+    background-color: rgba(0, 0, 0, 0.25) !important;
+    border-color: var(--border-color) !important;
+}
+
+body.dark-theme .doctor-profile span,
+body.emerald-theme .doctor-profile span {
+    color: var(--text-primary) !important;
+}
+
+/* Autocomplétion et suggestions */
+body.dark-theme .autocomplete-suggestions,
+body.emerald-theme .autocomplete-suggestions {
+    background-color: var(--bg-card) !important;
+    border-color: var(--border-color) !important;
+}
+
+body.dark-theme .autocomplete-suggestion,
+body.emerald-theme .autocomplete-suggestion {
+    color: var(--text-primary) !important;
+    border-bottom: 1px solid var(--border-color) !important;
+}
+
+body.dark-theme .autocomplete-suggestion:hover,
+body.emerald-theme .autocomplete-suggestion:hover,
+body.dark-theme .autocomplete-suggestion.active,
+body.emerald-theme .autocomplete-suggestion.active {
+    background-color: var(--bg-main) !important;
+    color: var(--accent-blue) !important;
+}
+
+body.dark-theme .autocomplete-suggestion .suggestion-sub,
+body.emerald-theme .autocomplete-suggestion .suggestion-sub {
+    color: var(--text-secondary) !important;
+}
+
+/* Raccords UI Assistants et alertes */
+body.dark-theme .ai-results-card,
+body.emerald-theme .ai-results-card {
+    background-color: var(--bg-sidebar) !important;
+}
+
+body.dark-theme .dropdown-menu-content,
+body.emerald-theme .dropdown-menu-content {
+    background-color: var(--bg-card) !important;
+    border-color: var(--border-color) !important;
+}
+
+body.dark-theme .dropdown-menu-content button,
+body.emerald-theme .dropdown-menu-content button {
+    color: var(--text-primary) !important;
+}
+
+body.dark-theme .dropdown-menu-content button:hover,
+body.emerald-theme .dropdown-menu-content button:hover {
+    background-color: var(--bg-main) !important;
+    color: var(--accent-blue) !important;
+}
+
+body.dark-theme .dropdown-trigger,
+body.emerald-theme .dropdown-trigger {
+    background-color: rgba(255, 255, 255, 0.05) !important;
+    color: var(--text-primary) !important;
+}
+
+body.dark-theme .dropdown-trigger:hover,
+body.emerald-theme .dropdown-trigger:hover {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Surcharges Sidebar Impression A4 (Modal Settings) */
+body.dark-theme .print-settings-sidebar,
+body.emerald-theme .print-settings-sidebar {
+    background-color: var(--bg-sidebar) !important;
+    border-right-color: var(--border-color) !important;
+    color: var(--text-primary) !important;
+}
+
+body.dark-theme .print-settings-sidebar h3,
+body.dark-theme .print-settings-sidebar label,
+body.emerald-theme .print-settings-sidebar h3,
+body.emerald-theme .print-settings-sidebar label {
+    color: var(--text-primary) !important;
+}
+
+body.dark-theme .print-settings-sidebar select,
+body.dark-theme .print-settings-sidebar input,
+body.emerald-theme .print-settings-sidebar select,
+body.emerald-theme .print-settings-sidebar input {
+    background-color: rgba(17, 24, 39, 0.95) !important;
+    color: var(--text-primary) !important;
+    border-color: var(--border-color) !important;
+}
+
+body.emerald-theme .print-settings-sidebar select,
+body.emerald-theme .print-settings-sidebar input {
+    background-color: #071712 !important;
+}
+
+/* Surcharges Dossier Médical Électronique (DME Drawer) */
+body.dark-theme #patient-dme-drawer .dme-drawer-content,
+body.emerald-theme #patient-dme-drawer .dme-drawer-content {
+    background-color: var(--bg-card) !important;
+    border-left-color: var(--border-color) !important;
+}
+
+body.dark-theme #patient-dme-drawer h3,
+body.dark-theme #patient-dme-drawer h4,
+body.dark-theme #patient-dme-drawer strong,
+body.dark-theme #patient-dme-drawer span,
+body.emerald-theme #patient-dme-drawer h3,
+body.emerald-theme #patient-dme-drawer h4,
+body.emerald-theme #patient-dme-drawer strong,
+body.emerald-theme #patient-dme-drawer span {
+    color: var(--text-primary) !important;
+}
+
+body.dark-theme #patient-dme-drawer p,
+body.emerald-theme #patient-dme-drawer p {
+    color: var(--text-secondary) !important;
+}
+
+body.dark-theme #patient-dme-drawer p strong,
+body.emerald-theme #patient-dme-drawer p strong {
+    color: var(--text-primary) !important;
+}
+
+body.dark-theme #patient-dme-drawer .dme-section-card,
+body.emerald-theme #patient-dme-drawer .dme-section-card {
+    background: var(--bg-main) !important;
+    border-color: var(--border-color) !important;
+}
+
+body.dark-theme #patient-dme-drawer .dme-section-title,
+body.emerald-theme #patient-dme-drawer .dme-section-title {
+    border-bottom-color: var(--border-color) !important;
+    color: var(--text-primary) !important;
+}
+
+body.dark-theme #patient-dme-drawer .dme-item-link,
+body.emerald-theme #patient-dme-drawer .dme-item-link {
+    background-color: var(--bg-card) !important;
+    border-color: var(--border-color) !important;
+}
+
+body.dark-theme #patient-dme-drawer .dme-item-link span,
+body.emerald-theme #patient-dme-drawer .dme-item-link span {
+    color: var(--text-primary) !important;
+}
+
+body.dark-theme #patient-dme-drawer .dme-item-link small,
+body.emerald-theme #patient-dme-drawer .dme-item-link small {
+    color: var(--text-secondary) !important;
+}
+
+body.dark-theme #patient-dme-drawer .dme-item-link:hover,
+body.emerald-theme #patient-dme-drawer .dme-item-link:hover {
+    background-color: var(--border-color) !important;
+    border-color: var(--accent-blue) !important;
+}
+
+/* Surcharges En-tête de section */
+body.dark-theme .content-header h1,
+body.dark-theme .content-header p,
+body.dark-theme .header-title h1,
+body.dark-theme .header-title p,
+body.emerald-theme .content-header h1,
+body.emerald-theme .content-header p,
+body.emerald-theme .header-title h1,
+body.emerald-theme .header-title p {
+    color: var(--text-primary) !important;
+}
+
+body.dark-theme .header-title h1,
+body.emerald-theme .header-title h1 {
+    font-weight: 800 !important;
+}
+
+body.dark-theme .header-title p,
+body.emerald-theme .header-title p {
+    color: var(--text-secondary) !important;
+}
+
+/* Surcharges des boutons secondaires */
+body.dark-theme .btn-secondary,
+body.emerald-theme .btn-secondary {
+    background-color: rgba(255, 255, 255, 0.05) !important;
+    border-color: var(--border-color) !important;
+    color: var(--text-primary) !important;
+}
+
+body.dark-theme .btn-secondary:hover,
+body.emerald-theme .btn-secondary:hover {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    color: var(--accent-blue) !important;
+}
+
+/* Surcharges des widgets BI du Dashboard */
+body.dark-theme .dashboard-grid .kpi-card,
+body.emerald-theme .dashboard-grid .kpi-card {
+    background-color: var(--bg-card) !important;
+}
+
+body.dark-theme .kpi-info .kpi-value,
+body.emerald-theme .kpi-info .kpi-value {
+    color: var(--text-primary) !important;
+}
+
+body.dark-theme h3,
+body.emerald-theme h3 {
+    color: var(--text-primary) !important;
+}
+
+body.dark-theme label,
+body.emerald-theme label {
+    color: var(--text-primary) !important;
+}
+
+/* Surcharges du formulaire et des cartes de saisie */
+body.dark-theme .form-card,
+body.emerald-theme .form-card {
+    background-color: var(--bg-card) !important;
+    border-color: var(--border-color) !important;
+}
+
+body.dark-theme .form-card-title,
+body.emerald-theme .form-card-title {
+    color: var(--accent-blue) !important;
+    border-bottom-color: var(--border-color) !important;
+}
+
+body.dark-theme .item-row,
+body.emerald-theme .item-row {
+    background-color: rgba(0, 0, 0, 0.25) !important;
+    border-color: var(--border-color) !important;
+}
+
+body.dark-theme .item-row-header,
+body.emerald-theme .item-row-header {
+    border-bottom-color: var(--border-color) !important;
+    color: var(--text-secondary) !important;
+}
+
+body.dark-theme .item-subtotal,
+body.emerald-theme .item-subtotal {
+    background-color: rgba(0, 0, 0, 0.4) !important;
+    color: var(--text-primary) !important;
+    border-color: var(--border-color) !important;
+}
+
+/* Raccords styles AI Assistant */
+body.dark-theme #ai-results-card,
+body.emerald-theme #ai-results-card {
+    background-color: rgba(0, 0, 0, 0.2) !important;
+    border-color: var(--border-color) !important;
+}
+
+body.dark-theme #ai-results-card div,
+body.emerald-theme #ai-results-card div {
+    color: var(--text-primary) !important;
+}
+
+/* Surcharges du modal de création de patient */
+body.dark-theme #new-patient-modal .card,
+body.dark-theme #new-patient-modal > div,
+body.emerald-theme #new-patient-modal .card,
+body.emerald-theme #new-patient-modal > div {
+    background-color: var(--bg-card) !important;
+    border-color: var(--border-color) !important;
+    color: var(--text-primary) !important;
+}
+
+body.dark-theme #new-patient-modal h3,
+body.dark-theme #new-patient-modal label,
+body.emerald-theme #new-patient-modal h3,
+body.emerald-theme #new-patient-modal label {
+    color: var(--text-primary) !important;
+}
+
+/* Règle absolue : L'Aperçu A4 reste TOUJOURS blanc pour simuler le papier physique réel ! */
+body.dark-theme #modal-a4-sheet,
+body.dark-theme .preview-panel > div,
+body.emerald-theme #modal-a4-sheet,
+body.emerald-theme .preview-panel > div {
+    background-color: #ffffff !important;
+    color: #1a202c !important;
+}
+
+body.dark-theme .preview-panel > div *,
+body.dark-theme #modal-a4-sheet *,
+body.emerald-theme .preview-panel > div *,
+body.emerald-theme #modal-a4-sheet * {
+    color: inherit;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Outfit', 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background-color: var(--bg-main);
+    color: var(--text-primary);
+    line-height: 1.5;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Layout Principal */
+.app-container {
+    display: flex;
+    flex-direction: row;
+    min-height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+}
+
+/* ===========================================================================
+   SIDEBAR PREMIUM - Glassmorphism + Micro-Animations + Relief Actif
+   =========================================================================== */
+.sidebar {
+
+    width: 280px;
+    background-color: var(--bg-sidebar);
+    border-right: 1px solid var(--border-color);
+    padding: 28px 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex-shrink: 0;
+    z-index: 100;
+    backdrop-filter: blur(20px) saturate(1.4);
+    -webkit-backdrop-filter: blur(20px) saturate(1.4);
+    box-shadow: 4px 0 32px rgba(0, 0, 0, 0.04), 1px 0 0 rgba(255,255,255,0.6) inset;
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    overflow: hidden;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s ease;
+}
+
+/* Ligne subtile de séparation lumineuse sur le bord droit */
+.sidebar::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 1px;
+    height: 100%;
+    background: linear-gradient(to bottom, transparent 0%, rgba(255,255,255,0.4) 30%, rgba(255,255,255,0.2) 70%, transparent 100%);
+    pointer-events: none;
+}
+
+body.dark-theme .sidebar {
+    box-shadow: 4px 0 40px rgba(0, 0, 0, 0.5), 1px 0 0 rgba(255,255,255,0.04) inset;
+    background: linear-gradient(180deg, #0b0f19 0%, #080c16 100%);
+}
+
+body.dark-theme .sidebar::after {
+    background: linear-gradient(to bottom, transparent 0%, rgba(56,189,248,0.12) 30%, rgba(56,189,248,0.06) 70%, transparent 100%);
+}
+
+body.emerald-theme .sidebar {
+    box-shadow: 4px 0 40px rgba(0, 0, 0, 0.5), 1px 0 0 rgba(16,185,129,0.08) inset;
+    background: linear-gradient(180deg, #071712 0%, #050e0a 100%);
+}
+
+body.emerald-theme .sidebar::after {
+    background: linear-gradient(to bottom, transparent 0%, rgba(16,185,129,0.15) 30%, rgba(16,185,129,0.07) 70%, transparent 100%);
+}
+
+/* Brand / Logo */
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    margin-bottom: 36px;
+    padding: 10px 12px;
+    border-radius: var(--radius-md);
+    transition: var(--transition-normal);
+    cursor: default;
+}
+
+.brand:hover {
+    background-color: rgba(74, 111, 165, 0.04);
+}
+
+.brand-icon {
+    width: 44px;
+    height: 44px;
+    background: linear-gradient(135deg, var(--accent-blue) 0%, var(--accent-teal) 100%);
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 900;
+    font-size: 1.2rem;
+    box-shadow: 0 6px 20px rgba(74, 111, 165, 0.35), 0 2px 6px rgba(74, 111, 165, 0.2);
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    position: relative;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.brand-icon::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.15) 50%, transparent 70%);
+    transform: rotate(45deg) translateX(-100%);
+    transition: transform 0.6s ease;
+}
+
+.brand:hover .brand-icon::before {
+    transform: rotate(45deg) translateX(100%);
+}
+
+.brand:hover .brand-icon {
+    transform: rotate(-6deg) scale(1.08);
+    box-shadow: 0 10px 28px rgba(74, 111, 165, 0.45), 0 4px 10px rgba(74, 111, 165, 0.25);
+}
+
+.brand-text h2 {
+    font-size: 1.08rem;
+    font-weight: 900;
+    letter-spacing: 0.3px;
+    color: var(--text-primary);
+    line-height: 1.2;
+}
+
+.brand-text span {
+    font-size: 0.68rem;
+    color: var(--text-secondary);
+    font-weight: 600;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    opacity: 0.8;
+}
+
+/* Menu de navigation */
+.nav-menu {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    flex-grow: 1;
+}
+
+/* Item de navigation principal */
+.nav-item {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    padding: 11px 14px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.88rem;
+    color: var(--text-secondary);
+    transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid transparent;
+    position: relative;
+    letter-spacing: 0.1px;
+    user-select: none;
+}
+
+/* Hover - effet carte légère */
+.nav-item:hover {
+    background-color: rgba(74, 111, 165, 0.06);
+    color: var(--text-primary);
+    border-color: rgba(74, 111, 165, 0.1);
+    transform: translateX(3px);
+    box-shadow: 0 2px 8px rgba(74, 111, 165, 0.06);
+}
+
+/* Actif - carte en relief avec dégradé et lueur */
+.nav-item.active {
+    background: linear-gradient(135deg,
+        rgba(30, 58, 138, 0.12) 0%,
+        rgba(74, 128, 123, 0.08) 100%);
+    color: var(--accent-blue);
+    border-color: rgba(30, 58, 138, 0.18);
+    font-weight: 800;
+    box-shadow:
+        0 4px 16px rgba(30, 58, 138, 0.1),
+        0 1px 4px rgba(30, 58, 138, 0.08),
+        inset 0 1px 0 rgba(255,255,255,0.5);
+    transform: translateX(2px);
+}
+
+/* Indicateur actif : barre gauche lumineuse avec lueur */
+.nav-item.active::before {
+    content: '';
+    position: absolute;
+    left: -1px;
+    top: 20%;
+    bottom: 20%;
+    width: 3px;
+    border-radius: 0 3px 3px 0;
+    background: linear-gradient(180deg, var(--accent-blue) 0%, var(--accent-teal) 100%);
+    box-shadow: 0 0 10px rgba(30, 58, 138, 0.5), 0 0 20px rgba(30, 58, 138, 0.2);
+    transition: all 0.3s ease;
+}
+
+body.dark-theme .nav-item:hover {
+    background-color: rgba(56, 189, 248, 0.05) !important;
+    color: var(--text-primary) !important;
+    border-color: rgba(56, 189, 248, 0.12) !important;
+    box-shadow: 0 2px 12px rgba(56, 189, 248, 0.06) !important;
+}
+
+body.dark-theme .nav-item.active {
+    background: linear-gradient(135deg,
+        rgba(56, 189, 248, 0.1) 0%,
+        rgba(45, 212, 191, 0.06) 100%) !important;
+    color: var(--accent-blue) !important;
+    border-color: rgba(56, 189, 248, 0.2) !important;
+    box-shadow:
+        0 4px 20px rgba(56, 189, 248, 0.12),
+        0 1px 4px rgba(56, 189, 248, 0.08),
+        inset 0 1px 0 rgba(255,255,255,0.05) !important;
+}
+
+body.dark-theme .nav-item.active::before {
+    background: linear-gradient(180deg, #38bdf8 0%, #2dd4bf 100%);
+    box-shadow: 0 0 14px rgba(56, 189, 248, 0.6), 0 0 28px rgba(56, 189, 248, 0.25);
+}
+
+body.emerald-theme .nav-item:hover {
+    background-color: rgba(16, 185, 129, 0.06) !important;
+    color: var(--text-primary) !important;
+    border-color: rgba(16, 185, 129, 0.12) !important;
+    box-shadow: 0 2px 12px rgba(16, 185, 129, 0.06) !important;
+}
+
+body.emerald-theme .nav-item.active {
+    background: linear-gradient(135deg,
+        rgba(251, 191, 36, 0.1) 0%,
+        rgba(16, 185, 129, 0.07) 100%) !important;
+    color: var(--accent-blue) !important;
+    border-color: rgba(251, 191, 36, 0.2) !important;
+    box-shadow:
+        0 4px 20px rgba(251, 191, 36, 0.1),
+        0 1px 4px rgba(251, 191, 36, 0.08),
+        inset 0 1px 0 rgba(255,255,255,0.03) !important;
+}
+
+body.emerald-theme .nav-item.active::before {
+    background: linear-gradient(180deg, #fbbf24 0%, #10b981 100%);
+    box-shadow: 0 0 14px rgba(251, 191, 36, 0.55), 0 0 28px rgba(251, 191, 36, 0.2);
+}
+
+/* Icônes SVG */
+.nav-item svg {
+    width: 19px;
+    height: 19px;
+    stroke: currentColor;
+    stroke-width: 2;
+    fill: none;
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.2s ease;
+    flex-shrink: 0;
+    opacity: 0.75;
+}
+
+.nav-item:hover svg {
+    transform: scale(1.14);
+    opacity: 1;
+}
+
+.nav-item.active svg {
+    opacity: 1;
+    stroke-width: 2.5;
+}
+
+/* ==========================================
+   GROUPES ET SOUS-ITEMS SIDEBAR
+   ========================================== */
+.nav-group-header {
+    font-size: 0.62rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1.8px;
+    color: var(--text-secondary);
+    padding: 18px 14px 7px 14px;
+    opacity: 0.55;
+    margin-bottom: 2px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    position: relative;
+}
+
+.nav-group-header::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, var(--border-color) 0%, transparent 100%);
+    opacity: 0.6;
+}
+
+body.dark-theme .nav-group-header::after {
+    background: linear-gradient(90deg, rgba(31, 41, 55, 0.8) 0%, transparent 100%);
+}
+
+body.emerald-theme .nav-group-header::after {
+    background: linear-gradient(90deg, rgba(17, 54, 43, 0.8) 0%, transparent 100%);
+}
+
+/* Sous-items */
+.nav-item.sub-item {
+    margin-left: 12px;
+    padding: 9px 12px 9px 20px;
+    font-size: 0.81rem;
+    gap: 10px;
+    font-weight: 500;
+    background-color: transparent;
+    border-left: none !important;
+    position: relative;
+    opacity: 0.85;
+    border-radius: 8px;
+}
+
+/* Connecteur vertical stylisé */
+.nav-item.sub-item::before {
+    content: '';
+    position: absolute;
+    left: 7px;
+    top: 50%;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--border-color);
+    transform: translateY(-50%);
+    transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: none;
+}
+
+.nav-item.sub-item:hover {
+    background-color: rgba(74, 111, 165, 0.05) !important;
+    color: var(--accent-blue) !important;
+    transform: translateX(3px);
+    opacity: 1;
+    border-color: rgba(74, 111, 165, 0.08) !important;
+    box-shadow: none !important;
+}
+
+.nav-item.sub-item:hover::before {
+    background-color: var(--accent-blue);
+    transform: translateY(-50%) scale(1.3);
+    box-shadow: 0 0 8px rgba(74, 111, 165, 0.4);
+}
+
+.nav-item.sub-item.active {
+    background: linear-gradient(135deg, rgba(30, 58, 138, 0.09) 0%, rgba(74, 128, 123, 0.05) 100%) !important;
+    color: var(--accent-blue) !important;
+    border-color: rgba(30, 58, 138, 0.12) !important;
+    box-shadow: 0 2px 8px rgba(30, 58, 138, 0.07) !important;
+    font-weight: 700;
+    opacity: 1;
+    transform: translateX(3px);
+}
+
+.nav-item.sub-item.active::before {
+    background-color: var(--accent-blue);
+    transform: translateY(-50%) scale(1.4);
+    box-shadow: 0 0 10px var(--accent-blue), 0 0 20px rgba(30, 58, 138, 0.25);
+}
+
+body.dark-theme .nav-item.sub-item:hover {
+    background-color: rgba(56, 189, 248, 0.04) !important;
+    color: var(--accent-blue) !important;
+    border-color: rgba(56, 189, 248, 0.08) !important;
+}
+
+body.dark-theme .nav-item.sub-item.active {
+    background: linear-gradient(135deg, rgba(56, 189, 248, 0.08) 0%, rgba(45, 212, 191, 0.04) 100%) !important;
+    border-color: rgba(56, 189, 248, 0.15) !important;
+    box-shadow: 0 2px 12px rgba(56, 189, 248, 0.07) !important;
+}
+
+body.emerald-theme .nav-item.sub-item:hover {
+    background-color: rgba(16, 185, 129, 0.05) !important;
+    color: var(--accent-blue) !important;
+    border-color: rgba(16, 185, 129, 0.1) !important;
+}
+
+body.emerald-theme .nav-item.sub-item.active {
+    background: linear-gradient(135deg, rgba(251, 191, 36, 0.08) 0%, rgba(16, 185, 129, 0.04) 100%) !important;
+    border-color: rgba(251, 191, 36, 0.15) !important;
+    box-shadow: 0 2px 12px rgba(251, 191, 36, 0.07) !important;
+}
+
+/* Scroll fluide dans la sidebar si trop d'items */
+.sidebar .nav-menu-wrapper {
+    overflow-y: auto;
+    flex-grow: 1;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-color) transparent;
+    padding-right: 2px;
+}
+
+.sidebar .nav-menu-wrapper::-webkit-scrollbar {
+    width: 3px;
+}
+
+.sidebar .nav-menu-wrapper::-webkit-scrollbar-thumb {
+    background-color: var(--border-color);
+    border-radius: 4px;
+}
+
+
+/* Zone de contenu principale */
+.main-content {
+    flex-grow: 1;
+    flex-shrink: 1;
+    min-width: 0;
+    margin-left: 280px;
+    width: calc(100vw - 280px);
+    padding: 40px;
+    overflow-y: auto;
+    max-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1), width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+body.sidebar-collapsed .sidebar {
+    transform: translateX(-280px) !important;
+}
+
+body.sidebar-collapsed .main-content {
+    margin-left: 0 !important;
+    width: 100vw !important;
+}
+
+/* En-tête du contenu */
+.content-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 20px;
+}
+
+.header-title h1 {
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: #2d3748;
+}
+
+.header-title p {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    margin-top: 4px;
+}
+
+/* Profil du médecin */
+.doctor-profile {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 16px;
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+}
+
+.avatar {
+    width: 36px;
+    height: 36px;
+    background-color: #cbd5e0;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: #4a5568;
+}
+
+/* Sections principales */
+.content-section {
+    display: none;
+    animation: fadeIn 0.4s ease-out;
+}
+
+.content-section.active {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Grilles & Cartes */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 20px;
+}
+
+.card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    box-shadow: var(--shadow-soft);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    transition: var(--transition-normal);
+    position: relative;
+    overflow: hidden;
+}
+
+.card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0) 100%);
+    pointer-events: none;
+    z-index: 1;
+}
+
+.card:hover {
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-4px) scale(1.008);
+    border-color: rgba(74, 111, 165, 0.35);
+}
+
+body.dark-theme .card:hover {
+    border-color: rgba(56, 189, 248, 0.35);
+}
+
+body.emerald-theme .card:hover {
+    border-color: rgba(251, 191, 36, 0.35);
+}
+
+.kpi-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+}
+
+.kpi-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: transparent;
+    transition: var(--transition-normal);
+}
+
+.kpi-card:hover::after {
+    background: var(--accent-blue);
+}
+
+body.dark-theme .kpi-card:hover::after {
+    background: var(--accent-blue);
+}
+
+body.emerald-theme .kpi-card:hover::after {
+    background: var(--accent-teal);
+}
+
+.kpi-info {
+    position: relative;
+    z-index: 2;
+}
+
+.kpi-info h4 {
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--text-secondary);
+    margin-bottom: 6px;
+    font-weight: 700;
+}
+
+.kpi-info .kpi-value {
+    font-size: 1.8rem;
+    font-weight: 900;
+    color: var(--text-primary);
+    letter-spacing: -0.5px;
+}
+
+.kpi-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition-normal);
+    position: relative;
+    z-index: 2;
+}
+
+.kpi-card:hover .kpi-icon {
+    transform: scale(1.12) rotate(4deg);
+}
+
+.kpi-icon.blue { 
+    background: linear-gradient(135deg, rgba(30, 58, 138, 0.12), rgba(30, 58, 138, 0.04)); 
+    color: var(--accent-blue); 
+    border: 1px solid rgba(30, 58, 138, 0.15);
+}
+.kpi-icon.teal { 
+    background: linear-gradient(135deg, rgba(75, 128, 123, 0.12), rgba(75, 128, 123, 0.04)); 
+    color: var(--accent-teal); 
+    border: 1px solid rgba(75, 128, 123, 0.15);
+}
+.kpi-icon.coral { 
+    background: linear-gradient(135deg, rgba(212, 139, 123, 0.12), rgba(212, 139, 123, 0.04)); 
+    color: var(--accent-coral); 
+    border: 1px solid rgba(212, 139, 123, 0.15);
+}
+.kpi-icon.gold { 
+    background: linear-gradient(135deg, rgba(195, 161, 126, 0.12), rgba(195, 161, 126, 0.04)); 
+    color: var(--accent-gold); 
+    border: 1px solid rgba(195, 161, 126, 0.15);
+}
+
+/* Formulaires Cliniques */
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 14px 16px; /* Vertical 14px, horizontal 16px — évite la compression */
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    min-width: 0; /* Empêche le débordement dans les grilles */
+}
+
+/* Colonnes grille 12 — avec min-width pour éviter la compression extrême */
+.col-12 { grid-column: span 12; }
+.col-11 { grid-column: span 11; }
+.col-10 { grid-column: span 10; }
+.col-9  { grid-column: span 9; }
+.col-8  { grid-column: span 8; }
+.col-7  { grid-column: span 7; }
+.col-6  { grid-column: span 6; }
+.col-5  { grid-column: span 5; }
+.col-4  { grid-column: span 4; }
+.col-3  { grid-column: span 3; }
+.col-2  { grid-column: span 2; }
+.col-1  { grid-column: span 1; }
+
+label {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--text-secondary);
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+    display: block; /* block pour que margin-bottom fonctionne toujours */
+    transition: var(--transition-fast);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+input, select, textarea {
+    font-family: inherit;
+    padding: 9px 12px; /* Légèrement réduit pour les panneaux étroits */
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    background-color: var(--bg-card);
+    color: var(--text-primary);
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: var(--transition-fast);
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.02);
+    width: 100%;           /* Toujours pleine largeur du conteneur */
+    box-sizing: border-box; /* Empêche le débordement hors du conteneur */
+}
+
+input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: var(--accent-blue) !important;
+    background-color: var(--bg-card);
+    box-shadow: 0 0 0 3px rgba(74, 111, 165, 0.18), inset 0 1px 2px rgba(0, 0, 0, 0.02) !important;
+}
+
+.discount-wrapper {
+    background-color: var(--bg-main) !important;
+    padding: 14px !important;
+    border-radius: var(--radius-md) !important;
+    border: 1px solid var(--border-color) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 8px !important;
+    transition: var(--transition-fast) !important;
+}
+
+.split-wrapper {
+    background-color: rgba(74, 111, 165, 0.05) !important;
+    border: 1px solid var(--border-color) !important;
+    padding: 14px 18px !important;
+    border-radius: var(--radius-md) !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+    margin-top: 5px !important;
+    transition: var(--transition-fast) !important;
+}
+
+body.dark-theme .split-wrapper {
+    background-color: rgba(56, 189, 248, 0.04) !important;
+    border-color: rgba(56, 189, 248, 0.15) !important;
+}
+
+body.emerald-theme .split-wrapper {
+    background-color: rgba(16, 185, 129, 0.04) !important;
+    border-color: rgba(16, 185, 129, 0.15) !important;
+}
+
+.signature-preview-card {
+    display: flex !important;
+    gap: 12px !important;
+    align-items: center !important;
+    background-color: var(--bg-main) !important;
+    border-radius: var(--radius-md) !important;
+    padding: 12px 16px !important;
+    border: 1px solid var(--border-color) !important;
+    margin-bottom: 12px !important;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.02) !important;
+    transition: var(--transition-fast) !important;
+}
+
+.signature-preview-card:hover {
+    border-color: var(--accent-blue) !important;
+}
+
+/* Grilles Dynamic de Saisie (Facturation) */
+.item-entry-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.item-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr 40px;
+    gap: 12px;
+    align-items: center;
+    background-color: var(--bg-card);
+    padding: 10px 14px;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-color);
+    transition: var(--transition-fast);
+}
+
+.item-row:hover {
+    transform: translateX(2px);
+    border-color: var(--accent-blue);
+    box-shadow: var(--shadow-soft);
+}
+
+/* Boutons */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 20px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    border-radius: var(--radius-md);
+    border: none;
+    cursor: pointer;
+    transition: var(--transition-fast);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--accent-blue), var(--accent-teal));
+    color: white;
+    box-shadow: 0 4px 12px rgba(74, 111, 165, 0.2);
+}
+
+.btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(74, 111, 165, 0.3);
+}
+
+.btn-secondary {
+    background-color: white;
+    color: #4a5568;
+    border: 1px solid var(--border-color);
+}
+
+.btn-secondary:hover {
+    background-color: var(--bg-main);
+}
+
+.btn-danger {
+    background-color: rgba(211, 47, 47, 0.1);
+    color: var(--danger);
+    border: 1px solid rgba(211, 47, 47, 0.2);
+}
+
+.btn-danger:hover {
+    background-color: var(--danger);
+    color: white;
+}
+
+.btn-small {
+    padding: 6px 12px;
+    font-size: 0.8rem;
+    border-radius: var(--radius-sm);
+}
+
+/* Panneau de saisie (form-panel) — évite l'overflow horizontal */
+.form-panel {
+    overflow-y: auto;
+    overflow-x: hidden;
+    min-width: 0; /* Indispensable dans un grid pour que le panneau ne déborde pas */
+}
+
+/* Éditeur de Document Live Preview - layout générique (2 colonnes : facturation, etc.) */
+.editor-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 25px;
+    min-width: 0;
+}
+
+/* Layout spécifique à la section Documents (3 colonnes : sidebar médecins + form + aperçu) */
+#documents-section .editor-layout {
+    grid-template-columns: 210px 1fr 1fr;
+    gap: 20px;
+    min-height: 0;
+}
+
+#cmf-doctors-sidebar-panel {
+    background-color: var(--bg-sidebar);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 16px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    overflow-y: auto;
+    box-shadow: var(--shadow-soft);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+
+/* ============================================================
+   SIDEBAR MÉDECINS CMF
+   ============================================================ */
+.cmf-doctor-card {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 10px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: var(--transition-fast);
+    border: 1px solid transparent;
+    background: transparent;
+    margin-bottom: 4px;
+}
+
+.cmf-doctor-card:hover {
+    background: rgba(75, 128, 123, 0.08);
+    border-color: rgba(75, 128, 123, 0.2);
+}
+
+.cmf-doctor-card.active-doctor {
+    background: linear-gradient(135deg, rgba(75, 128, 123, 0.15), rgba(30, 58, 138, 0.1));
+    border-color: var(--accent-teal);
+    box-shadow: 0 2px 8px rgba(75, 128, 123, 0.15);
+}
+
+.cmf-doctor-avatar {
+    font-size: 1.4rem;
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-card);
+    border-radius: 50%;
+    border: 1px solid var(--border-color);
+}
+
+.cmf-doctor-info {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
+}
+
+.cmf-doctor-name {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.cmf-doctor-spec {
+    font-size: 0.6rem;
+    color: var(--text-secondary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.cmf-doctor-check {
+    font-size: 0.9rem;
+    color: var(--accent-teal);
+    font-weight: 900;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.cmf-doctor-card.active-doctor .cmf-doctor-check {
+    opacity: 1;
+}
+
+body.dark-theme .cmf-doctor-card:hover { background: rgba(45, 212, 191, 0.08); }
+body.dark-theme .cmf-doctor-card.active-doctor { background: linear-gradient(135deg, rgba(45, 212, 191, 0.15), rgba(56, 189, 248, 0.1)); border-color: var(--accent-teal); }
+body.emerald-theme .cmf-doctor-card:hover { background: rgba(52, 211, 153, 0.08); }
+body.emerald-theme .cmf-doctor-card.active-doctor { background: linear-gradient(135deg, rgba(52, 211, 153, 0.15), rgba(16, 185, 129, 0.1)); border-color: var(--accent-teal); }
+
+.preview-panel {
+    background-color: var(--bg-main); /* Bureau s'adaptant au thème */
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.05);
+    padding: 30px 20px;
+    min-height: 700px;
+    overflow: auto;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.preview-panel > div {
+    background-color: #ffffff !important;
+    color: #1a202c !important;
+    width: 100%;
+    max-width: 21cm;
+    min-height: 28.5cm !important;
+    padding: 0.6cm 1.2cm !important;
+    box-shadow: var(--shadow-hover);
+    border-radius: 4px;
+    box-sizing: border-box;
+    display: flex !important;
+    flex-direction: column !important;
+    transition: var(--transition-normal);
+    zoom: 0.72;
+}
+
+/* En-tête papier à lettre clinique - Compacté pour tenir sur une seule page */
+.clinic-letterhead {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    border-bottom: 2px solid #2d3748;
+    padding-bottom: 8px;
+    margin-bottom: 12px;
+    flex-wrap: wrap; /* Empêche les chevauchements et collisions sur petit écran */
+    gap: 15px;
+}
+
+.clinic-logo-name h2 {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: #1a202c;
+    text-transform: uppercase;
+}
+
+.clinic-logo-name p {
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+}
+
+.clinic-contacts {
+    text-align: right;
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+    min-width: 200px; /* Assure une largeur de base propre */
+}
+
+.document-title {
+    text-align: center;
+    font-size: 1.25rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin: 12px 0;
+    color: #2d3748;
+}
+
+.doc-body {
+    font-size: 0.88rem;
+    color: #2d3748;
+    line-height: 1.5;
+}
+
+.signature-block {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-top: 15px; /* Plus serré pour s'assurer que tout tient sur une page */
+}
+
+.signature-seal-container {
+    width: 180px;
+    height: 110px;
+    position: relative;
+    margin: 4px auto;
+}
+
+.seal-img {
+    position: absolute;
+    top: 2px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: auto;
+    opacity: 1;
+    display: block;
+    mix-blend-mode: multiply; /* efface le fond blanc - supprime le cadre visible */
+    z-index: 5;
+}
+
+.signature-img {
+    position: absolute;
+    bottom: 2px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 150px;
+    height: auto;
+    display: block;
+    z-index: 10;
+    mix-blend-mode: multiply;
+}
+
+/* Tables & Tableaux */
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 15px 0;
+}
+
+th {
+    background-color: rgba(234, 230, 223, 0.6);
+    color: #3f4e64;
+    text-align: left;
+    padding: 12px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    border-bottom: 2px solid var(--border-color);
+}
+
+td {
+    padding: 12px;
+    font-size: 0.9rem;
+    border-bottom: 1px solid var(--border-color);
+    color: #4a5568;
+}
+
+tr:hover td {
+    background-color: rgba(255, 255, 255, 0.4);
+}
+
+/* Styles pour factures proforma en rendu */
+.bill-summary {
+    margin-top: 12px; /* Rapproche le total du tableau */
+    display: flex;
+    flex-direction: column;
+    gap: 4px; /* Resserre les totaux */
+    width: 290px;
+    align-self: flex-end;
+    margin-left: auto;
+    border-top: 2px solid var(--border-color);
+    padding-top: 8px;
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.82rem; /* Légèrement plus petit */
+}
+
+.summary-row.total {
+    font-size: 0.98rem;
+    font-weight: 800;
+    color: #1a202c;
+    border-top: 1px dashed var(--border-color);
+    padding-top: 5px;
+    margin-top: 2px;
+}
+
+/* ==========================================
+   📠 DESIGN ET RÈGLES D'IMPRESSION (A4 PREMIUM)
+   ========================================== */
+
+/* Modal d'Aperçu Avant Impression A4 sur écran */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(45, 55, 72, 0.95);
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    animation: fadeInModal 0.2s ease-out;
+}
+
+@keyframes fadeInModal {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.modal-toolbar {
+    height: 65px;
+    background-color: #2d3748;
+    border-bottom: 2px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 30px;
+    color: white;
+    flex-shrink: 0;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+.modal-toolbar .toolbar-title {
+    font-weight: 800;
+    font-size: 1.05rem;
+    letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.modal-toolbar .toolbar-actions {
+    display: flex;
+    gap: 12px;
+}
+
+.modal-preview-container {
+    flex-grow: 1;
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    background-color: #1a202c; /* Couleur sombre pour détacher la feuille blanche */
+    overflow: hidden;
+    height: calc(100vh - 65px);
+}
+
+.modal-preview-scroll-container {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 40px 20px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    height: 100%;
+}
+
+/* Feuille A4 Réaliste - Optimisée pour contenir TOUS les frais sur une seule page */
+.a4-sheet {
+    background-color: white;
+    width: 21cm;
+    min-height: 29.7cm;
+    padding: 0.6cm 1.2cm; /* Marges intelligentes pour garantir que ça tient sur UNE seule page */
+    box-shadow: 0 15px 45px rgba(0,0,0,0.5);
+    border-radius: 4px;
+    color: #2d3748;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 8px; /* Espacement minime entre les éléments */
+    position: relative !important; /* Pour positionner le pied de page absolu */
+}
+
+/* Pied de page officiel clinique (PDF & Impression) */
+.print-footer {
+    margin-top: auto !important;
+    page-break-inside: avoid !important;
+    text-align: center;
+    border: 1px solid #4b807b;
+    background-color: #f4f8f7;
+    border-radius: 6px;
+    padding: 5px 10px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.59rem;
+    font-weight: 600;
+    color: #2d3748;
+    line-height: 1.5;
+    box-sizing: border-box;
+    letter-spacing: 0em;
+    white-space: normal;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+}
+
+.bill-page-bottom-block {
+    margin-top: auto !important;
+    width: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 12px !important;
+    page-break-inside: avoid !important;
+}
+
+.a4-sheet > div {
+    display: flex !important;
+    flex-direction: column !important;
+    flex-grow: 1 !important;
+    min-height: 28.5cm !important;
+    box-sizing: border-box !important;
+}
+
+
+/* Correction de lisibilité du tableau A4 dans tous les thèmes (Dark/Emerald) */
+body.dark-theme .preview-panel td,
+body.emerald-theme .preview-panel td,
+body.dark-theme .a4-sheet td,
+body.emerald-theme .a4-sheet td,
+body.dark-theme #modal-a4-sheet td,
+body.emerald-theme #modal-a4-sheet td {
+    color: #1a202c !important;
+}
+
+body.dark-theme .preview-panel th,
+body.emerald-theme .preview-panel th,
+body.dark-theme .a4-sheet th,
+body.emerald-theme .a4-sheet th,
+body.dark-theme #modal-a4-sheet th,
+body.emerald-theme #modal-a4-sheet th {
+    color: #1a202c !important;
+    background-color: #eae6df !important;
+}
+
+/* Tableaux Quadrillés & Encadrés (CADRE ET GRILLE COMPLET) - Style comptable officiel */
+.preview-panel table, .a4-sheet table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+    border: 2px solid #1a202c !important; /* Cadre extérieur noir et épais */
+    margin: 10px 0 !important;
+    table-layout: fixed !important; /* Force le respect strict des pourcentages de colonnes sous format A4 */
+}
+
+.preview-panel th, .a4-sheet th {
+    background-color: #eae6df !important; /* Couleur bois de bouleau doux */
+    color: #1a202c !important;
+    font-weight: 800 !important;
+    border: 1px solid #2d3748 !important; /* Grille noire intérieure solide */
+    padding: 6px 10px !important; /* Cellules compactes */
+    font-size: 0.8rem !important;
+    text-align: left;
+}
+
+.preview-panel td, .a4-sheet td {
+    border: 1px solid #718096 !important; /* Grille intérieure solide pour toutes les cellules */
+    padding: 5px 8px !important; /* Très compact pour tenir sur une page */
+    font-size: 0.8rem !important;
+    color: #2d3748 !important;
+    word-break: break-word !important; /* Permet un retour à la ligne propre des désignations longues */
+    white-space: normal !important;
+}
+
+/* Alignements spécifiques dans les tableaux quadrillés */
+.preview-panel th:nth-child(2), .preview-panel td:nth-child(2),
+.a4-sheet th:nth-child(2), .a4-sheet td:nth-child(2) { text-align: center !important; }
+
+.preview-panel th:nth-child(3), .preview-panel td:nth-child(3),
+.a4-sheet th:nth-child(3), .a4-sheet td:nth-child(3) { text-align: right !important; }
+
+.preview-panel th:nth-child(4), .preview-panel td:nth-child(4),
+.a4-sheet th:nth-child(4), .a4-sheet td:nth-child(4) { text-align: right !important; }
+
+/* ==========================================
+   📠 RÈGLES D'IMPRESSION PHYSIQUE / PDF
+   ========================================== */
+@page {
+    size: A4;
+    margin: 1.2cm 1.5cm; /* Marges physiques strictes pour l'impression A4 */
+}
+
+@media print {
+    /* Cache toute l'application principale */
+    .app-container, body > *:not(#print-preview-modal) {
+        display: none !important;
+    }
+    
+    /* Affiche le modal de prévisualisation comme seule page imprimable */
+    #print-preview-modal {
+        position: absolute !important;
+        left: 0 !important;
+        top: 0 !important;
+        width: 100% !important;
+        height: auto !important;
+        background: white !important;
+        display: block !important;
+        z-index: 1 !important;
+        overflow: visible !important;
+    }
+    
+    .modal-toolbar {
+        display: none !important;
+    }
+    
+    .modal-preview-container {
+        padding: 0 !important;
+        background: white !important;
+        overflow: visible !important;
+        display: block !important;
+    }
+    
+    .a4-sheet {
+        box-shadow: none !important;
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important; /* Laisse le navigateur gérer les marges physiques via @page */
+        border: none !important;
+        min-height: 0 !important;
+        overflow: visible !important;
+        page-break-inside: avoid !important;
+    }
+}
+
+/* ==========================================
+   ✨ AUTOCOMPLÉTION SUR-MESURE PREMIUM (SCROLLABLE)
+   ========================================== */
+.autocomplete-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+@keyframes slideDown {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.autocomplete-suggestions {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    max-height: 220px;
+    overflow-y: auto;
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-hover);
+    z-index: 99999;
+    margin-top: 6px;
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    animation: slideDown 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.autocomplete-suggestion {
+    padding: 11px 16px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    color: var(--text-primary);
+    border-bottom: 1px solid var(--border-color);
+    transition: var(--transition-fast);
+    text-align: left;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.autocomplete-suggestion:last-child {
+    border-bottom: none;
+}
+
+.autocomplete-suggestion strong {
+    color: inherit !important;
+}
+
+.autocomplete-suggestion .suggestion-sub {
+    font-size: 0.72rem;
+    color: var(--text-secondary);
+    font-style: italic;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-left: 10px;
+}
+
+.autocomplete-suggestion:hover, 
+.autocomplete-suggestion.active {
+    background-color: rgba(74, 111, 165, 0.1) !important;
+    color: var(--accent-blue) !important;
+    padding-left: 20px !important;
+}
+
+body.dark-theme .autocomplete-suggestion:hover, 
+body.dark-theme .autocomplete-suggestion.active {
+    background-color: rgba(56, 189, 248, 0.08) !important;
+    color: var(--accent-blue) !important;
+}
+
+body.emerald-theme .autocomplete-suggestion:hover, 
+body.emerald-theme .autocomplete-suggestion.active {
+    background-color: rgba(16, 185, 129, 0.08) !important;
+    color: var(--accent-blue) !important;
+}
+
+/* Scrollbar fine et scandinave pour suggestions */
+.autocomplete-suggestions::-webkit-scrollbar {
+    width: 6px;
+}
+
+.autocomplete-suggestions::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.autocomplete-suggestions::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 3px;
+}
+
+.autocomplete-suggestions::-webkit-scrollbar-thumb:hover {
+    background: var(--text-secondary);
+}
+
+/* ==========================================
+   📂 PANNEAU COULISSANT DME 360° (PATIENT DRAWER)
+   ========================================== */
+.dme-drawer-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 999999;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.dme-drawer-backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(6, 8, 20, 0.4);
+    backdrop-filter: blur(0px);
+    -webkit-backdrop-filter: blur(0px);
+    opacity: 0;
+    transition: opacity 0.3s ease, backdrop-filter 0.3s ease, -webkit-backdrop-filter 0.3s ease;
+}
+
+.dme-drawer-overlay.open .dme-drawer-backdrop {
+    opacity: 1;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+}
+
+.dme-drawer-content {
+    position: relative;
+    width: 420px;
+    height: 100%;
+    background-color: var(--bg-card);
+    border-left: 2px solid var(--border-color);
+    box-shadow: -15px 0 45px rgba(0, 0, 0, 0.15);
+    display: flex;
+    flex-direction: column;
+    z-index: 10;
+    transform: translateX(100%);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    backdrop-filter: blur(15px);
+}
+
+.dme-drawer-overlay.open .dme-drawer-content {
+    transform: translateX(0);
+}
+
+.dme-drawer-header {
+    padding: 24px;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--bg-sidebar);
+}
+
+.dme-avatar {
+    width: 46px;
+    height: 46px;
+    background: linear-gradient(135deg, var(--accent-teal), var(--accent-blue));
+    color: white;
+    font-weight: 800;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.15rem;
+    box-shadow: 0 4px 10px rgba(74, 111, 165, 0.2);
+}
+
+.dme-close-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 1px solid var(--border-color);
+    background-color: var(--bg-main);
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition-fast);
+}
+
+.dme-close-btn:hover {
+    background-color: var(--danger);
+    color: white;
+    border-color: var(--danger);
+}
+
+.dme-drawer-body {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.dme-section-card {
+    background-color: var(--bg-main);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 16px;
+    box-shadow: var(--shadow-soft);
+}
+
+.dme-section-title {
+    font-size: 0.88rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    border-bottom: 1px dashed var(--border-color);
+    padding-bottom: 8px;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.dme-list-container {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-height: 160px;
+    overflow-y: auto;
+}
+
+.dme-item-link {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    border-radius: var(--radius-sm);
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    cursor: pointer;
+    transition: var(--transition-fast);
+}
+
+.dme-item-link:hover {
+    background-color: var(--border-color);
+    border-color: var(--accent-blue);
+    transform: translateX(2px);
+}
+
+.dme-item-link span {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.dme-item-link small {
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+}
+
+/* Scrollbar fine pour listes du DME */
+.dme-list-container::-webkit-scrollbar,
+.dme-drawer-body::-webkit-scrollbar {
+    width: 5px;
+}
+
+.dme-list-container::-webkit-scrollbar-thumb,
+.dme-drawer-body::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 3px;
+}
+
+/* ==========================================
+   ⏰ ALERTES CLINIQUES & CONVALESCENCE
+   ========================================== */
+.alerts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 15px;
+    width: 100%;
+}
+
+.alert-card {
+    background-color: white;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    box-shadow: var(--shadow-soft);
+    position: relative;
+    transition: var(--transition-normal);
+}
+
+.alert-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-hover);
+}
+
+.alert-card.alert-green {
+    border-left: 5px solid var(--success);
+    background-color: rgba(104, 159, 56, 0.03);
+}
+
+.alert-card.alert-orange {
+    border-left: 5px solid var(--warning);
+    background-color: rgba(245, 124, 0, 0.03);
+}
+
+.alert-card.alert-red {
+    border-left: 5px solid var(--danger);
+    background-color: rgba(211, 47, 47, 0.03);
+    animation: pulse-border 2s infinite;
+}
+
+@keyframes pulse-border {
+    0% { box-shadow: 0 0 0 0 rgba(211, 47, 47, 0.25); }
+    70% { box-shadow: 0 0 0 8px rgba(211, 47, 47, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(211, 47, 47, 0); }
+}
+
+.alert-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.alert-title {
+    font-size: 0.78rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.7px;
+}
+
+.alert-card.alert-green .alert-title { color: var(--success); }
+.alert-card.alert-orange .alert-title { color: var(--warning); }
+.alert-card.alert-red .alert-title { color: var(--danger); }
+
+.alert-patient {
+    font-size: 0.92rem;
+    font-weight: 800;
+    color: #1a202c;
+}
+
+.alert-desc {
+    font-size: 0.78rem;
+    color: var(--text-secondary);
+    line-height: 1.45;
+}
+
+.alert-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 5px;
+}
+
+/* ==========================================
+   MODULE TIERS-PAYANT SPLIT STYLES
+   ========================================== */
+.item-row.split-mode-active, .item-row-header.split-mode-active {
+    grid-template-columns: 1.4fr 0.3fr 0.7fr 0.7fr 0.7fr 0.35fr 0.7fr 0.7fr 30px !important;
+    gap: 6px !important;
+    padding: 6px 8px !important;
+}
+
+.item-row .split-field, .item-row-header .split-field {
+    display: none !important;
+}
+
+.item-row.split-mode-active .split-field, .item-row-header.split-mode-active .split-field {
+    display: block !important;
+}
+
+/* Optimisations d'espace pour les inputs en mode split actif */
+.item-row.split-mode-active input, 
+.item-row.split-mode-active select {
+    padding: 6px 4px !important;
+    font-size: 0.82rem !important;
+    height: auto !important;
+}
+
+.item-row.split-mode-active input.item-name {
+    padding-left: 8px !important;
+}
+
+/* Masquer les flèches des inputs numériques pour regagner de l'espace */
+.item-row input[type=number]::-webkit-inner-spin-button, 
+.item-row input[type=number]::-webkit-outer-spin-button { 
+    -webkit-appearance: none; 
+    margin: 0; 
+}
+.item-row input[type=number] {
+    -moz-appearance: textfield;
+    text-align: center;
+}
+
+.item-split-read-only {
+    width: 100%;
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-align: right;
+    padding: 6px 4px !important;
+    background-color: rgba(60, 99, 130, 0.05);
+    border-radius: var(--radius-sm);
+    color: var(--text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    border: 1px solid var(--border-color);
+}
+
+/* ============================================================
+   💎 SYSTÈME DE DESIGN PREMIUM - REGISTRE & BADGES & DROPDOWNS
+   ============================================================ */
+
+/* Badges de Fiches - Uniformisés et Modernisés (Pastels Scandinaves) */
+.badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px 8px;
+    font-size: 0.72rem;
+    font-weight: 800;
+    border-radius: 6px;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    transition: var(--transition-fast);
+}
+
+.badge.dark {
+    background-color: rgba(74, 111, 165, 0.08);
+    color: var(--accent-blue);
+    border: 1px solid rgba(74, 111, 165, 0.25);
+}
+
+.badge.light {
+    background-color: rgba(75, 128, 123, 0.08);
+    color: var(--accent-teal);
+    border: 1px solid rgba(75, 128, 123, 0.25);
+}
+
+.badge.warning {
+    background-color: rgba(245, 124, 0, 0.08);
+    color: var(--warning);
+    border: 1px solid rgba(245, 124, 0, 0.25);
+}
+
+.badge.success {
+    background-color: rgba(104, 159, 56, 0.08);
+    color: var(--success);
+    border: 1px solid rgba(104, 159, 56, 0.25);
+}
+
+.badge.danger {
+    background-color: rgba(211, 47, 47, 0.08);
+    color: var(--danger);
+    border: 1px solid rgba(211, 47, 47, 0.25);
+}
+
+.badge.info {
+    background-color: rgba(195, 161, 126, 0.12);
+    color: #9d7d59;
+    border: 1px solid rgba(195, 161, 126, 0.25);
+}
+
+/* Lien Patient Épuré */
+.patient-link {
+    cursor: pointer;
+    color: var(--accent-blue);
+    font-weight: 800;
+    text-decoration: none;
+    transition: var(--transition-fast);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.patient-link:hover {
+    color: var(--accent-teal);
+    text-decoration: none;
+}
+
+.patient-avatar {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background-color: rgba(74, 111, 165, 0.12);
+    color: var(--accent-blue);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.72rem;
+    font-weight: 800;
+}
+
+/* Boutons & Dropdowns d'Actions alignés au Pixel Près */
+.actions-cell-wrapper {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.dropdown-actions {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-trigger {
+    padding: 6px 10px !important;
+    font-size: 0.95rem !important;
+    font-weight: bold;
+    background-color: rgba(212, 207, 198, 0.2);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: var(--transition-fast);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+}
+
+.dropdown-trigger:hover {
+    background-color: rgba(212, 207, 198, 0.4);
+    color: var(--accent-blue);
+}
+
+.dropdown-menu-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 100%;
+    background-color: white;
+    min-width: 195px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    z-index: 9999 !important;
+    margin-top: 6px;
+    overflow: hidden;
+    animation: dropdownFadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes dropdownFadeIn {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.dropdown-menu-content.show {
+    display: block;
+}
+
+.dropdown-menu-content button {
+    width: 100%;
+    text-align: left;
+    background: none;
+    border: none;
+    padding: 10px 15px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: var(--transition-fast);
+}
+
+.dropdown-menu-content button:hover {
+    background-color: #f5f3f0;
+    color: var(--accent-blue);
+}
+
+.dropdown-menu-content .divider {
+    height: 1px;
+    background-color: var(--border-color);
+    margin: 4px 0;
+}
+
+.dropdown-menu-content .btn-danger-hover:hover {
+    background-color: rgba(211, 47, 47, 0.08);
+    color: var(--danger) !important;
+}
+
+/* Optimisation générale de la table du registre */
+#register-table-rows tr td {
+    vertical-align: middle !important;
+    line-height: 1.4;
+}
+
+/* ============================================================
+   SYSTÈME DE CARTES VISUELLES & MODE FOCUS ERGONOMIQUE
+   ============================================================ */
+.form-cards-container {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;   /* Réduit pour éviter l'entassement en panneau étroit */
+    margin-bottom: 16px;
+}
+
+.form-card {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 16px 20px; /* Réduit de 24px → 16px pour les panneaux comprimés */
+    box-shadow: var(--shadow-soft);
+    transition: var(--transition-normal);
+    overflow: visible;   /* Permet le débordement des autocomplétions et dropdowns */
+}
+
+.form-card:hover {
+    box-shadow: var(--shadow-hover);
+}
+
+.form-card-title {
+    font-family: 'Outfit', 'Inter', sans-serif;
+    font-size: 0.95rem;   /* Légèrement réduit pour les panneaux étroits */
+    font-weight: 800;
+    color: var(--accent-blue);
+    border-bottom: 1.5px dashed var(--border-color);
+    padding-bottom: 8px;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Commutateur de Layout Premium */
+.layout-toggle-group {
+    display: flex;
+    background-color: rgba(74, 111, 165, 0.08);
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    padding: 3px;
+    gap: 4px;
+    transition: var(--transition-fast);
+}
+
+body.dark-theme .layout-toggle-group,
+body.emerald-theme .layout-toggle-group {
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
+.layout-toggle-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 700;
+    padding: 6px 14px;
+    border-radius: 16px;
+    color: var(--text-secondary);
+    transition: var(--transition-fast);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.layout-toggle-btn:hover {
+    color: var(--accent-blue);
+}
+
+.layout-toggle-btn.active {
+    background-color: var(--accent-blue);
+    color: white !important;
+    box-shadow: 0 2px 6px rgba(74, 111, 165, 0.2);
+}
+
+/* Focus Mode - layout facturation (2 colonnes → 1 colonne) */
+.editor-layout.layout-focus-active {
+    grid-template-columns: 1fr !important;
+}
+
+/* Focus Mode - layout documents (3 colonnes → sidebar + form) */
+#documents-section .editor-layout.layout-focus-active {
+    grid-template-columns: 200px 1fr !important;
+}
+
+.editor-layout.layout-focus-active .preview-panel {
+    display: none !important;
+}
+
+.editor-layout.layout-focus-active #cmf-doctors-sidebar-panel {
+    display: flex !important;
+}
+
+/* ============================================================
+   COMMUTATEUR DE THEME PREMIUM SEGMENTE
+   ============================================================ */
+.theme-switcher {
+    display: flex;
+    background-color: rgba(74, 111, 165, 0.08);
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    padding: 3px;
+    gap: 4px;
+    transition: var(--transition-fast);
+}
+
+body.dark-theme .theme-switcher,
+body.emerald-theme .theme-switcher {
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
+.theme-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 0.95rem;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition-fast);
+    color: var(--text-secondary);
+}
+
+.theme-btn:hover {
+    color: var(--accent-blue);
+    background-color: rgba(255, 255, 255, 0.15);
+}
+
+.theme-btn.active {
+    background-color: var(--accent-blue) !important;
+    color: white !important;
+    box-shadow: 0 2px 6px rgba(74, 111, 165, 0.25);
+}
+
+/* ==========================================
+   📂 ONGLETS DU REGISTRE GÉNÉRAL
+   ========================================== */
+.register-tab {
+    padding: 12px 20px;
+    border: none;
+    background: transparent;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--text-secondary);
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    transition: var(--transition-fast);
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.register-tab:hover {
+    color: var(--accent-blue);
+    background: rgba(74, 111, 165, 0.05);
+}
+
+body.dark-theme .register-tab:hover {
+    background: rgba(56, 189, 248, 0.05);
+}
+
+body.emerald-theme .register-tab:hover {
+    background: rgba(16, 185, 129, 0.05);
+}
+
+.register-tab.active {
+    color: var(--accent-blue) !important;
+    border-bottom-color: var(--accent-blue);
+    font-weight: 800;
+}
+
+.register-sub-filter {
+    padding: 6px 14px;
+    border-radius: 20px;
+    border: 1px solid var(--border-color);
+    background-color: var(--bg-card);
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: var(--transition-fast);
+}
+
+.register-sub-filter:hover {
+    border-color: var(--accent-blue);
+    color: var(--accent-blue);
+    transform: translateY(-1px);
+}
+
+.register-sub-filter.active {
+    background-color: var(--accent-blue);
+    color: white !important;
+    border-color: var(--accent-blue);
+    box-shadow: 0 2px 8px rgba(74, 111, 165, 0.25);
+}
+
+body.dark-theme .register-sub-filter.active {
+    box-shadow: 0 2px 8px rgba(56, 189, 248, 0.25);
+}
+
+body.emerald-theme .register-sub-filter.active {
+    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.25);
+}
+
+/* Badges colorés par catégorie d'archive */
+.badge.archive-cro {
+    background: rgba(128, 90, 213, 0.12);
+    color: #6b46c1;
+    border: 1px solid rgba(128, 90, 213, 0.3);
+}
+
+.badge.archive-hospi {
+    background: rgba(49, 130, 206, 0.12);
+    color: #2b6cb0;
+    border: 1px solid rgba(49, 130, 206, 0.3);
+}
+
+.badge.archive-consult {
+    background: rgba(56, 161, 105, 0.12);
+    color: #276749;
+    border: 1px solid rgba(56, 161, 105, 0.3);
+}
+
+.badge.archive-certif {
+    background: rgba(221, 107, 32, 0.12);
+    color: #c05621;
+    border: 1px solid rgba(221, 107, 32, 0.3);
+}
+
+/* Dark theme pour les badges d'archives */
+body.dark-theme .badge.archive-cro {
+    background: rgba(128, 90, 213, 0.2);
+    color: #b794f4;
+}
+
+body.dark-theme .badge.archive-hospi {
+    background: rgba(49, 130, 206, 0.2);
+    color: #90cdf4;
+}
+
+body.dark-theme .badge.archive-consult {
+    background: rgba(56, 161, 105, 0.2);
+    color: #9ae6b4;
+}
+
+body.dark-theme .badge.archive-certif {
+    background: rgba(221, 107, 32, 0.2);
+    color: #fbd38d;
+}
+
+body.dark-theme .register-sub-filter {
+    background: var(--bg-card);
+    border-color: var(--border-color);
+    color: var(--text-secondary);
+}
+
+/* ==========================================
+   ⚡ BARRE DE PAGINATION INTERACTIVE & PREMIUM
+   ========================================== */
+.pagination-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 20px;
+    background: var(--bg-main);
+    border-top: 1px solid var(--border-color);
+    border-bottom-left-radius: var(--radius-lg);
+    border-bottom-right-radius: var(--radius-lg);
+    transition: background 0.3s ease;
+}
+
+.pagination-bar button {
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    font-weight: 700;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.pagination-bar button:not(:disabled):hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.08);
+}
+
+.pagination-bar button:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+.pagination-bar span {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--text-secondary);
+    letter-spacing: 0.2px;
+}
+
+/* ==========================================
+   ⏱️ FIL CHRONOLOGIQUE D'ACTIVITÉS DME
+   ========================================== */
+.dme-timeline {
+    position: relative;
+    padding-left: 28px;
+    margin: 12px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.dme-timeline::before {
+    content: '';
+    position: absolute;
+    left: 8px;
+    top: 6px;
+    bottom: 6px;
+    width: 2px;
+    background-color: var(--border-color);
+}
+
+.dme-timeline-item {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    cursor: pointer;
+    padding: 12px 16px;
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    transition: var(--transition-fast);
+}
+
+.dme-timeline-item:hover {
+    border-color: var(--accent-blue);
+    transform: translateX(4px);
+    box-shadow: var(--shadow-soft);
+}
+
+.dme-timeline-badge {
+    position: absolute;
+    left: -28px;
+    top: 14px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background-color: var(--bg-card);
+    border: 2px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: translateX(-50%);
+    font-size: 0.72rem;
+    transition: var(--transition-fast);
+    z-index: 2;
+}
+
+.dme-timeline-item:hover .dme-timeline-badge {
+    border-color: var(--accent-blue);
+    background-color: var(--accent-blue);
+    color: white;
+}
+
+.dme-timeline-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.dme-timeline-type {
+    font-size: 0.82rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.dme-timeline-date {
+    font-size: 0.72rem;
+    color: var(--text-secondary);
+    font-weight: 600;
+}
+
+.dme-timeline-details {
+    font-size: 0.78rem;
+    color: var(--text-secondary);
+    line-height: 1.45;
+}
+
+.dme-timeline-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px dashed var(--border-color);
+    padding-top: 6px;
+    margin-top: 4px;
+}
+
+.dme-timeline-meta {
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+    font-style: italic;
+}
+
+.dme-timeline-amount {
+    font-size: 0.8rem;
+    font-weight: 800;
+    color: var(--accent-teal);
+}
+
+/* Styles pour les lignes d'ajout rapide (Procédures) */
+.quick-add-row {
+    padding: 8px 12px;
+    cursor: pointer;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background 0.2s;
+    background: var(--bg-card);
+}
+.quick-add-row:hover, .quick-add-row.active {
+    background: rgba(74, 111, 165, 0.1) !important;
+}
+body.dark-theme .quick-add-row:hover, body.dark-theme .quick-add-row.active {
+    background: rgba(255, 255, 255, 0.08) !important;
+}
+body.emerald-theme .quick-add-row:hover, body.emerald-theme .quick-add-row.active {
+    background: rgba(49, 151, 149, 0.12) !important;
+}
+

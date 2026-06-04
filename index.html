@@ -1,0 +1,1298 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MercyFiat MedSuite - Clinique Mercy Fiat</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Feuille de styles premium (Gris Nordique) -->
+    <link rel="stylesheet" href="styles.css">
+    <!-- Gabarit de contournement Electron pour charger proprement les scripts standards sur window -->
+    <script>
+        if (typeof module === 'object') {
+            window.tempModule = module;
+            module = undefined;
+        }
+    </script>
+    <!-- SheetJS pour les exports Excel natifs (Chargé localement pour une résilience 100% hors-ligne) -->
+    <script src="assets/xlsx.full.min.js"></script>
+    <script>
+        if (window.tempModule) {
+            module = window.tempModule;
+            window.tempModule = undefined;
+        }
+    </script>
+</head>
+<body>
+
+    <div class="app-container">
+        
+        <!-- ==========================================
+             BARRE LATÉRALE DE NAVIGATION (SIDEBAR)
+             ========================================== -->
+        <aside class="sidebar">
+            <div>
+                <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 40px; gap: 10px;">
+                    <div class="brand" style="margin-bottom: 0;">
+                        <div class="brand-icon">MF</div>
+                        <div class="brand-text">
+                            <h2>MERCY FIAT</h2>
+                            <span>MEDSUITE v1.0</span>
+                        </div>
+                    </div>
+                    <!-- Sélecteur de Thème Premium à 3 Segments -->
+                    <div class="theme-switcher" style="display: flex; background: rgba(74, 111, 165, 0.1); border: 1px solid var(--border-color); border-radius: 20px; padding: 3px; gap: 4px; transition: var(--transition-fast);">
+                        <button type="button" class="theme-btn active" id="theme-btn-light" onclick="setTheme('light')" style="background: none; border: none; cursor: pointer; font-size: 0.95rem; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: var(--transition-fast);" title="Thème Zen Clair (☀️)">☀️</button>
+                        <button type="button" class="theme-btn" id="theme-btn-dark" onclick="setTheme('dark')" style="background: none; border: none; cursor: pointer; font-size: 0.95rem; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: var(--transition-fast);" title="Thème Obsidienne Nuit (🌙)">🌙</button>
+                        <button type="button" class="theme-btn" id="theme-btn-emerald" onclick="setTheme('emerald')" style="background: none; border: none; cursor: pointer; font-size: 0.95rem; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: var(--transition-fast);" title="Thème Émeraude Impérial (🌲)">🌲</button>
+                    </div>
+                </div>
+                
+                <nav>
+                    <ul class="nav-menu">
+                        <!-- TABLEAU DE BORD -->
+                        <li class="nav-item active" id="nav-dashboard" onclick="switchSection('dashboard')">
+                            <!-- Icon Dashboard -->
+                            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9" rx="1"></rect><rect x="14" y="3" width="7" height="5" rx="1"></rect><rect x="14" y="12" width="7" height="9" rx="1"></rect><rect x="3" y="16" width="7" height="5" rx="1"></rect></svg>
+                            Tableau de Bord
+                        </li>
+                        
+                        <!-- REGISTRE GÉNÉRAL -->
+                        <li class="nav-item" id="nav-register" onclick="switchSection('register')">
+                            <!-- Icon Register -->
+                            <svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
+                            Registre Général
+                        </li>
+
+                        <!-- MODULE PATIENTS -->
+                        <li class="nav-item" id="nav-patients" onclick="switchSection('patients')">
+                            <!-- Icon Patients -->
+                            <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                            Patients
+                        </li>
+
+                        <!-- GESTION COMPTABLE -->
+                        <li class="nav-group-header">
+                            <span>📊</span> Comptabilité
+                        </li>
+                        <li class="nav-item sub-item" id="nav-billing-proforma" onclick="switchSubSection('billing', 'proforma')">
+                            <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line></svg>
+                            Facture Proforma
+                        </li>
+                        <li class="nav-item sub-item" id="nav-billing-assurance" onclick="switchSubSection('billing', 'assurance')">
+                            <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M12 2L2 7l10 5 10-5-10-5z"></path></svg>
+                            Prise en Charge Assur.
+                        </li>
+                        <li class="nav-item sub-item" id="nav-billing-definitif" onclick="switchSubSection('billing', 'definitif')">
+                            <svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line><path d="M8 14h8"></path></svg>
+                            Point d'Hospitalisation
+                        </li>
+
+                        <!-- ÉDITION CLINIQUE -->
+                        <li class="nav-group-header">
+                            <span>📋</span> Édition Médicale
+                        </li>
+                        <li class="nav-item sub-item" id="nav-documents-cro" onclick="switchSubSection('documents', 'cro')">
+                            <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+                            Comptes-Rendus (CRO)
+                        </li>
+                        <li class="nav-item sub-item" id="nav-documents-hospi" onclick="switchSubSection('documents', 'hospi')">
+                            <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                            Rapports d'Hospi
+                        </li>
+                        <li class="nav-item sub-item" id="nav-documents-consult" onclick="switchSubSection('documents', 'consult')">
+                            <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                            Rapports Consultation
+                        </li>
+                        <li class="nav-item sub-item" id="nav-documents-certif" onclick="switchSubSection('documents', 'certif')">
+                            <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="9" y1="9" x2="15" y2="9"></line><line x1="9" y1="13" x2="15" y2="13"></line><line x1="9" y1="17" x2="15" y2="17"></line></svg>
+                            Certificats &amp; Lettres
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+
+            <!-- Mode Développeur (Console & Inspecteur) -->
+            <div class="dev-mode-container" style="margin-bottom: 12px; border-top: 1px solid var(--border-color); padding-top: 12px;">
+                <button class="btn btn-secondary btn-small" onclick="toggleDevTools()" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; font-weight: 700; background-color: rgba(212, 207, 198, 0.3); border: 1px solid var(--border-color); font-size: 0.75rem; padding: 6px 10px;">
+                    <svg viewBox="0 0 24 24" style="width: 13px; height: 13px; stroke: currentColor; stroke-width: 3; fill: none;"><polyline points="4 17 10 11 4 5"></polyline><line x1="12" y1="19" x2="20" y2="19"></line></svg>
+                    Mode Développeur (F12)
+                </button>
+            </div>
+            
+            <div class="doctor-profile">
+                <div class="avatar">DG</div>
+                <div style="display: flex; flex-direction: column;">
+                    <span style="font-size: 0.85rem; font-weight: 800; color: var(--text-primary);">Dr Gipsy AGAVOEDO</span>
+                    <span style="font-size: 0.7rem; color: var(--text-secondary);">Chirurgie CMF / Ortho</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- ==========================================
+             ZONE DE CONTENU PRINCIPALE (MAIN CONTENT)
+             ========================================== -->
+        <main class="main-content">
+            
+            <!-- EN-TÊTE COMMUN -->
+            <header class="content-header">
+                <div class="header-title" style="display: flex; align-items: center; gap: 15px;">
+                    <button id="btn-toggle-sidebar" class="btn btn-secondary" onclick="toggleSidebar(true)" style="padding: 8px 12px; font-weight: 700; border-radius: 8px; display: flex; align-items: center; justify-content: center;" title="Masquer le menu latéral">
+                        <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none" style="margin: 0;"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+                    </button>
+                    <button id="btn-back-nav" class="btn btn-secondary" style="display: none; align-items: center; gap: 6px; padding: 8px 14px; font-weight: 700; border-radius: 8px;" onclick="navigateBack()">
+                        <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none" style="margin-right: 2px;"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                        Retour
+                    </button>
+                    <div>
+                        <h1 id="page-title">Tableau de Bord</h1>
+                        <p id="page-subtitle">Aperçu général de votre activité clinique et comptable.</p>
+                    </div>
+                </div>
+                <div>
+                    <button class="btn btn-secondary" onclick="exportFullRegisterToExcel()">
+                        <!-- Icon Export -->
+                        <svg viewBox="0 0 24 24" style="width:16px; height:16px; stroke:currentColor; stroke-width:2.5; fill:none; margin-right:6px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                        Exporter Registre Excel
+                    </button>
+                </div>
+            </header>
+
+            <!-- ==========================================
+                 SECTION 1 : TABLEAU DE BORD (DASHBOARD)
+                 ========================================== -->
+            <section id="dashboard-section" class="content-section active">
+                <!-- Grille de KPIs -->
+                <div class="dashboard-grid">
+                    <div class="card kpi-card">
+                        <div class="kpi-info">
+                            <h4>Proformas Générées</h4>
+                            <span class="kpi-value" id="kpi-proformas">0</span>
+                        </div>
+                        <div class="kpi-icon blue">
+                            <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+                        </div>
+                    </div>
+                    
+                    <div class="card kpi-card">
+                        <div class="kpi-info">
+                            <h4>Points Définitifs</h4>
+                            <span class="kpi-value" id="kpi-definitifs">0</span>
+                        </div>
+                        <div class="kpi-icon teal">
+                            <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none"><rect x="2" y="4" width="20" height="16" rx="2"></rect><path d="M12 8v8"></path><path d="M8 12h8"></path></svg>
+                        </div>
+                    </div>
+                    
+                    <div class="card kpi-card">
+                        <div class="kpi-info">
+                            <h4>Chiffre d'Affaires Brut</h4>
+                            <span class="kpi-value" id="kpi-ca">0 FCFA</span>
+                        </div>
+                        <div class="kpi-icon gold">
+                            <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                        </div>
+                    </div>
+                    
+                    <div class="card kpi-card">
+                        <div class="kpi-info">
+                            <h4>Rapports Rédigés</h4>
+                            <span class="kpi-value" id="kpi-reports">0</span>
+                        </div>
+                        <div class="kpi-icon coral">
+                            <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1"></rect></svg>
+                        </div>
+                    </div>
+
+                    <div class="card kpi-card">
+                        <div class="kpi-info">
+                            <h4>En-cours Assurances</h4>
+                            <span class="kpi-value" id="kpi-encours" style="color:var(--accent-coral);">0 FCFA</span>
+                        </div>
+                        <div class="kpi-icon" style="background-color:rgba(212, 139, 123, 0.15); color:var(--accent-coral);">
+                            <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2.5" fill="none"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                        </div>
+                    </div>
+                    </div>
+
+                <!-- RACCOURCIS RAPIDES -->
+                <div class="card" style="display:flex; align-items:center; gap:16px; padding:16px 24px; margin-bottom:25px; background:linear-gradient(135deg, rgba(56,178,172,0.06), rgba(99,179,237,0.06)); border:1px solid rgba(56,178,172,0.15);">
+                    <span style="font-size:1.1rem; font-weight:800; color:var(--text-primary); white-space:nowrap;">⚡ Actions Rapides :</span>
+                    <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                        <button class="btn" onclick="switchSection('billing'); setTimeout(()=>resetBillEditorForm(), 200);" style="background:linear-gradient(135deg,#38b2ac,#2f9e97); color:white; font-weight:700; font-size:0.82rem; padding:8px 18px; border-radius:8px; border:none; cursor:pointer; box-shadow:0 2px 8px rgba(56,178,172,0.2); display:flex; align-items:center; gap:6px;">
+                            <svg viewBox="0 0 24 24" width="15" height="15" stroke="currentColor" stroke-width="2.5" fill="none"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                            Nouveau Proforma
+                        </button>
+                        <button class="btn" onclick="switchSection('documents');" style="background:linear-gradient(135deg,#667eea,#5a67d8); color:white; font-weight:700; font-size:0.82rem; padding:8px 18px; border-radius:8px; border:none; cursor:pointer; box-shadow:0 2px 8px rgba(102,126,234,0.2); display:flex; align-items:center; gap:6px;">
+                            <svg viewBox="0 0 24 24" width="15" height="15" stroke="currentColor" stroke-width="2.5" fill="none"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+                            Nouveau Rapport
+                        </button>
+                        <button class="btn" onclick="switchSection('register');" style="background:linear-gradient(135deg,#ed8936,#dd6b20); color:white; font-weight:700; font-size:0.82rem; padding:8px 18px; border-radius:8px; border:none; cursor:pointer; box-shadow:0 2px 8px rgba(237,137,54,0.2); display:flex; align-items:center; gap:6px;">
+                            <svg viewBox="0 0 24 24" width="15" height="15" stroke="currentColor" stroke-width="2.5" fill="none"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1"></rect></svg>
+                            Registre Général
+                        </button>
+                    </div>
+                </div>
+
+                <!-- SECTION ALERTES PROACTIVES -->
+                <div class="card" id="convalescence-alerts-section" style="margin-bottom: 25px; display: none; flex-direction: column; gap: 15px; border-left: 5px solid var(--accent-coral); background: linear-gradient(135deg, rgba(212, 139, 123, 0.03), rgba(255, 255, 255, 0.9));">
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <h3 style="font-weight: 800; font-size: 1.1rem; color: var(--text-primary); display:flex; align-items:center; gap:8px;">
+                            <span style="font-size: 1.3rem;">⏰</span> Alertes Cliniques &amp; Suivi Actif de Convalescence
+                        </h3>
+                        <span class="badge dark" id="alerts-count-badge" style="background-color: var(--accent-coral); font-weight:700;">0 alerte(s) active(s)</span>
+                    </div>
+                    <div class="alerts-grid" id="convalescence-alerts-container">
+                        <!-- Les cartes d'alertes seront injectées ici -->
+                    </div>
+                </div>
+
+                <!-- DOUBLE GRILLE DE GRAPHIQUES DECISIONNELS (BI) -->
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 25px;">
+                    <!-- Graphique CA Mensuel -->
+                    <div class="card" style="display: flex; flex-direction: column; gap: 15px; height: 320px;">
+                        <h3 style="font-weight: 800; font-size: 1.1rem; color: var(--text-primary); display:flex; align-items:center; gap:8px;">
+                            <span style="font-size: 1.2rem;">📊</span> Chiffre d'Affaires Mensuel (Historique Réel)
+                        </h3>
+                        <div style="flex-grow:1; position:relative; width:100%; height:100%; display:flex; align-items:center; justify-content:center;" id="ca-chart-container">
+                            <!-- Graphique SVG Dynamique -->
+                        </div>
+                    </div>
+                    
+                    <!-- Graphique Répartition Assurances -->
+                    <div class="card" style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 20px; height: 320px; align-items: center;">
+                        <div style="display:flex; flex-direction:column; gap:15px; overflow:hidden;">
+                            <h3 style="font-weight: 800; font-size: 1.1rem; color: var(--text-primary); display:flex; align-items:center; gap:8px;">
+                                <span style="font-size: 1.2rem;">🍩</span> Répartition Assurances
+                            </h3>
+                            <div style="display: flex; flex-direction: column; gap: 6px; font-size: 0.8rem; overflow-y:auto; max-height:190px;" id="insurance-legend">
+                                <!-- Légende insérée dynamiquement -->
+                            </div>
+                        </div>
+                        <div style="display: flex; justify-content: center; align-items: center; width: 100%; height: 180px;" id="insurance-chart-container">
+                            <!-- Graphique Donut SVG Dynamique -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ==========================================
+                     SUIVI DES CRÉANCES TIERS-PAYANT (MUTUELLES)
+                     ========================================== -->
+                <div class="card" style="display: flex; flex-direction: column; gap: 20px; margin-bottom: 25px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-color); padding-bottom:12px;">
+                        <h3 style="font-weight: 800; font-size: 1.1rem; color: var(--text-primary); display:flex; align-items:center; gap:8px;">
+                            <span style="font-size: 1.25rem;">📊</span> Suivi des Créances &amp; Recouvrement Tiers-Payant
+                        </h3>
+                        <span class="badge success" style="font-weight: 800; font-size: 0.72rem; padding: 4px 10px;" id="kpi-recouvrement-global">Recouvrement Global : 0%</span>
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 30px;">
+                        <!-- Tableau Analytique des Créances -->
+                        <div class="table-container" style="border:1px solid var(--border-color); border-radius:var(--radius-md); background:var(--bg-card); padding:10px; overflow-x:auto;">
+                            <table style="margin:0; width:100%;">
+                                <thead>
+                                    <tr>
+                                        <th>Assureur</th>
+                                        <th style="text-align:center;">Dossiers Impayés</th>
+                                        <th style="text-align:right;">Créances en Souffrance</th>
+                                        <th style="text-align:right;">Taux Recouvrement</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="insurer-receivables-rows">
+                                    <!-- Rempli dynamiquement -->
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <!-- Barre Proportionnelle des Créances (Visualisation) -->
+                        <div style="display:flex; flex-direction:column; gap:16px; justify-content:center;" id="insurer-receivables-bars">
+                            <!-- Rempli par JS avec des barres horizontales premium -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- LISTE D'ACTIVITÉ RÉCENTE -->
+                <div class="card" style="display: flex; flex-direction: column; gap: 15px; margin-bottom: 25px;">
+                    <h3 style="font-weight: 800; font-size: 1.1rem; color: var(--text-primary); display:flex; align-items:center; gap:8px;">
+                        <span style="font-size: 1.2rem;">📋</span> Activité Récente des Patients
+                    </h3>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Patient</th>
+                                    <th>Type</th>
+                                    <th>Assurance</th>
+                                    <th>Total Facturé</th>
+                                    <th>Date</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="recent-patients-list">
+                                <!-- Inséré par JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==========================================
+                 SECTION 2 : FACTURATION PRO (BILLING PRO)
+                 ========================================== -->
+            <section id="billing-section" class="content-section">
+                <div class="editor-layout">
+                    
+                    <!-- Panneau de saisie Facturation -->
+                    <div class="card form-panel" style="display:flex; flex-direction:column; gap:20px;">
+                        <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-color); padding-bottom:10px; margin-bottom: 5px; flex-wrap:wrap; gap:8px;">
+                            <h3 style="font-weight: 800; font-size: 1.15rem; color: #2d3748; margin:0;">Détails de la Facture / Devis</h3>
+                            <div style="display:flex; align-items:center; gap:10px;">
+                                <button type="button" class="btn" onclick="resetBillEditorForm()" style="background:linear-gradient(135deg,#38b2ac,#2f9e97); color:white; font-weight:800; font-size:0.82rem; padding:7px 16px; border-radius:8px; border:none; cursor:pointer; box-shadow:0 2px 8px rgba(56,178,172,0.25); display:flex; align-items:center; gap:6px; white-space:nowrap;" title="Créer un nouveau proforma de zéro">
+                                    <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                    Nouveau Proforma
+                                </button>
+                                <!-- Commutateur de Layout Premium -->
+                                <div class="layout-toggle-group">
+                                    <button type="button" class="layout-toggle-btn active" id="layout-toggle-billing-split" onclick="setEditorLayout('billing', 'split')" title="Écran Partagé">🌓 Écran Partagé</button>
+                                    <button type="button" class="layout-toggle-btn" id="layout-toggle-billing-focus" onclick="setEditorLayout('billing', 'focus')" title="Saisie Large (Focus Mode)">🖥️ Saisie Large</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <form id="billing-form" onsubmit="event.preventDefault();">
+                            <div class="form-cards-container">
+                                
+                                <!-- Card 1: Renseignements & Prise en Charge Patient -->
+                                <div class="form-card">
+                                    <h4 class="form-card-title">👤 Renseignements &amp; Prise en Charge Patient</h4>
+                                    <div class="form-grid">
+                                        <div class="form-group col-6">
+                                            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:4px; margin-bottom:4px;">
+                                                <label for="bill-patient-nom" style="margin:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; flex:1; min-width:0;">Nom du Patient</label>
+                                                <button type="button" onclick="openNewPatientModal()" class="btn btn-secondary btn-small" style="font-size:0.67rem; padding:2px 7px; background:rgba(74, 111, 165, 0.1); border-color:rgba(74, 111, 165, 0.3); color:var(--accent-blue); font-weight:700; white-space:nowrap; flex-shrink:0;">➕ Créer Nouveau</button>
+                                            </div>
+                                            <input type="text" id="bill-patient-nom" placeholder="Ex: PARAISO" oninput="updateBillPreview()" required>
+                                        </div>
+                                        <div class="form-group col-6">
+                                            <label for="bill-patient-prenom">Prénom du Patient</label>
+                                            <input type="text" id="bill-patient-prenom" placeholder="Ex: Alex" oninput="updateBillPreview()" required>
+                                        </div>
+                                        <div class="form-group col-4">
+                                            <label for="bill-patient-type">Prise en Charge</label>
+                                            <select id="bill-patient-type" onchange="handleBillPriseEnChargeChange(); updateBillPreview();">
+                                                <option value="PRIVE">Patient Ordinaire (Privé 100%)</option>
+                                                <option value="MALADIE">Assuré Maladie</option>
+                                                <option value="SINISTRE">Sinistré Automobile</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-4" id="bill-insurance-container" style="display:none;">
+                                            <label for="bill-insurance">Assurance</label>
+                                            <select id="bill-insurance" onchange="updateInsuranceCoverage(); updateBillPreview();">
+                                                <!-- Populated dynamically from MercyFiatDB -->
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-4" id="bill-coverage-container" style="display:none;">
+                                            <label for="bill-coverage">Taux de Couverture (%)</label>
+                                            <input type="number" id="bill-coverage" min="0" max="100" value="80" oninput="reapplyInsurerRulesToAllRows(); updateBillPreview()">
+                                        </div>
+                                        <div class="form-group col-12" id="bill-matricule-container" style="display:none;">
+                                            <label id="bill-matricule-label" for="bill-matricule">N° Assuré / Matricule</label>
+                                            <input type="text" id="bill-matricule" placeholder="Ex: 4904-2022-400" oninput="updateBillPreview()">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Card 2: Détails Cliniques & Forfaits -->
+                                <div class="form-card">
+                                    <h4 class="form-card-title">🩺 Détails Cliniques &amp; Intervention</h4>
+                                    <div class="form-grid">
+                                        <div class="form-group col-6">
+                                            <label for="bill-date">Date de la Facture</label>
+                                            <input type="date" id="bill-date" onchange="updateBillPreview()" style="font-size:0.9rem; width:100%;">
+                                        </div>
+                                        <div class="form-group col-6">
+                                            <label for="bill-type">Type de Document</label>
+                                            <select id="bill-type" onchange="handleBillTypeChange(); updateBillPreview()">
+                                                <option value="PROFORMA">Facture Proforma (Devis Initial)</option>
+                                                <option value="DETAIL_ASSUR">Détail Assurance (Accord Proforma)</option>
+                                                <option value="DEFINITIF">Point d'Hospitalisation (Définitif / Journalier)</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-6" id="custom-title-container" style="display:none;">
+                                            <label for="bill-title-custom">Intitulé personnalisé du Point</label>
+                                            <input type="text" id="bill-title-custom" placeholder="Ex: Point Définitif d'Hospitalisation" value="Point Définitif d'Hospitalisation" oninput="updateBillPreview()">
+                                        </div>
+                                        <div class="form-group col-12">
+                                             <label for="bill-diagnostic">Diagnostic Clinique</label>
+                                             <input type="text" id="bill-diagnostic" placeholder="Ex: Rupture complète du ligament croisé antérieur du genou droit" oninput="updateBillPreview()">
+                                         </div>
+                                         <div class="form-group col-8">
+                                             <label for="bill-intervention">Intervention / Acte Chirurgical (Chargement Forfait Auto)</label>
+                                             <input type="text" id="bill-intervention" placeholder="Ex: Plastie ligamentaire du LCA par DIDT" oninput="updateBillPreview()">
+                                         </div>
+                                         <div class="form-group col-4">
+                                             <label for="bill-k-code">Code K / Cotation Acte</label>
+                                             <input type="text" id="bill-k-code" placeholder="Ex: KC 150" oninput="updateBillPreview()">
+                                         </div>
+                                    </div>
+                                </div>
+
+                                <!-- Card 3: Réduction & Plafonds d'Assurance -->
+                                <div class="form-card">
+                                    <div class="form-group col-12 discount-wrapper">
+                                        <label style="margin-bottom:0; font-weight:700; color:var(--text-primary); display:flex; align-items:center; gap:5px;">🎁 Réduction Clinique Accordée</label>
+                                        <div style="display:flex; gap:10px; align-items:center; width:100%;">
+                                            <select id="bill-discount-type" onchange="updateBillDiscountDisplay(); updateBillPreview();" style="width:40%; padding:8px; border-radius:var(--radius-sm); border:1px solid var(--border-color); font-weight:600; cursor:pointer;">
+                                                <option value="PERCENT">% (Pourcentage)</option>
+                                                <option value="AMOUNT">FCFA (Montant Fixe)</option>
+                                            </select>
+                                            <input type="number" id="bill-discount-value" value="0" min="0" placeholder="Valeur" oninput="updateBillDiscountDisplay(); updateBillPreview();" style="width:60%; padding:8px; border-radius:var(--radius-sm); border:1px solid var(--border-color); font-weight:700; color:var(--accent-blue);">
+                                        </div>
+                                        <span id="bill-discount-display" style="font-weight:700; color:var(--accent-blue); font-size:0.85rem; text-align:right;">0% de réduction</span>
+                                    </div>
+                                    <div class="form-group col-12 split-wrapper" id="split-mode-container" style="display:none; margin-top:5px; background:rgba(74, 111, 165, 0.08); padding:12px 15px; border-radius:var(--radius-md); border:1px solid rgba(74, 111, 165, 0.2); align-items:center; gap:10px;">
+                                        <input type="checkbox" id="bill-use-split" onchange="toggleBillingSplitMode(); updateBillPreview();" style="width:18px; height:18px; cursor:pointer; margin:0;">
+                                        <label for="bill-use-split" style="margin-bottom:0; font-weight:700; color:var(--accent-blue); cursor:pointer; user-select:none;">Activer la répartition Tiers-Payant (Accord Physique d'Assurance)</label>
+                                    </div>
+                                </div>
+
+                                <!-- Card 4: Règlement & Encaissement -->
+                                <div class="form-card">
+                                    <h4 class="form-card-title">💳 Mode de Règlement &amp; Encaissement</h4>
+                                    <div class="form-grid">
+                                        <div class="form-group col-6">
+                                            <label for="bill-payment-method">Mode de Règlement</label>
+                                            <select id="bill-payment-method" onchange="updateBillPreview()">
+                                                <option value="CASH">Espèces (Cash)</option>
+                                                <option value="BANK_TRANSFER">Virement Bancaire</option>
+                                                <option value="CHECK">Chèque Bancaire</option>
+                                                <option value="MOBILE_MONEY">Mobile Money (MTN / Moov)</option>
+                                                <option value="TIERS_PAYANT">Attente Tiers-Payant Mutuelle</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-6">
+                                            <label for="bill-amount-paid-patient">Montant Encaissé Patient (FCFA)</label>
+                                            <input type="number" id="bill-amount-paid-patient" placeholder="Laisser vide si solde total" min="0" oninput="updateBillPreview()">
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </form>
+                        
+                        <!-- Remplissage intelligent pré-configuré -->
+                        <div style="background-color:rgba(234, 230, 223, 0.3); padding:12px; border-radius:var(--radius-md); display:flex; flex-direction:column; gap:8px; border:1px dashed var(--accent-gold); position:relative;">
+                            <h4 style="font-size:0.82rem; font-weight:700; color:var(--accent-gold); margin:0; display:flex; align-items:center; gap:5px;">🚀 Ajout Rapide de Prestations &amp; Forfaits</h4>
+                            
+                            <!-- Filtres rapides par catégorie -->
+                            <div style="display:flex; gap:5px; flex-wrap:wrap; font-size:0.75rem;">
+                                <button type="button" class="quick-filter-btn active" id="filter-btn-all" onclick="filterQuickAdd('ALL', this)" style="padding:4px 10px; border-radius:12px; border:1px solid var(--border-color); background:white; cursor:pointer; font-weight:700; transition:all 0.2s ease;">Tous</button>
+                                <button type="button" class="quick-filter-btn" id="filter-btn-packs" onclick="filterQuickAdd('PACKS', this)" style="padding:4px 10px; border-radius:12px; border:1px solid var(--border-color); background:white; cursor:pointer; font-weight:700; transition:all 0.2s ease;">🔥 Forfaits</button>
+                                <button type="button" class="quick-filter-btn" id="filter-btn-actes" onclick="filterQuickAdd('ACTES_K', this)" style="padding:4px 10px; border-radius:12px; border:1px solid var(--border-color); background:white; cursor:pointer; font-weight:700; transition:all 0.2s ease;">⚡ Actes K</button>
+                                <button type="button" class="quick-filter-btn" id="filter-btn-sejour" onclick="filterQuickAdd('SEJOUR', this)" style="padding:4px 10px; border-radius:12px; border:1px solid var(--border-color); background:white; cursor:pointer; font-weight:700; transition:all 0.2s ease;">🏢 Séjour</button>
+                                <button type="button" class="quick-filter-btn" id="filter-btn-diagnostic" onclick="filterQuickAdd('DIAGNOSTIC', this)" style="padding:4px 10px; border-radius:12px; border:1px solid var(--border-color); background:white; cursor:pointer; font-weight:700; transition:all 0.2s ease;">🔬 CS &amp; Labo</button>
+                            </div>
+
+                            <div style="position:relative; width:100%;">
+                                <input type="text" id="quick-add-search-input" placeholder="🔍 Rechercher un forfait, acte chirurgical, chambre, bilan..." onfocus="showQuickAddResults()" oninput="searchQuickAdd()" style="width:100%; padding:10px 12px; border-radius:var(--radius-sm); border:1px solid var(--border-color); font-weight:600; font-size:0.85rem; box-sizing:border-box;">
+                                
+                                <!-- Liste de résultats flottante -->
+                                <div id="quick-add-floating-results" style="display:none; position:absolute; top:105%; left:0; right:0; background:white; border:1px solid var(--border-color); border-radius:var(--radius-sm); box-shadow:0 10px 25px rgba(0,0,0,0.1); max-height:240px; overflow-y:auto; z-index:1000; padding:5px 0;">
+                                    <!-- Rempli en JS -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Grille d'items dynamique -->
+                        <div>
+                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                                <h4 style="font-size:0.9rem; font-weight:700; color:#2d3748;">Détail des Frais Facturés</h4>
+                                <button class="btn btn-secondary btn-small" onclick="addCustomBillingRow()">+ Ajouter Ligne</button>
+                            </div>
+                            
+                            <!-- En-tête des colonnes pour alignement de grille -->
+                            <div id="billing-items-header" class="item-row-header" style="display:grid; grid-template-columns: 2fr 1fr 1fr 1fr 40px; gap:12px; padding: 6px 12px; margin-bottom: 5px; font-size: 0.72rem; font-weight: 800; text-transform: uppercase; color: #718096; letter-spacing: 0.5px; border-bottom: 1px solid var(--border-color);">
+                                <span>Désignation</span>
+                                <span style="text-align:center;">Qté</span>
+                                <span>P. Unitaire</span>
+                                <span style="text-align:right;">Clinique (PU*Q)</span>
+                                <span class="split-field">Plafond Accord</span>
+                                <span class="split-field">Couv (%)</span>
+                                <span class="split-field" style="text-align:right;">Part Assur.</span>
+                                <span class="split-field" style="text-align:right;">Part Pat.</span>
+                                <span></span>
+                            </div>
+                            
+                            <div id="billing-items-container" class="item-entry-grid">
+                                <!-- Lignes d'items insérées en JS -->
+                            </div>
+                        </div>
+                        
+                        <!-- ── OPTIONS D'AFFICHAGE SUR LA FACTURE ── -->
+                        <div style="background:var(--bg-card); border:1px solid var(--border-color); border-radius:var(--radius-sm); padding:10px 14px; margin-top:12px;">
+                            <p style="font-size:0.72rem; font-weight:800; text-transform:uppercase; color:var(--text-secondary); margin:0 0 8px 0; letter-spacing:0.5px;">⚙️ Options d'affichage sur la facture</p>
+                            <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px 20px;">
+                                <label style="display:inline-flex; align-items:center; gap:7px; font-weight:600; cursor:pointer; font-size:0.82rem; color:var(--text-primary);">
+                                    <input type="checkbox" id="bill-show-sig" checked onchange="updateBillPreview()" style="width:16px;height:16px;cursor:pointer;margin:0;">
+                                    Afficher Signature
+                                </label>
+                                <label style="display:inline-flex; align-items:center; gap:7px; font-weight:600; cursor:pointer; font-size:0.82rem; color:var(--text-primary);">
+                                    <input type="checkbox" id="bill-show-cachet" checked onchange="updateBillPreview()" style="width:16px;height:16px;cursor:pointer;margin:0;">
+                                    Afficher Cachet
+                                </label>
+                                <label style="display:inline-flex; align-items:center; gap:7px; font-weight:600; cursor:pointer; font-size:0.82rem; color:var(--text-primary);">
+                                    <input type="checkbox" id="bill-show-diag" onchange="updateBillPreview()" style="width:16px;height:16px;cursor:pointer;margin:0;">
+                                    Afficher Diagnostic
+                                </label>
+                                <label style="display:inline-flex; align-items:center; gap:7px; font-weight:600; cursor:pointer; font-size:0.82rem; color:var(--text-primary);">
+                                    <input type="checkbox" id="bill-show-interv" onchange="updateBillPreview()" style="width:16px;height:16px;cursor:pointer;margin:0;">
+                                    Afficher Intervention
+                                </label>
+                            </div>
+                        </div>
+
+                        <div style="display:flex; gap:12px; margin-top:15px; border-top:1px solid var(--border-color); padding-top:20px; flex-wrap:wrap;">
+                            <button class="btn btn-primary" id="btn-unlock-bill" onclick="setFormLockState('billing', false)" style="display:none; flex-grow:1.5; background: linear-gradient(135deg, var(--accent-gold), var(--accent-coral)); font-weight:800; color:white; border:none; box-shadow:0 4px 10px rgba(0,0,0,0.08);">
+                                🔓 Modifier la Fiche
+                            </button>
+                            <button class="btn btn-primary" onclick="saveActiveBill()" style="flex-grow:1.5;">
+                                💾 Enregistrer la Facture
+                            </button>
+                            <button class="btn btn-secondary" id="btn-duplicate-bill" onclick="duplicateCurrentBillFromEditor()" style="display:none; font-weight:700;" title="Dupliquer cette facture">
+                                👯 Dupliquer
+                            </button>
+                            <button class="btn btn-secondary" id="btn-reset-bill" onclick="resetBillEditorForm()" style="font-weight:700;" title="Commencer une nouvelle facture de zéro">
+                                🆕 Nouveau
+                            </button>
+                            <button class="btn btn-secondary" onclick="openPrintPreview('billing')">
+                                🖨️ Imprimer / Exporter PDF
+                            </button>
+                            <button class="btn btn-secondary" onclick="exportSingleBillToExcel()">
+                                📊 Excel
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Panneau de Rendu Impression (A4 clinique) -->
+                    <div class="preview-panel" id="bill-print-preview">
+                        <!-- Rempli par le moteur JS de facturation -->
+                    </div>
+                    
+                </div>
+            </section>
+
+            <!-- ==========================================
+                 SECTION 3 : ÉDITEUR CLINIQUE (MEDDOCS)
+                 ========================================== -->
+            <section id="documents-section" class="content-section">
+                <div class="editor-layout">
+                    
+                    <!-- ===== SIDEBAR MÉDECINS CMF ===== -->
+                    <div id="cmf-doctors-sidebar-panel">
+                        <div style="font-size:0.7rem; font-weight:800; text-transform:uppercase; letter-spacing:0.8px; color:var(--text-secondary); padding-bottom:8px; border-bottom:1px solid var(--border-color); margin-bottom:4px; display:flex; align-items:center; gap:5px;">
+                            <span>🏥</span> Médecins CMF
+                        </div>
+                        <div id="cmf-doctors-sidebar">
+                            <!-- Rempli dynamiquement par documents.js -->
+                        </div>
+                        <div style="margin-top:auto; padding-top:10px; border-top:1px solid var(--border-color);">
+                            <p style="font-size:0.62rem; color:var(--text-secondary); font-style:italic; line-height:1.4; text-align:center;">Cliquez sur un médecin pour le choisir comme signataire</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Panneau de rédaction / Formulaire -->
+                    <!-- Panneau de rédaction / Formulaire -->
+                    <div class="card form-panel" style="display:flex; flex-direction:column; gap:16px; overflow-y:auto;">
+
+                        <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-color); padding-bottom:10px; margin-bottom: 5px;">
+                            <h3 style="font-weight:800; font-size:1.1rem; color:#2d3748; margin:0; display:flex; align-items:center; gap:8px;">
+                                <span style="font-size:1.2rem;">📋</span> Génération Automatique de Rapports Médicaux
+                            </h3>
+                            <!-- Commutateur de Layout Premium -->
+                            <div class="layout-toggle-group">
+                                <button type="button" class="layout-toggle-btn active" id="layout-toggle-documents-split" onclick="setEditorLayout('documents', 'split')" title="Écran Partagé">🌓 Écran Partagé</button>
+                                <button type="button" class="layout-toggle-btn" id="layout-toggle-documents-focus" onclick="setEditorLayout('documents', 'focus')" title="Saisie Large (Focus Mode)">🖥️ Saisie Large</button>
+                            </div>
+                        </div>
+
+                        <div class="form-cards-container">
+                            
+                            <!-- Card 1: Modèles & Remplissage Rapide -->
+                            <div class="form-card" style="margin-bottom: 15px;">
+                                <h4 class="form-card-title">📂 Modèle &amp; Remplissage Rapide</h4>
+                                <div class="form-grid" style="gap: 12px;">
+                                    <!-- SÉLECTEUR TYPE DE RAPPORT -->
+                                    <div class="form-group col-12">
+                                        <label for="doc-template" style="font-weight:700;">Type de Rapport / Modèle</label>
+                                        <select id="doc-template" onchange="loadDocumentTemplate()" style="font-size:0.88rem; width: 100%;">
+                                            <optgroup label="📋 Rapports de Consultation (CS)">
+                                                <option value="rapport_cs_simple">Rapport de Consultation (CS Standard)</option>
+                                                <option value="rapport_cs_suivi">Rapport CS — Suivi Post-Opératoire</option>
+                                                <option value="rapport_cs_assurance">Rapport CS — Pour Compagnie d'Assurance</option>
+                                            </optgroup>
+                                            <optgroup label="🏥 Rapports d'Hospitalisation (HOSPI)">
+                                                <option value="rapport_hospi_simple">Rapport d'Hospitalisation (HOSPI Standard)</option>
+                                                <option value="rapport_hospi_assurance">Rapport HOSPI — Pour Compagnie d'Assurance</option>
+                                                <option value="rapport_hospi_prolongation">Rapport de Prolongation de Prise en Charge</option>
+                                                <option value="rapport_medical">Rapport Médical Général</option>
+                                            </optgroup>
+                                            <optgroup label="🔧 Comptes-Rendus Opératoires (CRO)">
+                                                <option value="cro_lca">CRO — Ligamentoplastie LCA (DIDT)</option>
+                                                <option value="cro_cmf">CRO — Ostéosynthèse Fracture Mandibulaire</option>
+                                            </optgroup>
+                                            <optgroup label="✅ Certificats Médicaux">
+                                                <option value="certif_repos">Certificat de Repos Médical</option>
+                                                <option value="certif_reprise">Certificat de Reprise de Travail</option>
+                                            </optgroup>
+                                            <optgroup label="📮 Correspondances">
+                                                <option value="relance_assurance">Lettre de Relance / Réclamation Assurance</option>
+                                            </optgroup>
+                                        </select>
+                                    </div>
+
+                                    <!-- AUTO-REMPLISSAGE PATIENT -->
+                                    <div class="form-group col-12" style="background:linear-gradient(135deg,rgba(56,178,172,0.08),rgba(255,255,255,0.9)); padding:12px 14px; border-radius:var(--radius-md); border:1px solid rgba(56,178,172,0.3);">
+                                        <label style="font-weight:800; color:var(--accent-teal); font-size:0.83rem; display:flex; align-items:center; gap:5px; margin-bottom:7px;">
+                                            🔍 Auto-remplissage depuis un patient existant
+                                        </label>
+                                        <select id="doc-patient-selector" style="width:100%; font-size:0.85rem;" onchange="autoFillFromPatient()">
+                                            <option value="">— Choisir un patient pour préremplir le rapport —</option>
+                                        </select>
+                                        <span style="font-size:0.69rem; color:var(--text-secondary); font-style:italic; display:block; margin-top:4px;">Les données (nom, âge, diagnostic, assurance) sont chargées automatiquement.</span>
+                                    </div>
+
+                                    <!-- ASSISTANT INTÉGRATION IA -->
+                                    <div class="col-12 ai-extraction-panel" style="background: linear-gradient(135deg, rgba(74, 111, 165, 0.05), rgba(75, 128, 123, 0.05)); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 12px; margin-top: 5px;">
+                                        <h4 style="font-weight: 800; font-size: 0.88rem; color: var(--accent-blue); display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+                                            <span>🧠</span> Assistant Clinique IA &amp; Lecture d'Imagerie
+                                        </h4>
+                                        <p style="font-size: 0.72rem; color: var(--text-secondary); margin-bottom: 8px; line-height: 1.4;">
+                                            Collez le compte-rendu d'imagerie (IRM, Radio, etc.). Notre IA MercyFiat va extraire automatiquement le diagnostic et l'imagerie clé pour remplir votre rapport de consultation.
+                                        </p>
+                                        
+                                        <textarea id="ai-raw-report" rows="3" style="font-size: 0.8rem; width: 100%; border-radius: var(--radius-sm); border: 1px solid var(--border-color); padding: 8px; margin-bottom: 8px; resize: vertical; font-family: inherit;" placeholder="Collez le texte du compte-rendu d'examen ici... Ex: 'IRM du genou droit: L'examen met en évidence une rupture complète du LCA avec lésion méniscale interne...'"></textarea>
+                                        
+                                        <div style="display: flex; gap: 10px; margin-bottom: 5px;">
+                                            <button type="button" class="btn btn-secondary btn-small" onclick="document.getElementById('ai-file-input').click()" style="font-size: 0.72rem; padding: 5px 10px; flex-grow: 1; text-align: center; font-weight: 700;">📂 Charger Fichier</button>
+                                            <input type="file" id="ai-file-input" style="display: none;" accept=".pdf,.txt,.rtf,.jpg,.jpeg,.png,.bmp,.tiff,.tif,.webp" onchange="importAIRawReportFile(event)">
+                                            <button type="button" class="btn btn-primary btn-small" onclick="analyzeReportWithAI()" style="font-size: 0.72rem; padding: 5px 10px; background: linear-gradient(135deg, var(--accent-teal), var(--accent-blue)); flex-grow: 1.5; font-weight: 800; border: none; color: white;">🧠 Lancer l'Analyse IA</button>
+                                        </div>
+                                        
+                                        <!-- Loader AI -->
+                                        <div id="ai-loader" style="display: none; align-items: center; justify-content: center; gap: 10px; padding: 12px; font-size: 0.75rem; color: var(--accent-blue); font-weight: 800; background: rgba(74, 111, 165, 0.08); border-radius: var(--radius-sm); border: 1px dashed rgba(74, 111, 165, 0.4); margin-top: 10px;">
+                                            <span class="ai-spinner">⌛</span> Lecture clinique et extraction des données par l'IA...
+                                        </div>
+
+                                        <!-- Résultats de l'analyse AI -->
+                                        <div id="ai-results-card" style="display: none; flex-direction: column; gap: 8px; padding: 12px; background: #ffffff; border: 1px solid rgba(56, 178, 172, 0.3); border-radius: var(--radius-sm); font-size: 0.78rem; border-left: 4px solid var(--accent-teal); margin-top: 10px; color: var(--text-primary);">
+                                            <h5 style="font-weight: 800; color: var(--accent-teal); margin-bottom: 4px; display: flex; align-items: center; justify-content: space-between;">
+                                                <span>✅ Extraction Terminée !</span>
+                                                <span id="ai-detected-type" class="badge outline" style="font-size: 0.62rem; padding: 2px 6px;">IRM Genou</span>
+                                            </h5>
+                                            <div><strong>Diagnostic Clinique :</strong> <span id="ai-res-diagnosis">--</span></div>
+                                            <div><strong>Observations Imagerie :</strong> <span id="ai-res-findings">--</span></div>
+                                            <div><strong>Intervention Suggérée :</strong> <span id="ai-res-intervention">--</span></div>
+                                            <div><strong>Code Nomenclature :</strong> <span id="ai-res-kcode" class="badge dark" style="font-size: 0.62rem; padding: 2px 6px;">--</span></div>
+                                            
+                                            <button type="button" class="btn btn-primary btn-small" onclick="injectAIExtraction()" style="margin-top: 8px; width: 100%; font-weight: 800; font-size: 0.75rem; background: linear-gradient(135deg, var(--accent-teal), var(--accent-blue)); border: none; color: white;">🔗 Lier et Injecter au Rapport</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Card 2: État Civil & Dates -->
+                            <div class="form-card" style="margin-bottom: 15px;">
+                                <h4 class="form-card-title">👤 Identité &amp; Dates Cliniques</h4>
+                                <div class="form-grid" style="gap: 12px;">
+                                    <div class="form-group col-2">
+                                        <label for="doc-civilite">Civilité</label>
+                                        <select id="doc-civilite" onchange="updateDocPreview()" style="font-size:0.85rem; width: 100%;">
+                                            <option value="M.">M.</option>
+                                            <option value="Mme">Mme</option>
+                                            <option value="Mlle">Mlle</option>
+                                            <option value="Dr">Dr</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-5">
+                                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px;">
+                                            <label for="doc-patient-nom" style="margin:0;">Nom du Patient</label>
+                                            <button type="button" onclick="openNewPatientModal()" class="btn btn-secondary btn-small" style="font-size:0.68rem; padding:1px 6px; background:rgba(74, 111, 165, 0.1); border-color:rgba(74, 111, 165, 0.3); color:var(--accent-blue); font-weight:700;">➕ Créer</button>
+                                        </div>
+                                        <input type="text" id="doc-patient-nom" placeholder="Ex: KPADONOU" oninput="updateDocPreview()" style="font-size:0.85rem; text-transform:uppercase; width: 100%;">
+                                    </div>
+                                    <div class="form-group col-5">
+                                        <label for="doc-patient-prenom">Prénom</label>
+                                        <input type="text" id="doc-patient-prenom" placeholder="Ex: Rémi Senakpon" oninput="updateDocPreview()" style="font-size:0.85rem; width: 100%;">
+                                    </div>
+                                    
+                                    <div class="form-group col-4">
+                                        <label for="doc-patient-age">Âge</label>
+                                        <input type="text" id="doc-patient-age" placeholder="Ex: 34 ans" oninput="updateDocPreview()" style="font-size:0.85rem; width: 100%;">
+                                    </div>
+                                    <div class="form-group col-4" id="field-date-consult">
+                                        <label for="doc-date-consult">Consultation</label>
+                                        <input type="date" id="doc-date-consult" onchange="updateDocPreview()" style="font-size:0.85rem; width: 100%;">
+                                    </div>
+                                    <div class="form-group col-4">
+                                        <label for="doc-date">Date Document</label>
+                                        <input type="date" id="doc-date" onchange="updateDocPreview()" style="font-size:0.85rem; width: 100%;">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Card 3: Données Cliniques (Motif & Diagnostic) -->
+                            <div class="form-card" style="margin-bottom: 15px;">
+                                <h4 class="form-card-title">🩺 Données Cliniques &amp; Diagnostics</h4>
+                                <div class="form-grid" style="gap: 12px;">
+                                    <div class="form-group col-12" id="field-motif">
+                                        <label for="doc-motif">Motif / Raison de la consultation (phrase courte)</label>
+                                        <input type="text" id="doc-motif" placeholder="Ex: des douleurs du genou droit survenues à la suite d'un traumatisme sportif" oninput="updateDocPreview()" style="font-size:0.85rem; width: 100%;">
+                                    </div>
+                                    <div class="form-group col-12" id="field-diagnostique">
+                                        <label for="doc-diagnostique">Diagnostic clinique précis (pour l'en-tête du rapport)</label>
+                                        <input type="text" id="doc-diagnostique" placeholder="Ex: Rupture du ligament croisé antérieur (LCA) du genou droit" oninput="updateDocPreview()" style="font-size:0.85rem; width: 100%;">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Card 4: Tiers-Payant & Assurances (Conditionnel) -->
+                            <div class="form-card" style="margin-bottom: 15px;">
+                                <h4 class="form-card-title">🚗 Prise en Charge Tiers-Payant &amp; Séjour</h4>
+                                <div class="form-grid" style="gap: 12px;">
+                                    <!-- CHAMPS ASSURANCE -->
+                                    <div class="col-12" id="field-insurer" style="display:none; gap:10px; grid-template-columns:1fr 1fr;">
+                                        <div class="form-group" style="margin:0;">
+                                            <label for="doc-insurer">Compagnie d'Assurance</label>
+                                            <select id="doc-insurer" onchange="updateInsurerLabel(); updateDocPreview();" style="font-size:0.85rem; width: 100%;">
+                                                <option value="">— Sélectionner —</option>
+                                                <!-- Populated dynamically from MercyFiatDB -->
+                                            </select>
+                                        </div>
+                                        <div class="form-group" style="margin:0;">
+                                            <label for="doc-insurer-name">Nom complet (si autre)</label>
+                                            <input type="text" id="doc-insurer-name" placeholder="Ex: MA SANTE Assurances" oninput="updateDocPreview()" style="font-size:0.85rem; width: 100%;">
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-12" id="field-sinistre" style="display:none;">
+                                        <label for="doc-sinistre">N° Sinistre / Référence Dossier Assurance</label>
+                                        <input type="text" id="doc-sinistre" placeholder="Ex: SIN-2025-00847 / REF-CMF-2025-0142" oninput="updateDocPreview()" style="font-size:0.85rem; width: 100%;">
+                                    </div>
+
+                                    <!-- DATES HOSPITALISATION -->
+                                    <div class="form-group col-4" id="field-date-entree" style="display:none;">
+                                        <label for="doc-date-entree">Date d'entrée</label>
+                                        <input type="date" id="doc-date-entree" onchange="updateDocPreview()" style="font-size:0.85rem; width: 100%;">
+                                    </div>
+                                    <div class="form-group col-4" id="field-date-sortie" style="display:none;">
+                                        <label for="doc-date-sortie">Date de sortie</label>
+                                        <input type="date" id="doc-date-sortie" onchange="updateDocPreview()" style="font-size:0.85rem; width: 100%;">
+                                    </div>
+                                    <div class="form-group col-4" id="field-date-intervention" style="display:none;">
+                                        <label for="doc-date-intervention">Chirurgie</label>
+                                        <input type="date" id="doc-date-intervention" onchange="updateDocPreview()" style="font-size:0.85rem; width: 100%;">
+                                    </div>
+                                    <div class="form-group col-6" id="field-date-prolongation" style="display:none;">
+                                        <label for="doc-date-prolongation">Date de prolongation</label>
+                                        <input type="date" id="doc-date-prolongation" onchange="updateDocPreview()" style="font-size:0.85rem; width: 100%;">
+                                    </div>
+                            </div>
+                        </div> <!-- Fermeture de form-card -->
+                        </div> <!-- Fermeture de form-cards-container -->
+
+                        <!-- ── INTERVENTION + CONVALESCENCE + JOURS ── -->
+                        <div class="form-group" id="field-intervention" style="margin:0;">
+                            <label for="doc-intervention" style="font-size:0.78rem;">Intervention réalisée (compléter la phrase "Il a bénéficié…")</label>
+                            <input type="text" id="doc-intervention" placeholder="Ex: d'une ostéosynthèse par plaque vissée LCP de la clavicule gauche" oninput="updateDocPreview()" style="font-size:0.85rem;">
+                        </div>
+                        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+                            <div class="form-group" id="field-hospi-days" style="display:none; margin:0;">
+                                <label for="doc-hospi-days" style="font-size:0.78rem;">Jours d'hospitalisation prévus</label>
+                                <input type="number" id="doc-hospi-days" min="1" max="365" placeholder="Ex: 15" oninput="updateDocPreview()" style="font-size:0.85rem;">
+                            </div>
+                            <div class="form-group" id="field-convalescence" style="display:none; margin:0;">
+                                <label for="doc-convalescence" style="font-size:0.78rem;">Durée de convalescence prescrite</label>
+                                <input type="text" id="doc-convalescence" placeholder="Ex: deux (02) mois" oninput="updateDocPreview()" style="font-size:0.85rem;">
+                            </div>
+                        </div>
+
+                        <!-- ── BLOCS TEXTE GUIDÉS ── -->
+                        <div style="border-top:1px dashed var(--border-color); padding-top:12px;">
+                            <p style="font-weight:800; font-size:0.82rem; color:#4a5568; margin-bottom:10px; display:flex; align-items:center; gap:6px;">
+                                ✍️ Blocs de Contenu Guidés
+                                <span style="font-weight:400; font-style:italic; color:var(--text-secondary); font-size:0.7rem;">— Remplissez pour générer automatiquement le corps du rapport</span>
+                            </p>
+
+                            <div class="form-group" id="field-rappel" style="margin:0 0 10px 0;">
+                                <label for="doc-rappel" style="font-size:0.78rem; color:#718096;">📌 "Pour rappel…" — Antécédents / Historique médical</label>
+                                <textarea id="doc-rappel" rows="2" style="font-size:0.83rem;" placeholder="Ex: elle avait été hospitalisée du 14 mai au 15 mai 2025 pour ressaut du 2ème et du 3ème doigt de la main droite. Elle avait bénéficié, le 14/05/2025, d'une cure chirurgicale." oninput="updateDocPreview()"></textarea>
+                            </div>
+                            <div class="form-group" id="field-examen" style="margin:0 0 10px 0;">
+                                <label for="doc-examen" style="font-size:0.78rem; color:#718096;">🔬 Examen clinique & Bilan (imagerie, résultats)</label>
+                                <textarea id="doc-examen" rows="2" style="font-size:0.83rem;" placeholder="Ex: Le scanner de la cheville gauche réalisé le 08 septembre 2025 met en évidence une pseudarthrose sur fracture de l'extrémité distale de la jambe, avec séquestre osseux au niveau du foyer de fracture." oninput="updateDocPreview()"></textarea>
+                            </div>
+                            <div class="form-group" id="field-conclusion" style="margin:0 0 10px 0;">
+                                <label for="doc-conclusion" style="font-size:0.78rem; color:#718096;">✅ Conclusion & Plan / Indication chirurgicale</label>
+                                <textarea id="doc-conclusion" rows="2" style="font-size:0.83rem;" placeholder="Ex: Il est indiqué, une reconstruction par arthrodèse de la cheville gauche selon la technique de Masquelet." oninput="updateDocPreview()"></textarea>
+                            </div>
+                            <div class="form-group" id="block-recommandations" style="margin:0 0 10px 0;">
+                                <label for="doc-recommandations" style="font-size:0.78rem; color:#718096;">💊 Recommandations / Prescriptions</label>
+                                <textarea id="doc-recommandations" rows="2" style="font-size:0.83rem;" placeholder="Ex: Nous préconisons la poursuite de la rééducation fonctionnelle." oninput="updateDocPreview()"></textarea>
+                            </div>
+                            <div class="form-group" id="block-etat-actuel" style="margin:0 0 10px 0; display:none;">
+                                <label for="doc-etat-actuel" style="font-size:0.78rem; color:#718096;">📊 État actuel & plaintes du patient</label>
+                                <textarea id="doc-etat-actuel" rows="2" style="font-size:0.83rem;" placeholder="Ex: il se plaint de douleurs et présente une raideur au niveau des doigts." oninput="updateDocPreview()"></textarea>
+                            </div>
+                            <div class="form-group" id="block-justification" style="margin:0; display:none;">
+                                <label for="doc-justification" style="font-size:0.78rem; color:#718096;">📝 Justification de la prolongation</label>
+                                <textarea id="doc-justification" rows="2" style="font-size:0.83rem;" placeholder="Ex: En raison de complications post-opératoires nécessitant une surveillance rapprochée..." oninput="updateDocPreview()"></textarea>
+                            </div>
+                        </div>
+
+                        <!-- ── ÉDITEUR TEXTE BRUT ── -->
+                        <div style="border-top:1px dashed var(--border-color); padding-top:12px;">
+                            <label for="doc-editor" style="font-weight:700; font-size:0.83rem; color:#2d3748; display:flex; justify-content:space-between; align-items:center;">
+                                <span>📝 Corps du texte (éditable directement)</span>
+                                <button type="button" onclick="loadDocumentTemplate()" class="btn btn-secondary btn-small" style="font-size:0.7rem; padding:3px 10px;">↺ Réinitialiser</button>
+                            </label>
+                            <textarea id="doc-editor" rows="10" style="font-family:monospace; font-size:0.8rem; line-height:1.6;" oninput="updateDocPreview()"></textarea>
+                        </div>
+
+                        <!-- ── ASSISTANT MOTS-CLÉS ── -->
+                        <div style="background:linear-gradient(135deg,rgba(195,161,126,0.07),rgba(255,255,255,0.9)); padding:12px 14px; border-radius:var(--radius-md); border:1px solid var(--border-color);">
+                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:7px;">
+                                <label style="font-weight:800; color:var(--accent-teal); font-size:0.83rem; display:flex; align-items:center; gap:5px; margin:0;">
+                                    🧠 Assistant Rédactionnel (Mots-clés)
+                                </label>
+                                <span style="font-size:0.67rem; font-weight:700; background:var(--bg-sidebar); padding:2px 6px; border-radius:4px; color:#4a5568;">Hors-Ligne Pro</span>
+                            </div>
+                            <div style="display:flex; gap:8px;">
+                                <input type="text" id="doc-keywords-input" placeholder="Ex: droite, garrot 280, vis 9mm, drain Redon..." style="flex-grow:1; font-size:0.83rem; padding:7px 12px;">
+                                <button type="button" class="btn btn-primary btn-small" onclick="generateDocFromKeywords()" style="background:linear-gradient(135deg,var(--accent-teal),var(--accent-blue)); font-weight:700; white-space:nowrap;">🪄 Adapter</button>
+                            </div>
+                        </div>
+
+
+                        <div style="background: var(--bg-sidebar); border: 1px solid var(--border-color); padding: 14px; border-radius: var(--radius-md); margin-top: 10px;">
+                            <span style="font-size:0.82rem; font-weight:700; color:var(--text-primary); display:block; margin-bottom:9px;">Médecin Signataire &amp; Éléments de signature :</span>
+                            
+                            <!-- Sélecteur médecin -->
+                            <div style="margin-bottom:10px;">
+                                <label style="font-size:0.72rem; color:var(--text-secondary); font-weight:600; display:block; margin-bottom:4px;">👨‍⚕️ Choisir le médecin signataire :</label>
+                                <select id="doc-medecin-select" style="width:100%; font-size:0.83rem; padding:6px 10px; border-radius:var(--radius-sm); border:1px solid var(--border-color); background:var(--bg-card); color:var(--text-primary); font-weight:600;">
+                                    <!-- Rempli par documents.js -->
+                                </select>
+                            </div>
+                            
+                            <!-- Aperçu signature/cachet -->
+                            <div class="signature-preview-card">
+                                <div style="flex:1; text-align:center;">
+                                    <p style="font-size:0.68rem; color:var(--text-secondary); margin-bottom:3px; font-weight:600;">CACHET</p>
+                                    <img id="cachet-preview-img" src="assets/cachet_centre.png" style="max-height:50px; max-width:80px; object-fit:contain;">
+                                </div>
+                                <div style="flex:1; text-align:center; border-left:1px solid var(--border-color); padding-left:12px;">
+                                    <p style="font-size:0.68rem; color:var(--text-secondary); margin-bottom:3px; font-weight:600;">SIGNATURE</p>
+                                    <img id="sig-preview-img" src="assets/signature.png" style="max-height:50px; max-width:80px; object-fit:contain;">
+                                </div>
+                                <div style="flex:1; text-align:left; border-left:1px solid var(--border-color); padding-left:10px;">
+                                    <p id="sig-preview-nom" style="font-size:0.78rem; font-weight:800; color:var(--text-primary); margin:0 0 2px 0;">Dr Gipsy AGAVOEDO</p>
+                                    <p id="sig-preview-spec" style="font-size:0.67rem; color:var(--text-secondary); margin:0;">Chirurgien Orth.</p>
+                                </div>
+                            </div>
+                            
+                            <div style="display:flex; gap:18px;">
+                                <label style="display:inline-flex; align-items:center; gap:7px; font-weight:500; cursor:pointer; font-size:0.85rem;">
+                                    <input type="checkbox" id="toggle-sig-image" checked onchange="updateDocPreview()">
+                                    Afficher Signature
+                                </label>
+                                <label style="display:inline-flex; align-items:center; gap:7px; font-weight:500; cursor:pointer; font-size:0.85rem;">
+                                    <input type="checkbox" id="toggle-seal-image" checked onchange="updateDocPreview()">
+                                    Afficher Cachet
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- ── ACTIONS ── -->
+                        <div style="display:flex; gap:10px; border-top:1px solid var(--border-color); padding-top:15px; flex-wrap:wrap;">
+                            <button class="btn btn-primary" id="btn-unlock-doc" onclick="setFormLockState('documents', false)" style="display:none; flex-grow:1.5; background: linear-gradient(135deg, var(--accent-gold), var(--accent-coral)); font-weight:800; color:white; border:none; box-shadow:0 4px 10px rgba(0,0,0,0.08);">
+                                🔓 Modifier la Fiche
+                            </button>
+                            <button class="btn btn-primary" onclick="saveActiveDocument()" style="flex-grow:1.5;">
+                                💾 Enregistrer le Rapport
+                            </button>
+                            <button class="btn btn-secondary" id="btn-duplicate-doc" onclick="duplicateCurrentDocFromEditor()" style="display:none; font-weight:700;" title="Dupliquer ce rapport">
+                                👯 Dupliquer
+                            </button>
+                            <button class="btn btn-secondary" id="btn-reset-doc" onclick="resetDocEditorForm()" style="font-weight:700;" title="Rédiger un nouveau rapport">
+                                🆕 Nouveau
+                            </button>
+                            <button class="btn btn-secondary" onclick="openPrintPreview('documents')">
+                                🖨️ Imprimer / PDF
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Panneau de Rendu Clinique (Papier à En-tête A4) -->
+                    <div class="preview-panel" id="doc-print-preview">
+                        <!-- Rempli dynamiquement par documents.js -->
+                    </div>
+                    
+                </div>
+            </section>
+
+            <!-- ==========================================
+                 SECTION 4 : REGISTRE GÉNÉRAL (DATABASE)
+                 ========================================== -->
+            <section id="register-section" class="content-section">
+                <div class="card" style="display:flex; flex-direction:column; gap:0;">
+                    <!-- HEADER: Titre + Recherche -->
+                    <div style="display:flex; justify-content:space-between; align-items:center; padding:20px 20px 15px 20px; border-bottom:1px solid var(--border-color);">
+                        <h3 style="font-weight: 800; font-size: 1.15rem; color: var(--text-primary); margin:0;">Archives et Registre Général</h3>
+                        <div style="display:flex; gap:10px; align-items:center;">
+                            <span id="register-result-count" class="badge dark" style="font-size:0.75rem; padding:4px 10px;">0 fiche(s)</span>
+                            <button class="btn btn-primary btn-small" onclick="openNewPatientModal()" style="padding: 8px 12px; white-space: nowrap; font-size: 0.8rem; background: linear-gradient(135deg, var(--accent-teal), var(--accent-blue)); display: flex; align-items: center; gap: 4px;">
+                                <span>➕ Nouveau Patient</span>
+                            </button>
+                            <input type="text" id="register-search" placeholder="🔍 Rechercher par nom, diagnostic, référence..." style="width:320px; padding:8px 12px;" oninput="renderRegisterTable()">
+                        </div>
+                    </div>
+
+                    <!-- ONGLETS PRINCIPAUX -->
+                    <div id="register-tabs-bar" style="display:flex; gap:0; border-bottom:2px solid var(--border-color); background:var(--bg-main); padding:0 20px;">
+                        <button class="register-tab active" data-tab="ALL" onclick="switchRegisterTab('ALL', this)">🔍 Tout</button>
+                        <button class="register-tab" data-tab="BILLS_ONLY" onclick="switchRegisterTab('BILLS_ONLY', this)">📊 Mes Factures</button>
+                        <button class="register-tab" data-tab="MY_DOCS" onclick="switchRegisterTab('MY_DOCS', this)">📋 Mes Rapports</button>
+                        <button class="register-tab" data-tab="ARCHIVES" onclick="switchRegisterTab('ARCHIVES', this)">📚 Archives Importées <span id="archive-count-badge" class="badge light" style="font-size:0.65rem; padding:2px 6px; margin-left:4px;">851</span></button>
+                    </div>
+
+                    <!-- SOUS-FILTRES PAR CATÉGORIE (visible uniquement en mode Archives) -->
+                    <div id="register-sub-filters" style="display:none; padding:10px 20px; background:rgba(56,178,172,0.03); border-bottom:1px solid var(--border-color); gap:6px; flex-wrap:wrap;">
+                        <span style="font-weight:700; font-size:0.78rem; color:var(--text-secondary); margin-right:8px; align-self:center;">Catégorie :</span>
+                        <button class="register-sub-filter active" data-sub="ALL" onclick="switchRegisterSubFilter('ALL', this)">📚 Tous</button>
+                        <button class="register-sub-filter" data-sub="CRO" onclick="switchRegisterSubFilter('CRO', this)">🔬 CRO — Chirurgie</button>
+                        <button class="register-sub-filter" data-sub="HOSPI" onclick="switchRegisterSubFilter('HOSPI', this)">🏥 Hospitalisation</button>
+                        <button class="register-sub-filter" data-sub="CONSULT" onclick="switchRegisterSubFilter('CONSULT', this)">📋 Consultation</button>
+                        <button class="register-sub-filter" data-sub="CERTIF" onclick="switchRegisterSubFilter('CERTIF', this)">📄 Certificats</button>
+                    </div>
+
+                    <!-- TABLEAU DU REGISTRE -->
+                    <div style="padding:15px 20px 20px 20px;">
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Patient</th>
+                                        <th>Catégorie de Fiche</th>
+                                        <th>Détail / Diagnostic</th>
+                                        <th>Assurance / Taux</th>
+                                        <th>Valeur brute</th>
+                                        <th>Date</th>
+                                        <th style="width:160px;">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="register-table-rows">
+                                    <!-- Rempli en JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- CONTRÔLES DE PAGINATION -->
+                    <div id="register-pagination-controls"></div>
+                </div>
+            </section>
+
+            <!-- ==========================================
+                 SECTION 5 : MODULE DÉDIÉ PATIENTÈLE (PATIENTS)
+                 ========================================== -->
+            <section id="patients-section" class="content-section">
+                <div class="card" style="display:flex; flex-direction:column; gap:0;">
+                    <!-- HEADER: Titre + Recherche -->
+                    <div style="display:flex; justify-content:space-between; align-items:center; padding:20px 20px 15px 20px; border-bottom:1px solid var(--border-color);">
+                        <h3 style="font-weight: 800; font-size: 1.15rem; color: var(--text-primary); margin:0;">Base des Patients Unique</h3>
+                        <div style="display:flex; gap:10px; align-items:center;">
+                            <span id="patients-result-count" class="badge dark" style="font-size:0.75rem; padding:4px 10px;">0 patient(s)</span>
+                            <button class="btn btn-primary btn-small" onclick="openNewPatientModal()" style="padding: 8px 12px; white-space: nowrap; font-size: 0.8rem; background: linear-gradient(135deg, var(--accent-teal), var(--accent-blue)); display: flex; align-items: center; gap: 4px;">
+                                <span>➕ Nouveau Patient</span>
+                            </button>
+                            <input type="text" id="patients-search" placeholder="🔍 Filtrer les patients par nom..." style="width:300px; padding:8px 12px;" oninput="renderPatientsTable()">
+                        </div>
+                    </div>
+
+                    <!-- TABLEAU DES PATIENTS -->
+                    <div style="padding:15px 20px 20px 20px;">
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Identité du Patient</th>
+                                        <th>Dernier Diagnostic / Motif</th>
+                                        <th>Acte / Intervention de Référence</th>
+                                        <th>Code Acte (K)</th>
+                                        <th style="width:380px; text-align:center;">Actions Cliniques &amp; Comptables</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="patients-table-rows">
+                                    <!-- Rempli en JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <!-- CONTRÔLES DE PAGINATION DES PATIENTS -->
+                    <div id="patients-pagination-controls"></div>
+                </div>
+            </section>
+
+        </main>
+        
+    </div>
+
+    <!-- Modal d'Aperçu Avant Impression Premium (A4) -->
+    <div id="print-preview-modal" class="modal-overlay" style="display: none;">
+        <div class="modal-toolbar">
+            <div class="toolbar-title">
+                <svg viewBox="0 0 24 24" style="width:20px; height:20px; stroke:var(--accent-teal); stroke-width:3; fill:none;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                <span>Aperçu & Suite d'Impression Clinique</span>
+            </div>
+            <div class="toolbar-actions" style="display:flex; gap:10px;">
+                <button class="btn btn-primary" onclick="printActiveDocViaPDF()" style="background: linear-gradient(135deg, var(--accent-teal), var(--accent-blue));">
+                    <svg viewBox="0 0 24 24" style="width:16px; height:16px; stroke:currentColor; stroke-width:2.5; fill:none; margin-right:5px;"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+                    🖨️ Imprimer / Aperçu (PDF)
+                </button>
+                <button class="btn btn-primary" onclick="exportActiveDocToPDF()" style="background: linear-gradient(135deg, var(--accent-teal), var(--accent-blue));">
+                    <svg viewBox="0 0 24 24" style="width:16px; height:16px; stroke:currentColor; stroke-width:2.5; fill:none; margin-right:5px;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+                    💾 Enregistrer en PDF
+                </button>
+                <button class="btn btn-secondary" onclick="closePrintPreviewModal()">
+                    Fermer / Retour
+                </button>
+            </div>
+        </div>
+        
+        <div class="modal-preview-container" style="display: grid; grid-template-columns: 320px 1fr; padding: 0; background-color: #1a202c; height: calc(100vh - 65px); overflow: hidden;">
+            
+            <!-- Panneau de Paramètres d'Impression Premium (Style Chrome / Acrobat) -->
+            <div class="print-settings-sidebar" style="background-color:#eae6df; border-right:2px solid var(--border-color); padding:25px; display:flex; flex-direction:column; gap:20px; color:#2d3748; box-shadow:5px 0 15px rgba(0,0,0,0.15); z-index:10; height:100%;">
+                <h3 style="font-size:1.05rem; font-weight:800; border-bottom:1px solid var(--border-color); padding-bottom:10px; color:#1a202c; display:flex; align-items:center; gap:8px;">
+                    <svg viewBox="0 0 24 24" style="width:18px; height:18px; stroke:var(--accent-teal); stroke-width:2.5; fill:none;"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                    Configuration
+                </h3>
+                
+                <div class="form-group">
+                    <label for="print-device" style="font-weight:700; font-size:0.8rem; color:#4a5568; margin-bottom:5px; display:block;">Imprimante Destination</label>
+                    <select id="print-device" style="width:100%; font-size:0.85rem; padding:10px; border-radius:6px; background-color:white; border:1px solid var(--border-color); color:#2d3748; font-weight:600;">
+                        <option value="">Détection en cours...</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="print-copies" style="font-weight:700; font-size:0.8rem; color:#4a5568; margin-bottom:5px; display:block;">Nombre de copies</label>
+                    <input type="number" id="print-copies" min="1" value="1" style="width:100%; font-size:0.85rem; padding:10px; border-radius:6px; background-color:white; border:1px solid var(--border-color); color:#2d3748; font-weight:600;">
+                </div>
+                
+                <div class="form-group">
+                    <label for="print-color" style="font-weight:700; font-size:0.8rem; color:#4a5568; margin-bottom:5px; display:block;">Mode Couleur</label>
+                    <select id="print-color" style="width:100%; font-size:0.85rem; padding:10px; border-radius:6px; background-color:white; border:1px solid var(--border-color); color:#2d3748; font-weight:600;">
+                        <option value="color">🎨 Imprimer en Couleur</option>
+                        <option value="mono">⚫ Noir et blanc / Niveaux de gris</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="print-margins" style="font-weight:700; font-size:0.8rem; color:#4a5568; margin-bottom:5px; display:block;">Marges</label>
+                    <select id="print-margins" style="width:100%; font-size:0.85rem; padding:10px; border-radius:6px; background-color:white; border:1px solid var(--border-color); color:#2d3748; font-weight:600;">
+                        <option value="none">Aucune (Conseillé - Marges A4 Clinique)</option>
+                        <option value="default">Par défaut (Browser)</option>
+                    </select>
+                </div>
+                
+                <div class="form-group" style="margin-top: 10px; border-top: 1px dashed var(--border-color); padding-top: 12px;">
+                    <label for="pdf-password" style="font-weight:700; font-size:0.8rem; color:#4a5568; margin-bottom:5px; display:block;">🔒 Mot de passe PDF (Optionnel)</label>
+                    <input type="password" id="pdf-password" placeholder="Saisir un code pour verrouiller le PDF" style="width:100%; font-size:0.85rem; padding:10px; border-radius:6px; background-color:white; border:1px solid var(--border-color); color:#2d3748; font-weight:600; box-sizing:border-box;">
+                </div>
+                
+                <div style="flex-grow:1;"></div>
+                
+                <button class="btn btn-primary" onclick="launchSilentPrint()" style="width:100%; padding:12px; font-size:0.88rem; font-weight:800; background:linear-gradient(135deg, var(--accent-teal), var(--accent-blue)); display:flex; justify-content:center; align-items:center; gap:8px; margin-bottom: 8px;">
+                    <svg viewBox="0 0 24 24" style="width:18px; height:18px; stroke:currentColor; stroke-width:2.5; fill:none;"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+                    Impression Directe
+                </button>
+                <button class="btn btn-secondary" onclick="printDOMElement('modal-a4-sheet')" style="width:100%; padding:12px; font-size:0.88rem; font-weight:800; border-color:var(--accent-teal); color:var(--accent-teal); display:flex; justify-content:center; align-items:center; gap:8px;">
+                    <svg viewBox="0 0 24 24" style="width:18px; height:18px; stroke:currentColor; stroke-width:2.5; fill:none;"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                    Dialogue Système (A4)
+                </button>
+            </div>
+            
+            <!-- Zone d'Aperçu A4 (Centrée sur fond noir avec scroll indépendant) -->
+            <div class="modal-preview-scroll-container" style="flex-grow: 1; overflow-y: auto; padding: 40px 20px; display: flex; justify-content: center; align-items: flex-start; height: 100%;">
+                <div id="modal-a4-sheet" class="a4-sheet" style="box-shadow: 0 20px 50px rgba(0,0,0,0.6); margin-bottom:40px;">
+                    <!-- Rempli dynamiquement en clonant l'aperçu actif -->
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    <!-- Modal de Création de Patient -->
+    <div id="new-patient-modal" class="modal-overlay" style="display: none; align-items: center; justify-content: center; background-color: rgba(6, 8, 20, 0.85); backdrop-filter: blur(5px);">
+        <div class="card" style="width: 520px; background-color: var(--bg-card); border: 1px solid var(--border-color); box-shadow: var(--shadow-hover); border-radius: var(--radius-lg); display: flex; flex-direction: column; gap: 20px; padding: 25px; animation: fadeInModal 0.2s ease-out;">
+            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--border-color); padding-bottom: 12px;">
+                <h3 style="font-weight: 800; font-size: 1.15rem; color: var(--text-primary); display: flex; align-items: center; gap: 8px;">
+                    <svg viewBox="0 0 24 24" style="width: 20px; height: 20px; stroke: var(--accent-teal); stroke-width: 2.5; fill: none;"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="20" y1="8" x2="20" y2="14"></line><line x1="23" y1="11" x2="17" y2="11"></line></svg>
+                    ➕ Enregistrer un Patient
+                </h3>
+                <button class="btn btn-danger btn-small" onclick="closeNewPatientModal()" style="padding: 4px 8px; font-weight: 800; border-radius: 50%; border: none;">✕</button>
+            </div>
+            
+            <form id="new-patient-form" onsubmit="event.preventDefault(); saveNewPatientFromModal();" style="display: flex; flex-direction: column; gap: 15px;">
+                <div class="form-grid" style="gap: 15px;">
+                    <div class="form-group col-6">
+                        <label for="new-patient-nom" style="font-size: 0.8rem; font-weight: 700; color: var(--text-secondary);">Nom de famille</label>
+                        <input type="text" id="new-patient-nom" placeholder="Ex: SOGNI" required style="text-transform: uppercase; width: 100%;">
+                    </div>
+                    <div class="form-group col-6">
+                        <label for="new-patient-prenom" style="font-size: 0.8rem; font-weight: 700; color: var(--text-secondary);">Prénom(s)</label>
+                        <input type="text" id="new-patient-prenom" placeholder="Ex: Delphin" required style="width: 100%;">
+                    </div>
+                    <div class="form-group col-6">
+                        <label for="new-patient-age" style="font-size: 0.8rem; font-weight: 700; color: var(--text-secondary);">Âge / Infos complémentaires</label>
+                        <input type="text" id="new-patient-age" placeholder="Ex: 34 ans" style="width: 100%;">
+                    </div>
+                    <div class="form-group col-6">
+                        <label for="new-patient-type" style="font-size: 0.8rem; font-weight: 700; color: var(--text-secondary);">Prise en Charge</label>
+                        <select id="new-patient-type" onchange="handleModalPriseEnChargeChange()" style="width: 100%; height: 38px; border-radius: var(--radius-sm); border: 1px solid var(--border-color); padding: 0 10px; background-color: var(--bg-card); color: var(--text-primary); font-weight: 600;">
+                            <option value="PRIVE">Patient Ordinaire (Privé 100%)</option>
+                            <option value="MALADIE">Assuré Maladie</option>
+                            <option value="SINISTRE">Sinistré Automobile</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Bloc Assurance Modal (Hidable) -->
+                    <div id="new-patient-insurance-block" class="col-12" style="display: none; padding: 0; margin: 0;">
+                        <div class="form-grid" style="gap: 15px;">
+                            <div class="form-group col-6">
+                                <label for="new-patient-insurer" style="font-size: 0.8rem; font-weight: 700; color: var(--text-secondary);">Organisme Assureur</label>
+                                <select id="new-patient-insurer" style="width: 100%; height: 38px; border-radius: var(--radius-sm); border: 1px solid var(--border-color); padding: 0 10px; background-color: var(--bg-card); color: var(--text-primary);">
+                                    <!-- Populated dynamically from MercyFiatDB -->
+                                </select>
+                            </div>
+                            <div class="form-group col-6">
+                                <label id="new-patient-matricule-label" for="new-patient-matricule" style="font-size: 0.8rem; font-weight: 700; color: var(--text-secondary);">N° d'Assuré / Matricule</label>
+                                <input type="text" id="new-patient-matricule" placeholder="Ex: 4904-2022-400" style="width: 100%;">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-12">
+                        <label for="new-patient-diag" style="font-size: 0.8rem; font-weight: 700; color: var(--text-secondary);">Diagnostic par défaut</label>
+                        <input type="text" id="new-patient-diag" placeholder="Ex: Rupture complète du LCA gauche" style="width: 100%;">
+                    </div>
+                    <div class="form-group col-12">
+                        <label for="new-patient-interv" style="font-size: 0.8rem; font-weight: 700; color: var(--text-secondary);">Intervention / Acte chirurgical</label>
+                        <input type="text" id="new-patient-interv" placeholder="Ex: Arthroscopie reconstruction LCA et Ménisectomie" style="width: 100%;">
+                    </div>
+                    <div class="form-group col-12">
+                        <label for="new-patient-kcode" style="font-size: 0.8rem; font-weight: 700; color: var(--text-secondary);">Code K nomenclature (ex: K180)</label>
+                        <input type="text" id="new-patient-kcode" placeholder="Ex: K180" style="width: 100%;">
+                    </div>
+                </div>
+                
+                <div style="display: flex; gap: 12px; margin-top: 15px; border-top: 1px solid var(--border-color); padding-top: 15px; justify-content: flex-end;">
+                    <button type="button" class="btn btn-secondary" onclick="closeNewPatientModal()" style="font-weight: 700;">Annuler</button>
+                    <button type="submit" class="btn btn-primary" style="font-weight: 700; background: linear-gradient(135deg, var(--accent-teal), var(--accent-blue));">Enregistrer dans la base</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Panneau Coulissant DME 360° du Patient -->
+    <div id="patient-dme-drawer" class="dme-drawer-overlay" style="display: none;">
+        <div class="dme-drawer-backdrop" onclick="closePatientDMEDrawer()"></div>
+        <div class="dme-drawer-content" style="background-color: var(--bg-card); border-left: 2px solid var(--border-color); box-shadow: var(--shadow-hover);">
+            <div class="dme-drawer-header" style="border-bottom: 1px solid var(--border-color); padding: 20px 24px;">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <div class="dme-avatar" id="dme-patient-avatar">--</div>
+                    <div>
+                        <h3 id="dme-patient-fullname" style="font-weight: 800; font-size: 1.15rem; color: var(--text-primary); line-height: 1.2;">NOM DU PATIENT</h3>
+                        <span id="dme-patient-age" style="font-size: 0.78rem; color: var(--text-secondary); font-weight: 600;">Âge: --</span>
+                    </div>
+                </div>
+                <button class="dme-close-btn" onclick="closePatientDMEDrawer()" style="color: var(--text-secondary);">✕</button>
+            </div>
+            
+            <!-- Barre d'Exportation & Impression DME Premium -->
+            <div style="display:flex; gap:10px; padding:10px 24px; border-bottom:1px solid var(--border-color); background-color: var(--bg-sidebar);">
+                <button class="btn btn-secondary btn-small" onclick="exportDMEToExcel()" style="flex-grow:1; font-weight:800; padding:6px 12px; font-size:0.75rem; display:flex; align-items:center; justify-content:center; gap:5px; border-color:rgba(74, 111, 165, 0.4); color:var(--accent-blue);">
+                    <span>📥 Dossier Excel (.xlsx)</span>
+                </button>
+                <button class="btn btn-primary btn-small" onclick="printDMEConsolidated()" style="flex-grow:1; font-weight:800; padding:6px 12px; font-size:0.75rem; display:flex; align-items:center; justify-content:center; gap:5px; background:linear-gradient(135deg, var(--accent-teal), var(--accent-blue));">
+                    <span>🖨️ Imprimer DME (A4)</span>
+                </button>
+            </div>
+            
+            <div class="dme-drawer-body">
+                <!-- Section Identité Clinique -->
+                <div class="dme-section-card">
+                    <h4 class="dme-section-title">🩺 Informations Cliniques de Base</h4>
+                    <p style="font-size: 0.82rem; margin-bottom: 4px; color: var(--text-secondary);"><strong>Diagnostic Initial :</strong><br><span id="dme-patient-diagnosis" style="color: var(--text-primary); font-weight: 600;">--</span></p>
+                    <p style="font-size: 0.82rem; color: var(--text-secondary);"><strong>Acte Prévu / Pratiqué :</strong><br><span id="dme-patient-intervention" style="color: var(--text-primary); font-weight: 600;">--</span> <span id="dme-patient-kcode" class="badge dark" style="font-size: 0.65rem; padding: 2px 6px; display: inline-block; margin-top: 4px;">K--</span></p>
+                </div>
+
+                <!-- Section Synthèse Financière -->
+                <div class="dme-section-card" style="background: linear-gradient(135deg, rgba(74, 111, 165, 0.04), rgba(75, 128, 123, 0.04)); border-left: 4px solid var(--accent-blue);">
+                    <h4 class="dme-section-title">📊 Synthèse Financière Consolidée</h4>
+                    <div style="display: flex; flex-direction: column; gap: 6px; font-size: 0.82rem;">
+                        <div style="display:flex; justify-content:space-between;">
+                            <span>Montant total facturé :</span>
+                            <strong id="dme-total-billed" style="color: var(--text-primary); font-weight: 700;">0 FCFA</strong>
+                        </div>
+                        <div style="display:flex; justify-content:space-between;">
+                            <span>Prises en charge Assurances :</span>
+                            <strong id="dme-total-insurance" style="color: var(--text-primary); font-weight: 700;">0 FCFA</strong>
+                        </div>
+                        <div style="display:flex; justify-content:space-between;">
+                            <span>Reste à charge Patient :</span>
+                            <strong id="dme-total-patient" style="color: var(--text-primary); font-weight: 700;">0 FCFA</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section Fil Chronologique d'Activités -->
+                <div class="dme-section-card">
+                    <h4 class="dme-section-title">⏱️ Fil d'Activités & Historique Clinique</h4>
+                    <div class="dme-timeline" id="dme-timeline-container">
+                        <p style="font-style: italic; font-size: 0.78rem; color: var(--text-secondary); text-align: center; padding: 15px 0;">Aucune activité enregistrée pour ce patient.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts logiques applicatifs -->
+    <script src="database.js"></script>
+    <script src="print_templates.js"></script>
+    <script src="billing_calculations.js"></script>
+    <script src="real_data.js"></script>
+    <script src="app_database.js"></script>
+    <script src="app_ui_helpers.js"></script>
+    <script src="app_print_service.js"></script>
+    <script src="app_patients_ui.js"></script>
+    <script src="app_workflow.js"></script>
+    <script src="app_dme_drawer.js"></script>
+    <script src="app_recent_activity.js"></script>
+    <script src="app_demo_data.js"></script>
+    <script src="app_router.js"></script>
+    <script src="app_autocomplete.js"></script>
+    <script src="app_analytics.js"></script>
+    <script src="app.js"></script>
+    <script src="billing_utils.js"></script>
+    <script src="billing_packages.js"></script>
+    <script src="billing.js"></script>
+    <script src="documents.js"></script>
+    <script src="register_ui.js"></script>
+    <script src="excel_export_service.js"></script>
+</body>
+</html>

@@ -1,0 +1,201 @@
+1226: @media print {
+1227:     /* Cache toute l'application principale */
+1228:     .app-container, body > *:not(#print-preview-modal) {
+1229:         display: none !important;
+1230:     }
+1231:     
+1232:     /* Affiche le modal de prévisualisation comme seule page imprimable */
+1233:     #print-preview-modal {
+1234:         position: absolute !important;
+1235:         left: 0 !important;
+1236:         top: 0 !important;
+1237:         width: 100% !important;
+1238:         height: auto !important;
+1239:         background: white !important;
+1240:         display: block !important;
+1241:         z-index: 1 !important;
+1242:         overflow: visible !important;
+1243:     }
+1244:     
+1245:     .modal-toolbar {
+1246:         display: none !important;
+1247:     }
+1248:     
+1249:     .modal-preview-container {
+1250:         padding: 0 !important;
+1251:         background: white !important;
+1252:         overflow: visible !important;
+1253:         display: block !important;
+1254:     }
+1255:     
+1256:     .a4-sheet {
+1257:         box-shadow: none !important;
+1258:         width: 100% !important;
+1259:         margin: 0 !important;
+1260:         padding: 0 !important; /* Laisse le navigateur gérer les marges physiques via @page */
+1261:         border: none !important;
+1262:         min-height: 0 !important;
+1263:         overflow: visible !important;
+1264:         page-break-inside: avoid !important;
+1265:     }
+1266: }
+1267: 
+1268: /* ==========================================
+1269:    ✨ AUTOCOMPLÉTION SUR-MESURE PREMIUM (SCROLLABLE)
+1270:    ========================================== */
+1271: .autocomplete-wrapper {
+1272:     position: relative;
+1273:     width: 100%;
+1274: }
+1275: 
+1276: .autocomplete-suggestions {
+1277:     position: absolute;
+1278:     top: 100%;
+1279:     left: 0;
+1280:     width: 100%;
+1281:     max-height: 200px;
+1282:     overflow-y: auto;
+1283:     background-color: rgba(255, 255, 255, 0.98);
+1284:     border: 1px solid var(--border-color);
+1285:     border-radius: var(--radius-md);
+1286:     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+1287:     z-index: 99999;
+1288:     margin-top: 4px;
+1289:     backdrop-filter: blur(10px);
+1290: }
+1291: 
+1292: .autocomplete-suggestion {
+1293:     padding: 10px 14px;
+1294:     font-size: 0.85rem;
+1295:     cursor: pointer;
+1296:     color: var(--text-primary);
+1297:     border-bottom: 1px solid rgba(0, 0, 0, 0.03);
+1298:     transition: var(--transition-fast);
+1299:     text-align: left;
+1300:     display: flex;
+1301:     justify-content: space-between;
+1302:     align-items: center;
+1303: }
+1304: 
+1305: .autocomplete-suggestion:last-child {
+1306:     border-bottom: none;
+1307: }
+1308: 
+1309: .autocomplete-suggestion strong {
+1310:     color: inherit !important;
+1311: }
+1312: 
+1313: .autocomplete-suggestion .suggestion-sub {
+1314:     font-size: 0.72rem;
+1315:     color: var(--text-secondary);
+1316:     font-style: italic;
+1317:     white-space: nowrap;
+1318:     overflow: hidden;
+1319:     text-overflow: ellipsis;
+1320:     margin-left: 10px;
+1321: }
+1322: 
+1323: .autocomplete-suggestion:hover, 
+1324: .autocomplete-suggestion.active {
+1325:     background-color: rgba(74, 111, 165, 0.12);
+1326:     color: var(--accent-blue);
+1327: }
+1328: 
+1329: /* Scrollbar fine et scandinave pour suggestions */
+1330: .autocomplete-suggestions::-webkit-scrollbar {
+1331:     width: 6px;
+1332: }
+1333: 
+1334: .autocomplete-suggestions::-webkit-scrollbar-track {
+1335:     background: transparent;
+1336: }
+1337: 
+1338: .autocomplete-suggestions::-webkit-scrollbar-thumb {
+1339:     background: var(--border-color);
+1340:     border-radius: 3px;
+1341: }
+1342: 
+1343: .autocomplete-suggestions::-webkit-scrollbar-thumb:hover {
+1344:     background: var(--text-secondary);
+1345: }
+1346: 
+1347: /* ==========================================
+1348:    📂 PANNEAU COULISSANT DME 360° (PATIENT DRAWER)
+1349:    ========================================== */
+1350: .dme-drawer-overlay {
+1351:     position: fixed;
+1352:     top: 0;
+1353:     left: 0;
+1354:     width: 100vw;
+1355:     height: 100vh;
+1356:     z-index: 999999;
+1357:     display: flex;
+1358:     justify-content: flex-end;
+1359: }
+1360: 
+1361: .dme-drawer-backdrop {
+1362:     position: absolute;
+1363:     top: 0;
+1364:     left: 0;
+1365:     width: 100%;
+1366:     height: 100%;
+1367:     background-color: rgba(26, 32, 44, 0.4);
+1368:     backdrop-filter: blur(4px);
+1369:     transition: var(--transition-normal);
+1370: }
+1371: 
+1372: .dme-drawer-content {
+1373:     position: relative;
+1374:     width: 420px;
+1375:     height: 100%;
+1376:     background-color: rgba(255, 255, 255, 0.98);
+1377:     border-left: 2px solid var(--border-color);
+1378:     box-shadow: -15px 0 45px rgba(0, 0, 0, 0.15);
+1379:     display: flex;
+1380:     flex-direction: column;
+1381:     z-index: 10;
+1382:     transform: translateX(100%);
+1383:     transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+1384:     backdrop-filter: blur(15px);
+1385: }
+1386: 
+1387: .dme-drawer-overlay.open .dme-drawer-content {
+1388:     transform: translateX(0);
+1389: }
+1390: 
+1391: .dme-drawer-header {
+1392:     padding: 24px;
+1393:     border-bottom: 1px solid var(--border-color);
+1394:     display: flex;
+1395:     justify-content: space-between;
+1396:     align-items: center;
+1397:     background-color: var(--bg-sidebar);
+1398: }
+1399: 
+1400: .dme-avatar {
+1401:     width: 46px;
+1402:     height: 46px;
+1403:     background: linear-gradient(135deg, var(--accent-teal), var(--accent-blue));
+1404:     color: white;
+1405:     font-weight: 800;
+1406:     border-radius: 50%;
+1407:     display: flex;
+1408:     align-items: center;
+1409:     justify-content: center;
+1410:     font-size: 1.15rem;
+1411:     box-shadow: 0 4px 10px rgba(74, 111, 165, 0.2);
+1412: }
+1413: 
+1414: .dme-close-btn {
+1415:     width: 32px;
+1416:     height: 32px;
+1417:     border-radius: 50%;
+1418:     border: 1px solid var(--border-color);
+1419:     background-color: white;
+1420:     color: var(--text-secondary);
+1421:     font-size: 0.85rem;
+1422:     cursor: pointer;
+1423:     display: flex;
+1424:     align-items: center;
+1425:     justify-content: center;
+1426:     transition: var(--transition-fast);

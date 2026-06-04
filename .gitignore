@@ -1,0 +1,31 @@
+# Dépendances Node
+node_modules/
+npm-debug.log*
+
+# Bases de données contenant des données médicales privées (Confidentialité / RGPD)
+*.json
+!package.json
+!package-lock.json
+scratch/*.json
+
+# Fichiers volumineux, builds et installateurs
+dist/
+*.exe
+*.zip
+*.tar.gz
+*.rar
+
+# Documents exportés (Factures et rapports)
+*.pdf
+*.xlsx
+*.xls
+scratch/*.pdf
+scratch/*.xlsx
+
+# Fichiers système et logs
+*.log
+.DS_Store
+Thumbs.db
+.tempmediaStorage/
+__pycache__/
+*.pyc

@@ -1,0 +1,45 @@
+{
+  "name": "mercyfiat-medsuite-desktop",
+  "version": "1.0.0",
+  "description": "Application bureautique officielle de la Clinique Mercy Fiat pour la facturation et les documents médicaux.",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron .",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder"
+  },
+  "keywords": [
+    "medical",
+    "billing",
+    "invoice",
+    "clinic",
+    "mercyfiat"
+  ],
+  "author": "Dr Gipsy AGAVOEDO / Mercy Fiat Clinique",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^30.0.0",
+    "electron-builder": "^26.8.1"
+  },
+  "build": {
+    "appId": "com.mercyfiat.medsuite",
+    "productName": "MercyFiatMedSuite",
+    "win": {
+      "target": "nsis",
+      "requestedExecutionLevel": "asInvoker"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "MercyFiat MedSuite"
+    }
+  },
+  "dependencies": {
+    "@pdfsmaller/pdf-encrypt-lite": "^1.0.2",
+    "exceljs": "^4.4.0",
+    "pdf-parse": "^2.4.5"
+  }
+}
