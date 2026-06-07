@@ -1,6 +1,7 @@
 import ctypes
 from ctypes import wintypes
 import subprocess
+import os
 
 # Define structures to read credential
 LPBYTE = ctypes.POINTER(ctypes.c_ubyte)
@@ -64,14 +65,27 @@ def run_git(args, hide_token=False):
     print("Stderr:", stderr)
     return res.returncode == 0
 
-print("Staging changes...")
-run_git(["add", "."])
+files_to_remove = [
+    'scratch/check_all_templates.py',
+    'scratch/debug_templates.py',
+    'scratch/fix_templates.py',
+    'scratch/push_fixes.py',
+    'scratch/show_git_changes.py'
+]
 
-print("Committing changes...")
-commit_msg = "Fix name splitting, prefill IDs and header duplication in reports"
-run_git(["commit", "-m", commit_msg])
+print("Removing temporary files...")
+for f in files_to_remove:
+    if os.path.exists(f):
+        os.remove(f)
+        print(f"Removed: {f}")
 
-print("Pushing changes...")
+print("Staging deletions...")
+run_git(["add", "-A"])
+
+print("Committing deletions...")
+run_git(["commit", "-m", "Clean up temporary debugging and fixing scripts"])
+
+print("Pushing deletions...")
 push_url = f"https://{token}@github.com/Degnon92/CMF-MED_SUITE-APP"
 if run_git(["push", push_url, "main"], hide_token=True):
     print("Push succeeded!")
