@@ -3,7 +3,7 @@ import numpy as np
 from PIL import Image
 
 def verify_alignment():
-    p = r"c:\Users\Degnon\Documents\2.MERCY FIAT CLINIQUE\2. Dr Gipsy\MercyFiatMedSuiteDesktop\assets\cachet_centre.png"
+    p = r"c:\Users\Farus\Documents\2.MERCY FIAT CLINIQUE\2. Dr Gipsy\MercyFiatMedSuiteDesktop\assets\cachet_centre.png"
     if not os.path.exists(p):
         print("assets/cachet_centre.png does not exist!")
         return
@@ -27,7 +27,7 @@ def verify_alignment():
             elif abs(r[i, j] - 62.5) < 1.0:
                 vis[i, j] = [0, 255, 0, 255] # Green
                 
-    Image.fromarray(vis).save(r"C:\Users\Degnon\.gemini\antigravity-ide\brain\7cd223db-09d4-4d6d-b877-ad294933360a\check_alignment.png")
+    Image.fromarray(vis).save(r"C:\Users\Farus\.gemini\antigravity-ide\brain\7cd223db-09d4-4d6d-b877-ad294933360a\check_alignment.png")
     print("Saved check_alignment.png to brain artifacts directory")
 
 if __name__ == "__main__":

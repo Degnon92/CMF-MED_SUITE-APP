@@ -18,9 +18,9 @@ except ImportError:
 from pathlib import Path
 
 files_to_check = [
-    r"C:\Users\Degnon\Documents\2.MERCY FIAT CLINIQUE\2. Dr Gipsy\PROFORMA CHIRURGIE\FACTURE AFG MALADIE 1.xlsx",
-    r"C:\Users\Degnon\Documents\2.MERCY FIAT CLINIQUE\2. Dr Gipsy\PROFORMA CHIRURGIE\CREANCES NSIA.xlsx",
-    r"C:\Users\Degnon\Documents\2.MERCY FIAT CLINIQUE\2. Dr Gipsy\PROFORMA CHIRURGIE\EXEMPLAIRE PROFORMA. LAWANIxlsx.xlsx",
+    r"C:\Users\Farus\Documents\2.MERCY FIAT CLINIQUE\2. Dr Gipsy\PROFORMA CHIRURGIE\FACTURE AFG MALADIE 1.xlsx",
+    r"C:\Users\Farus\Documents\2.MERCY FIAT CLINIQUE\2. Dr Gipsy\PROFORMA CHIRURGIE\CREANCES NSIA.xlsx",
+    r"C:\Users\Farus\Documents\2.MERCY FIAT CLINIQUE\2. Dr Gipsy\PROFORMA CHIRURGIE\EXEMPLAIRE PROFORMA. LAWANIxlsx.xlsx",
 ]
 
 for filepath in files_to_check:

@@ -15,11 +15,11 @@ except ImportError:
 from pathlib import Path
 
 # Fichier de test KPEKPASSI
-EXCEL_FILE = Path(r"C:\Users\Degnon\Documents\2.MERCY FIAT CLINIQUE\2. Dr Gipsy\MercyFiatMedSuiteDesktop\Facture_PARAISO_PROFORMA.xlsx")
+EXCEL_FILE = Path(r"C:\Users\Farus\Documents\2.MERCY FIAT CLINIQUE\2. Dr Gipsy\MercyFiatMedSuiteDesktop\Facture_PARAISO_PROFORMA.xlsx")
 
 if not EXCEL_FILE.exists():
     # Chercher dans le dossier parent
-    parent = Path(r"C:\Users\Degnon\Documents\2.MERCY FIAT CLINIQUE")
+    parent = Path(r"C:\Users\Farus\Documents\2.MERCY FIAT CLINIQUE")
     files = list(parent.rglob("EXEMPLAIRE*.xlsx")) + list(parent.rglob("KPEK*.xlsx")) + list(parent.rglob("*.xlsx"))
     if files:
         EXCEL_FILE = files[0]

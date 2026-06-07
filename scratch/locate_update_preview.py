@@ -1,6 +1,6 @@
 import os
 
-base_dir = r"c:\Users\Degnon\Documents\2.MERCY FIAT CLINIQUE\2. Dr Gipsy\MercyFiatMedSuiteDesktop"
+base_dir = r"c:\Users\Farus\Documents\2.MERCY FIAT CLINIQUE\2. Dr Gipsy\MercyFiatMedSuiteDesktop"
 billing_path = os.path.join(base_dir, "billing.js")
 
 with open(billing_path, 'r', encoding='utf-8') as f:

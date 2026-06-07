@@ -7,7 +7,7 @@ Applies all fixes directly to real_data.js AND documents_db.json.
 import json, os, re, sys
 sys.stdout.reconfigure(encoding='utf-8')
 
-desktop = r"c:\Users\Degnon\Documents\2.MERCY FIAT CLINIQUE\2. Dr Gipsy\MercyFiatMedSuiteDesktop"
+desktop = r"c:\Users\Farus\Documents\2.MERCY FIAT CLINIQUE\2. Dr Gipsy\MercyFiatMedSuiteDesktop"
 real_path = os.path.join(desktop, "real_data.js")
 docs_path = os.path.join(desktop, "documents_db.json")
 

@@ -1,7 +1,7 @@
 import json
 import os
 
-desktop_dir = r"c:\Users\Degnon\Documents\2.MERCY FIAT CLINIQUE\2. Dr Gipsy\MercyFiatMedSuiteDesktop"
+desktop_dir = r"c:\Users\Farus\Documents\2.MERCY FIAT CLINIQUE\2. Dr Gipsy\MercyFiatMedSuiteDesktop"
 bills_path = os.path.join(desktop_dir, "bills_db.json")
 
 with open(bills_path, "r", encoding="utf-8") as f:

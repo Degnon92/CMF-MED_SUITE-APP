@@ -6,7 +6,7 @@ import openpyxl
 import docx
 from datetime import datetime
 
-workspace_dir = r"c:\Users\Degnon\Documents\2.MERCY FIAT CLINIQUE\2. Dr Gipsy"
+workspace_dir = r"c:\Users\Farus\Documents\2.MERCY FIAT CLINIQUE\2. Dr Gipsy"
 app_dir = os.path.join(workspace_dir, "MercyFiatMedSuiteDesktop")
 
 print("Démarrage de la reconstruction de la base de données...")
@@ -122,17 +122,28 @@ def parse_date(text):
             pass
             
     # Essayer textuel (ex : 10 Octobre 2024)
-    months = {
-        "janvier": 1, "fevrier": 2, "février": 2, "mars": 3, "avril": 4, "mai": 5, "juin": 6,
-        "juillet": 7, "aout": 8, "août": 8, "septembre": 9, "octobre": 10, "novembre": 11, "décembre": 12, "decembre": 12
-    }
-    match_txt = re.search(r'\b(\d{1,2})\s+([a-zéûó]+)\s+(\d{4})\b', text, re.IGNORECASE)
+    match_txt = re.search(r'\b(\d{1,2})\s+(\S+)\s+(\d{4})\b', text, re.IGNORECASE)
     if match_txt:
         day, m_name, year = match_txt.groups()
-        m_name = m_name.lower()
-        if m_name in months:
+        m_clean = m_name.lower()
+        
+        month_val = None
+        if m_clean.startswith("juin"):
+            month_val = 6
+        elif m_clean.startswith("juil"):
+            month_val = 7
+        else:
+            months_prefixes = {
+                "jan": 1, "fev": 2, "fév": 2, "mar": 3, "avr": 4, "mai": 5, "jui": 6,
+                "ao": 8, "sep": 9, "oct": 10, "nov": 11, "dec": 12, "déc": 12
+            }
+            for pref, val in months_prefixes.items():
+                if m_clean.startswith(pref):
+                    month_val = val
+                    break
+        if month_val:
             try:
-                dt = datetime(int(year), months[m_name], int(day))
+                dt = datetime(int(year), month_val, int(day))
                 return dt.strftime("%Y-%m-%d")
             except:
                 pass
@@ -416,7 +427,7 @@ def parse_excel_bills(wb_path, start_idx):
         
         # Scan de toutes les cellules utiles de la feuille
         for r in range(1, 35):
-            for c in range(1, 6):
+            for c in range(1, 13):
                 val = sheet.cell(r, c).value
                 if not val or not isinstance(val, str):
                     continue
@@ -426,7 +437,7 @@ def parse_excel_bills(wb_path, start_idx):
                 if val.lower().startswith("patient:") or val.lower().startswith("patient :"):
                     patient_name = val.split(":", 1)[1].strip()
                 # Client / Insurance
-                elif val.lower().startswith("client:") or val.lower().startswith("client :"):
+                elif val.lower().startswith("client:") or val.lower().startswith("client :") or val.lower().startswith("assurance:") or val.lower().startswith("assurance :"):
                     insurance = map_insurance(val.split(":", 1)[1].strip())
                 # Intervention
                 elif val.lower().startswith("intervention:") or val.lower().startswith("intervention :"):
@@ -510,6 +521,16 @@ def parse_excel_bills(wb_path, start_idx):
             items = [{"name": "Frais de soins cliniques standards", "price": gross_total or 210000, "qty": 1, "subtotal": gross_total or 210000}]
             if not gross_total:
                 gross_total = 210000
+                
+        # Fallback si l'assurance n'est pas détectée dans les cellules mais est présente dans le nom de l'onglet
+        if insurance == "PRIVE":
+            sheet_insurance = None
+            for ins_id in ["SANLAM", "ASCOMA", "SUNU", "NSIA", "ATLANTIQUE", "AFG", "LOTTO", "COTON", "NOBILA", "GRAS SAVOYE", "OLEA", "TRANSVIE", "SOBEMAP", "PORT_AUTONOME_COTONOU"]:
+                if ins_id.lower().replace("_", "") in sheetname.lower().replace("-", "").replace(" ", ""):
+                    sheet_insurance = ins_id
+                    break
+            if sheet_insurance:
+                insurance = sheet_insurance
                 
         # Split calculs par défaut
         coverage = 80 if insurance != "PRIVE" else 0

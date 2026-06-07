@@ -19,10 +19,10 @@ except ImportError:
     import openpyxl
 
 # --- CHEMINS ---
-EXCEL_FILE  = Path(r"C:\Users\Degnon\Documents\2.MERCY FIAT CLINIQUE\2. Dr Gipsy\PROFORMA CHIRURGIE\EXEMPLAIRE PROFORMA.xlsx")
-BILLS_FILE  = Path(r"C:\Users\Degnon\Documents\2.MERCY FIAT CLINIQUE\2. Dr Gipsy\MercyFiatMedSuiteDesktop\bills_db.json")
-BACKUP_FILE = Path(r"C:\Users\Degnon\Documents\2.MERCY FIAT CLINIQUE\2. Dr Gipsy\MercyFiatMedSuiteDesktop\bills_db_backup_before_reimport.json")
-REPORT_FILE = Path(r"C:\Users\Degnon\Documents\2.MERCY FIAT CLINIQUE\2. Dr Gipsy\MercyFiatMedSuiteDesktop\scratch\reimport_report.txt")
+EXCEL_FILE  = Path(r"C:\Users\Farus\Documents\2.MERCY FIAT CLINIQUE\2. Dr Gipsy\PROFORMA CHIRURGIE\EXEMPLAIRE PROFORMA.xlsx")
+BILLS_FILE  = Path(r"C:\Users\Farus\Documents\2.MERCY FIAT CLINIQUE\2. Dr Gipsy\MercyFiatMedSuiteDesktop\bills_db.json")
+BACKUP_FILE = Path(r"C:\Users\Farus\Documents\2.MERCY FIAT CLINIQUE\2. Dr Gipsy\MercyFiatMedSuiteDesktop\bills_db_backup_before_reimport.json")
+REPORT_FILE = Path(r"C:\Users\Farus\Documents\2.MERCY FIAT CLINIQUE\2. Dr Gipsy\MercyFiatMedSuiteDesktop\scratch\reimport_report.txt")
 
 DRY_RUN = '--dry-run' in sys.argv  # Simulation sans modification
 print(f"Mode : {'DRY-RUN (simulation)' if DRY_RUN else 'RÉEL (modification de bills_db.json)'}\n")

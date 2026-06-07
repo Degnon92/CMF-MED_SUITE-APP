@@ -1,6 +1,6 @@
 import json, os, sys, re
 sys.stdout.reconfigure(encoding='utf-8')
-desktop = r"c:\Users\Degnon\Documents\2.MERCY FIAT CLINIQUE\2. Dr Gipsy\MercyFiatMedSuiteDesktop"
+desktop = r"c:\Users\Farus\Documents\2.MERCY FIAT CLINIQUE\2. Dr Gipsy\MercyFiatMedSuiteDesktop"
 
 with open(os.path.join(desktop, "documents_db.json"), "r", encoding="utf-8") as f:
     docs = json.load(f)

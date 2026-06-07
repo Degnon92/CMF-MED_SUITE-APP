@@ -197,18 +197,35 @@ function switchSubSection(moduleName, subType) {
             }
         });
         
+        const btnHeaderReset = document.getElementById('btn-header-reset-doc');
         if (subType === 'cro') {
             if (title) title.textContent = "Comptes-Rendus Opératoires (CRO)";
             if (subtitle) subtitle.textContent = "Saisie ciblée pour vos protocoles opératoires et fiches de chirurgie.";
+            if (btnHeaderReset) {
+                btnHeaderReset.innerHTML = `<svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg> Nouveau CRO`;
+                btnHeaderReset.title = "Rédiger un nouveau Compte-Rendu Opératoire";
+            }
         } else if (subType === 'hospi') {
             if (title) title.textContent = "Rapports d'Hospitalisation";
             if (subtitle) subtitle.textContent = "Résumés de séjours hospitaliers et demandes de prolongation.";
+            if (btnHeaderReset) {
+                btnHeaderReset.innerHTML = `<svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg> Nouveau Rapport Hospi`;
+                btnHeaderReset.title = "Rédiger un nouveau Rapport d'Hospitalisation";
+            }
         } else if (subType === 'consult') {
             if (title) title.textContent = "Rapports de Consultation";
             if (subtitle) subtitle.textContent = "Notes cliniques de consultation initiale et de suivi post-opératoire.";
+            if (btnHeaderReset) {
+                btnHeaderReset.innerHTML = `<svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg> Nouveau Rapport Consultation`;
+                btnHeaderReset.title = "Rédiger un nouveau Rapport de Consultation";
+            }
         } else if (subType === 'certif') {
             if (title) title.textContent = "Certificats & Correspondances";
             if (subtitle) subtitle.textContent = "Certificats d'arrêt de travail, repos médical, reprises et relances d'assurances.";
+            if (btnHeaderReset) {
+                btnHeaderReset.innerHTML = `<svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg> Nouveau Certificat / Lettre`;
+                btnHeaderReset.title = "Rédiger un nouveau Certificat ou une Lettre";
+            }
         }
         
         // Mettre à jour l'aperçu

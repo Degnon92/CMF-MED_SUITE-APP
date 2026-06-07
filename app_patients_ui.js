@@ -25,7 +25,7 @@ function renderPatientsTable() {
             diagnosis: (p.diagnosis && p.diagnosis.toLowerCase() !== 'bilan clinique') ? p.diagnosis : '',
             intervention: p.intervention || '',
             kCode: p.kCode || '',
-            age: p.age || '45 ans',
+            age: p.age || '',
             matricule: p.matricule || '',
             insurer: p.insurer || 'PRIVE',
             priseEnCharge: p.priseEnCharge || 0
@@ -42,7 +42,7 @@ function renderPatientsTable() {
                 diagnosis: (p.diagnosis && p.diagnosis.toLowerCase() !== 'bilan clinique') ? p.diagnosis : '',
                 intervention: p.intervention || '',
                 kCode: p.kCode || '',
-                age: p.age || '35 ans',
+                age: p.age || '',
                 matricule: p.matricule || '',
                 insurer: p.insurer || 'PRIVE',
                 priseEnCharge: p.priseEnCharge || 0

@@ -4,7 +4,7 @@ from datetime import datetime
 
 sys.stdout.reconfigure(encoding='utf-8', errors='replace')
 
-EXCEL_FILE = Path(r"C:\Users\Degnon\Documents\2.MERCY FIAT CLINIQUE\2. Dr Gipsy\PROFORMA CHIRURGIE\EXEMPLAIRE PROFORMA.xlsx")
+EXCEL_FILE = Path(r"C:\Users\Farus\Documents\2.MERCY FIAT CLINIQUE\2. Dr Gipsy\PROFORMA CHIRURGIE\EXEMPLAIRE PROFORMA.xlsx")
 BILLS_FILE = Path(r"bills_db.json")
 
 months_map = {

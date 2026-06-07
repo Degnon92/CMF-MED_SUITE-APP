@@ -3,7 +3,7 @@ sys.stdout.reconfigure(encoding='utf-8', errors='replace')
 
 from reimport_bills_from_excel import clean_patient_name, detect_insurer, detect_bill_type_from_sheet, parse_french_date, map_header_cols, match_score, date_diff_days
 
-wb = openpyxl.load_workbook(r'C:\Users\Degnon\Documents\2.MERCY FIAT CLINIQUE\2. Dr Gipsy\PROFORMA CHIRURGIE\EXEMPLAIRE PROFORMA.xlsx', data_only=True)
+wb = openpyxl.load_workbook(r'C:\Users\Farus\Documents\2.MERCY FIAT CLINIQUE\2. Dr Gipsy\PROFORMA CHIRURGIE\EXEMPLAIRE PROFORMA.xlsx', data_only=True)
 bills = json.load(open('bills_db.json', encoding='utf-8'))
 
 ws = wb['KPEKPASSI BOUCARI DETAILS ASSUR']

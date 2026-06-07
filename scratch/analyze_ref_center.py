@@ -3,7 +3,7 @@ import numpy as np
 from PIL import Image
 
 def analyze_ref_center():
-    p = r"C:\Users\Degnon\.gemini\antigravity-ide\brain\7cd223db-09d4-4d6d-b877-ad294933360a\media__1780516168149.png"
+    p = r"C:\Users\Farus\.gemini\antigravity-ide\brain\7cd223db-09d4-4d6d-b877-ad294933360a\media__1780516168149.png"
     img = Image.open(p).convert("RGBA")
     arr = np.array(img)
     h, w = arr.shape[:2]
@@ -39,7 +39,7 @@ def analyze_ref_center():
             elif abs(r[i, j] - 120) < 1.0:
                 vis[i, j] = [0, 0, 255, 255]
                 
-    Image.fromarray(vis).save(r"C:\Users\Degnon\.gemini\antigravity-ide\brain\7cd223db-09d4-4d6d-b877-ad294933360a\ref_stamp_circles.png")
+    Image.fromarray(vis).save(r"C:\Users\Farus\.gemini\antigravity-ide\brain\7cd223db-09d4-4d6d-b877-ad294933360a\ref_stamp_circles.png")
     print("Saved ref_stamp_circles.png with circles at r=80 (red), r=100 (green), r=120 (blue)")
 
 if __name__ == "__main__":

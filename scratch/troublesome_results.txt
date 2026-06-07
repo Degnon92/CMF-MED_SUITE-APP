@@ -1,0 +1,279 @@
+
+======================================
+Checking patients_db.json
+======================================
+Match 1:
+{
+  "name": "YARARISSOUNON MALICK",
+  "diagnosis": "Le bilan lésionnel révèle une rupture du ménisque médial droit",
+  "intervention": "",
+  "kCode": ""
+}
+------------------------------
+Match 2:
+{
+  "name": "PARAISO",
+  "diagnosis": "Bilan clinique",
+  "intervention": "",
+  "kCode": ""
+}
+------------------------------
+Match 3:
+{
+  "name": "ADJASSA BENOIT",
+  "diagnosis": "Bilan clinique",
+  "intervention": "",
+  "kCode": ""
+}
+------------------------------
+Match 4:
+{
+  "name": "ARISSOU AROUNA",
+  "diagnosis": "Bilan clinique",
+  "intervention": "",
+  "kCode": ""
+}
+------------------------------
+Match 5:
+{
+  "name": "ADJASSA BÉNOIT",
+  "diagnosis": "Bilan clinique",
+  "intervention": "",
+  "kCode": ""
+}
+------------------------------
+Match 6:
+{
+  "name": "ADJASSA",
+  "diagnosis": "Bilan clinique",
+  "intervention": "",
+  "kCode": ""
+}
+------------------------------
+Match 7:
+{
+  "name": "PARAISO FRANCOIS XAVIER",
+  "diagnosis": "Bilan clinique",
+  "intervention": "",
+  "kCode": ""
+}
+------------------------------
+Total matches in patients_db.json: 7
+
+======================================
+Checking bills_db.json
+======================================
+Total matches in bills_db.json: 0
+
+======================================
+Checking documents_db.json
+======================================
+Match 1:
+{
+  "id": "DOC-REAL-AUTO-5",
+  "type": "DOC",
+  "category": "Consultation",
+  "title": "Consultation - YARARISSOUNON Malick",
+  "templateId": "rapport_cs_assurance",
+  "patientNom": "YARARISSOUNON",
+  "patientPrenom": "Malick",
+  "patientAge": "35 ans",
+  "date": "2025-01-31",
+  "diagnosis": "Le bilan lésionnel révèle une rupture du ménisque médial droit",
+  "intervention": "",
+  "content": "AGE : 18 ans\nRAPPORT DE CONSULTATION\nJe soussigné, Dr Gipsy AGAVOEDO, Chirurgien Orthopédiste Traumatologue à la clinique MERCY FIAT, certifie avoir consulté ce jour M. YARARISSOUNON Malick, âgé de 18 ans. Celui-ci présente une douleur au genou droit suite à un traumatisme sportif. Il a été immobilisé pendant 6 semaines avec un plâtre fémoro-pédieux, sans amélioration significative.\nLe bilan lésionnel révèle une rupture du ménisque médial droit.\nUne arthroscopie diagnostique et thérapeutique est indiquée.\nUne hospitalisation de 3 jours est prévue, sous réserve de complications éventuelles.\nFait pour servir et valoir ce que de droit.\nFait à Cotonou, le 31/01/2025\nDr Gipsy AGAVOEDO\nChirurgien Orthopédiste\nTraumatologue\nFait à Cotonou, le 14/01/25\nDr Gipsy AGAVOEDO\nChirurgien Orthopédiste\nTraumatologue"
+}
+------------------------------
+Match 2:
+{
+  "id": "DOC-REAL-AUTO-178",
+  "type": "DOC",
+  "category": "Consultation",
+  "title": "Consultation - YARARISSOUNON Malick",
+  "templateId": "rapport_cs_assurance",
+  "patientNom": "YARARISSOUNON",
+  "patientPrenom": "Malick",
+  "patientAge": "35 ans",
+  "date": "2024-10-15",
+  "diagnosis": "Bilan clinique",
+  "intervention": "",
+  "content": "SEME AGUE PK 18 Tel +229 69 62 02 02/98 00 00 55 et Cotonou Vodjè Tel : +229 69 02 11 11/ 98 70   98 98\nE-mail : cliniquemercyfiat@gmail.com\nORABANK Cpte bancaire : 021707300201    N° IFU : 3201710045937    N° RCCM-RB-COT-17-B-19317\nMédecine générale\nDr DAH Judith\nPédiatrie\nDr BACHAROU Salwane\nCardiologie\nDr HAZOUME Michèle\nDr LASSISSI Moufidath\nEndocrinologie diabétologie\nDr MEDENOU Lionel\nNeurologie\nDr ADJIBADE Aminatou\nAnesthésie réanimation\nDr CHOBLI Hervé\nTraumatologie-orthopédie\nDr AGAVOEDO Gipsy\nDr DJEDOU Arnaud\nChirurgie pédiatrique\nDr AMOUSSOU Aristide\nUrologie\nDr SOUMANOU Fouad\nRadiologie\nDr ELEGBEDE Anicet\nLaboratoire\nDr KASSEIN Urbain\nCollaborateurs\nDr AKPAKPO Bruno\nPatient : YARARISSOUNON Malick\nRapport de consultation\nJe soussigné, Dr Gipsy AGAVOEDO, Chirurgien Orthopédiste Traumatologue à la clinique MERCY FIAT certifie avoir consulté ce jour Mr YARARISSOUNON Malick âgé de 18 ans. Il présente une douleur du genou droit suite à un traumatisme sportif.\nLe bilan lésionnel établit une rupture du ménisque médial droit.\nIl est indiqué une arthroscopie diagnostique et thérapeutique.\nNous prévoyons une hospitalisation de 4 jours sous réserve des complications ultérieures.\nFait pour servir et valoir ce que de droit.\nFait à Cotonou, le 15/10/2024\nDr Gipsy AGAVOEDO\nChirurgien Orthopédiste\nTraumatologue\nMEDECINE GENERALE – SPECIALITES MEDICALES ET CHIRURGICALES – LABORATOIRE\nCLINIQUE MERCY FIAT"
+}
+------------------------------
+Match 3:
+{
+  "id": "DOC-REAL-AUTO-181",
+  "type": "DOC",
+  "category": "Consultation",
+  "title": "Consultation - DZASSI Maurice",
+  "templateId": "rapport_cs_assurance",
+  "patientNom": "DZASSI",
+  "patientPrenom": "Maurice",
+  "patientAge": "35 ans",
+  "date": "2025-01-08",
+  "diagnosis": "Bilan clinique",
+  "intervention": "",
+  "content": "Patient : DZASSI Maurice\nRAPPORT DE CONSULTATION\nJe soussigné, Dr. Gipsy AGAVOEDO, chirurgien orthopédiste à la Clinique Mercy Fiat de Cotonou, certifie avoir consulté ce jour Monsieur DZASSI Maurice, âgé de 23 ans, footballeur professionnel évoluant au sein du club Loto FC.\nLe patient s’est présenté pour des douleurs au genou droit, évoluant depuis deux semaines à la suite d’un traumatisme sportif. L’examen clinique a permis de mettre en évidence un syndrome douloureux du ménisque médial droit.\nEn conséquence, une IRM a été prescrite pour un bilan complémentaire, et un repos sportif a été conseillé. Le patient sera revu en consultation avec les résultats de l’IRM pour un suivi adapté.\nFait à Cotonou, le 08/01/25\nDr Gipsy AGAVOEDO\nChirurgien Orthopédiste\nTraumatologue\nMédecine générale\nDr DAH Judith\nPédiatrie\nDr BACHAROU Salwane\nCardiologie\nDr HAZOUME Michèle\nDr LASSISSI Moufidath\nEndocrinologie diabétologie\nDr MEDENOU Lionel\nNeurologie\nDr SESSINOU Marie-Rose\nAnesthésie réanimation\nDr CHOBLI Hervé\nTraumatologie-orthopédie\nDr AGAVOEDO Gipsy\nDr DJEDOU Arnaud\nChirurgie pédiatrique\nUrologie\nDr JACQUET Djamal\nDr SOUMANOU Fouad\nRadiologie\nDr ELEGBEDE Anicet\nLaboratoire\nDr KASSEIN Urbain\nCollaborateurs\nDr AKPAKPO Bruno\nMédecine générale\nDr DAH Judith\nPédiatrie\nDr BACHAROU Salwane\nCardiologie\nDr HAZOUME Michèle\nDr LASSISSI Moufidath\nEndocrinologie diabétologie\nDr MEDENOU Lionel\nNeurologie\nDr SESSINOU Marie-Rose\nAnesthésie réanimation\nDr CHOBLI Hervé\nTraumatologie-orthopédie\nDr AGAVOEDO Gipsy\nDr DJEDOU Arnaud\nChirurgie pédiatrique\nUrologie\nDr JACQUET Djamal\nDr SOUMANOU Fouad\nRadiologie\nDr ELEGBEDE Anicet\nLaboratoire\nDr KASSEIN Urbain\nCollaborateurs\nDr AKPAKPO Bruno\nPatient : DASSI Gaël\nRAPPORT DE CONSULTATION\nJe soussigné, Dr. Gipsy AGAVOEDO, chirurgien orthopédiste à la Clinique Mercy Fiat de Cotonou, certifie avoir consulté le 27 décembre 2024 Monsieur DASSI Gaël, âgé de 23 ans, footballeur professionnel évoluant au sein du club Loto FC, pour des douleurs au genou gauche.\nL’examen clinique réalisé ce jour a objectivé une tendinite d’insertion tibiale du fascia lata. Le patient a bénéficié, le même jour, d’une infiltration de Diprostène ainsi que d’un traitement antalgique.\nRevoyant le patient ce jour, 3 janvier 2025, il rapporte une diminution considérable des douleurs. Cependant, je lui conseille de poursuivre l’arrêt de toute activité sportive, en particulier les compétitions, pour une durée supplémentaire de deux semaines. Durant cette période, il pourra continuer sa rééducation fonctionnelle, incluant une physiothérapie autour du genou et un programme de renforcement musculaire.\nJe le reverrai dans deux semaines afin d’apprécier l’évolution.\nConfraternellement,\nFait à Cotonou, le 08/01/25\nDr Gipsy AGAVOEDO\nChirurgien Orthopédiste\nTraumatologue\nPatient : DIOUARE el Hadj Kaoussou\nRAPPORT DE CONSULTATION\nJe soussigné, Dr. Gipsy AGAVOEDO, chirurgien orthopédiste à la Clinique Mercy Fiat de Cotonou, certifie avoir consulté le 27 décembre 2024 Monsieur DIOUARE el Hadj Kaoussou, âgé de 25 ans, footballeur professionnel évoluant au sein du club Loto FC, pour des douleurs au genou gauche.\nL’examen clinique réalisé ce jour a objectivé une tendinite d’insertion tibiale du fascia lata. Le patient a bénéficié, le même jour, d’une infiltration de Diprostène ainsi que d’un traitement antalgique.\nRevoyant le patient ce jour, 3 janvier 2025, il rapporte une diminution considérable des douleurs. Cependant, je lui conseille de poursuivre l’arrêt de toute activité sportive, en particulier les compétitions, pour une durée supplémentaire de deux semaines. Durant cette période, il pourra continuer sa rééducation fonctionnelle, incluant une physiothérapie autour du genou et un programme de renforcement musculaire.\nJe le reverrai dans deux semaines afin d’apprécier l’évolution.\nConfraternellement,\nFait à Cotonou, le 08/01/25\nDr Gipsy AGAVOEDO\nChirurgien Orthopédiste\nTraumatologue\nMédecine générale\nDr DAH Judith\nPédiatrie\nDr BACHAROU Salwane\nCardiologie\nDr HAZOUME Michèle\nDr LASSISSI Moufidath\nEndocrinologie diabétologie\nDr MEDENOU Lionel\nNeurologie\nDr SESSINOU Marie-Rose\nAnesthésie réanimation\nDr CHOBLI Hervé\nTraumatologie-orthopédie\nDr AGAVOEDO Gipsy\nDr DJEDOU Arnaud\nChirurgie pédiatrique\nUrologie\nDr JACQUET Djamal\nDr SOUMANOU Fouad\nRadiologie\nDr ELEGBEDE Anicet\nLaboratoire\nDr KASSEIN Urbain\nCollaborateurs\nDr AKPAKPO Bruno\nMédecine générale\nDr DAH Judith\nPédiatrie\nDr BACHAROU Salwane\nCardiologie\nDr HAZOUME Michèle\nDr LASSISSI Moufidath\nEndocrinologie diabétologie\nDr MEDENOU Lionel\nNeurologie\nDr SESSINOU Marie-Rose\nAnesthésie réanimation\nDr CHOBLI Hervé\nTraumatologie-orthopédie\nDr AGAVOEDO Gipsy\nDr DJEDOU Arnaud\nChirurgie pédiatrique\nDr AMOUSSOU Aristide\nUrologie\nDr JACQUET Djamal\nDr SOUMANOU Fouad\nRadiologie\nDr HOUNTON Emmanuel\nLaboratoire\nDr KASSEIN Urbain\nCollaborateurs\nDr AKPAKPO Bruno\nPatient : TOURE Papa Amadou\nAGE : 29 ans\nRAPPORT DE CONSULTATION\nJe soussigné, Dr Gipsy AGAVOEDO, chirurgien orthopédiste à la clinique Mercy Fiat de Cotonou, certifie avoir consulté ce jour, 14 janvier 2025, M. TOURE Papa Amadou, footballeur de Loto FC, âgé de 29 ans.\nLe patient avait été examiné il y a 45 jours pour une déchirure du muscle droit fémoral gauche.\nIl a observé un repos sportif et suivi une rééducation fonctionnelle adaptée.\nCe jour, l’évolution clinique et échographique est très satisfaisante.\nJe l’autorise donc à :\npoursuivre sa rééducation,\nreprendre progressivement ses activités professionnelles en respectant un protocole adapté.\nConfraternellement,\nFait à Cotonou, le 14/01/25\nDr Gipsy AGAVOEDO\nChirurgien Orthopédiste\nTraumatologue\nMédecine générale\nDr DAH Judith\nPédiatrie\nDr BACHAROU Salwane\nCardiologie\nDr HAZOUME Michèle\nDr LASSISSI Moufidath\nEndocrinologie diabétologie\nDr MEDENOU Lionel\nNeurologie\nDr SESSINOU Marie-Rose\nAnesthésie réanimation\nDr CHOBLI Hervé\nTraumatologie-orthopédie\nDr AGAVOEDO Gipsy\nDr DJEDOU Arnaud\nChirurgie pédiatrique\nDr AMOUSSOU Aristide\nUrologie\nDr JACQUET Djamal\nDr SOUMANOU Fouad\nRadiologie\nDr HOUNTON Emmanuel\nLaboratoire\nDr KASSEIN Urbain\nCollaborateurs\nDr AKPAKPO Bruno\nPatient : YARARISSOUNON Malick\nAGE : 18 ans\nRAPPORT DE CONSULTATION\nJe soussigné, Dr Gipsy AGAVOEDO, Chirurgien Orthopédiste Traumatologue à la clinique MERCY FIAT, certifie avoir consulté ce jour M. YARARISSOUNON Malick, âgé de 18 ans. Celui-ci présente une douleur au genou droit suite à un traumatisme sportif. Il a été immobilisé pendant 6 semaines avec un plâtre fémoro-pédieux, sans amélioration significative.\nLe bilan lésionnel révèle une rupture du ménisque médial droit.\nUne arthroscopie diagnostique et thérapeutique est indiquée.\nUne hospitalisation de 3 jours est prévue, sous réserve de complications éventuelles.\nFait pour servir et valoir ce que de droit.\nFait à Cotonou, le 31/01/2025\nDr Gipsy AGAVOEDO\nChirurgien Orthopédiste\nTraumatologue\nFait à Cotonou, le 14/01/25\nDr Gipsy AGAVOEDO\nChirurgien Orthopédiste\nTraumatologue\nPatient : LINKPO Paule\nAGE : 32 ans\nRAPPORT DE CONSULTATION\nJe soussigné, Dr Gipsy AGAVOEDO, Chirurgien Orthopédiste Traumatologue à la Clinique MERCY FIAT, certifie avoir consulté ce jour Mme LINKPO Paule, âgée de 32 ans, résidant à Abomey et joignable au (+229) 0162426040.\nMme LINKPO Paule a été victime d’un accident de circulation le 18 mars 2022, ayant entraîné une fracture ouverte bimalléolaire de la cheville droite et un traumatisme crânien. Elle a bénéficié, le 22 juillet 2022, d’une ostéosynthèse bimalléolaire par plaque vissée.\nL’évolution postopératoire a été favorable, marquée par une bonne consolidation osseuse et une rééducation fonctionnelle réussie. À ce jour, la patiente ne présente aucune plainte et sollicite une ablation du matériel d’ostéosynthèse.\nLa radiographie de contrôle met en évidence une consolidation osseuse suffisante des foyers de fractures malléolaires, ainsi que la présence d’une plaque vissée au niveau de la malléole latérale et des vis.\nUne ablation du matériel d’ostéosynthèse est indiquée.\nUne hospitalisation de trois jours est prévue, sous réserve de complications éventuelles.\nFait pour servir et valoir ce que de droit.\nFait à Cotonou, le 04/02/2025\nDr Gipsy AGAVOEDO\nChirurgien Orthopédiste\nTraumatologue\nFait à Cotonou, le 14/01/25\nDr Gipsy AGAVOEDO\nChirurgien Orthopédiste\nTraumatologue\nMédecine générale\nDr DAH Judith\nPédiatrie\nDr BACHAROU Salwane\nCardiologie\nDr HAZOUME Michèle\nDr LASSISSI Moufidath\nEndocrinologie diabétologie\nDr MEDENOU Lionel\nNeurologie\nDr SESSINOU Marie-Rose\nAnesthésie réanimation\nDr CHOBLI Hervé\nTraumatologie-orthopédie\nDr AGAVOEDO Gipsy\nDr DJEDOU Arnaud\nChirurgie pédiatrique\nDr AMOUSSOU Aristide\nUrologie\nDr JACQUET Djamal\nDr SOUMANOU Fouad\nRadiologie\nDr HOUNTON Emmanuel\nLaboratoire\nDr KASSEIN Urbain\nCollaborateurs\nDr AKPAKPO Bruno\nMédecine générale\nDr DAH Judith\nPédiatrie\nDr BACHAROU Salwane\nCardiologie\nDr HAZOUME Michèle\nDr LASSISSI Moufidath\nEndocrinologie diabétologie\nDr MEDENOU Lionel\nNeurologie\nDr SESSINOU Marie-Rose\nAnesthésie réanimation\nDr CHOBLI Hervé\nTraumatologie-orthopédie\nDr AGAVOEDO Gipsy\nDr DJEDOU Arnaud\nChirurgie pédiatrique\nDr AMOUSSOU Aristide\nUrologie\nDr JACQUET Djamal\nDr SOUMANOU Fouad\nRadiologie\nDr HOUNTON Emmanuel\nLaboratoire\nDr KASSEIN Urbain\nCollaborateurs\nDr AKPAKPO Bruno\nPatient : GANYE Floride\nAGE : 19 ans\nRAPPORT DE CONSULTATION\nJe soussigné, Dr Gipsy AGAVOEDO, chirurgien orthopédiste à la clinique Mercy Fiat de Cotonou, certifie avoir consulté ce jour, 14 janvier 2025, M. GANYE Floride, footballeur de Loto FC, âgé de 19 ans.\nLe patient avait été examiné il y a 45 jours pour une déchirure du long adducteur, survenue il y a environ trois mois.\nIl a observé un repos sportif et suivi une rééducation fonctionnelle adaptée.\nCe jour, l’évolution clinique et échographique est très satisfaisante.\nJe l’autorise donc à :\npoursuivre sa rééducation,\nreprendre progressivement ses activités professionnelles en respectant un protocole adapté.\nConfraternellement,\nFait à Cotonou, le 14/01/25\nDr Gipsy AGAVOEDO\nChirurgien Orthopédiste\nTraumatologue"
+}
+------------------------------
+Match 4:
+{
+  "id": "DOC-REAL-AUTO-191",
+  "type": "DOC",
+  "category": "Hospitalisation",
+  "title": "Hospitalisation - YARARISSOUNON Malick",
+  "templateId": "rapport_hospi_assurance",
+  "patientNom": "YARARISSOUNON",
+  "patientPrenom": "Malick",
+  "patientAge": "35 ans",
+  "date": "2025-03-04",
+  "diagnosis": "Bilan clinique",
+  "intervention": "",
+  "content": "Patient : YARARISSOUNON Malick\nAGE : 20 ans\nRAPPORT D’HOSPITALISATION\nJe, soussigné, Dr Gipsy AGAVOEDO, chirurgien orthopédiste à la Clinique Mercy Fiat de Cotonou, certifie avoir hospitalisé du 20 février 2025 au 04 mars 2025 Monsieur YARARISSOUNON Malick, âgé de 20 ans, pour une fissure méniscale grade 3 de la corne postérieure du ménisque persistante, une persistance de la rupture partielle du ligament croisé postérieur, épanchements liquidiens péri articulaires survenue à la suite d’un accident sportif il y a 5 mois.\nIl a bénéficié initialement, le 21 février 2025, d’une arthroscopie diagnostic puis secondairement, le 28 février 2025 d’une ménisectomie plus ligamentoplastie.\nLes suites opératoires sont favorables.\nIl ressort de ce qui précède une convalescence de deux (03) mois.\nFait pour servir et valoir ce que de droit.\nFait à Cotonou, le 04/03/25\nDr Gipsy AGAVOEDO\nChirurgien Orthopédiste\nTraumatologue\nMédecine générale\nDr DAH Judith\nPédiatrie\nDr BACHAROU Salwane\nCardiologie\nDr HAZOUME Michèle\nDr LASSISSI Moufidath\nEndocrinologie diabétologie\nDr MEDENOU Lionel\nNeurologie\nDr SESSINOU Marie-Rose\nAnesthésie réanimation\nDr CHOBLI Hervé\nTraumatologie-orthopédie\nDr AGAVOEDO Gipsy\nDr DJEDOU Arnaud\nChirurgie pédiatrique\nUrologie\nDr JACQUET Djamal\nDr SOUMANOU Fouad\nRadiologie\nDr ELEGBEDE Anicet\nLaboratoire\nDr KASSEIN Urbain\nCollaborateurs\nDr AKPAKPO Bruno"
+}
+------------------------------
+Match 5:
+{
+  "id": "DOC-REAL-AUTO-201",
+  "type": "DOC",
+  "category": "Hospitalisation",
+  "title": "Hospitalisation - ADEOSSI Anne Véronique",
+  "templateId": "rapport_hospi_assurance",
+  "patientNom": "ADEOSSI",
+  "patientPrenom": "Anne Véronique",
+  "patientAge": "35 ans",
+  "date": "2025-03-04",
+  "diagnosis": "Bilan clinique",
+  "intervention": "",
+  "content": "Patient : ADEOSSi Anne Véronique\nAGE : 35 ans\nRAPPORT D’HOSPITALISATION\nJe soussigné, Dr Gipsy AGAVOEDO, chirurgien orthopédiste à la Clinique Mercy Fiat de Cotonou, certifie avoir hospitalisé du 28 janvier 2025 au 03 février 2025 Madame ADEOSSI Anne Véronique, âgée de 35 ans, pour une luxation négligée du coude gauche accompagnée d'une fracture de la tête radiale gauche, survenue à la suite d’un accident de la circulation il y a 2 mois.\nLe 20 janvier 2025, il a bénéficié d’une réduction sanglante du coude gauche et d’une ostéosynthèse de la tête radiale.\nLes suites opératoires sont favorables.\nIl ressort de ce qui précède une convalescence de soixante (60) jours.\nFait pour servir et valoir ce que de droit.\nFait à Cotonou, le 04/03/25\nDr Gipsy AGAVOEDO\nChirurgien Orthopédiste\nTraumatologue\nMédecine générale\nDr DAH Judith\nPédiatrie\nDr BACHAROU Salwane\nCardiologie\nDr HAZOUME Michèle\nDr LASSISSI Moufidath\nEndocrinologie diabétologie\nDr MEDENOU Lionel\nNeurologie\nDr SESSINOU Marie-Rose\nAnesthésie réanimation\nDr CHOBLI Hervé\nTraumatologie-orthopédie\nDr AGAVOEDO Gipsy\nDr DJEDOU Arnaud\nChirurgie pédiatrique\nUrologie\nDr JACQUET Djamal\nDr SOUMANOU Fouad\nRadiologie\nDr ELEGBEDE Anicet\nLaboratoire\nDr KASSEIN Urbain\nCollaborateurs\nDr AKPAKPO Bruno\nMédecine générale\nDr DAH Judith\nPédiatrie\nDr BACHAROU Salwane\nCardiologie\nDr HAZOUME Michèle\nDr LASSISSI Moufidath\nEndocrinologie diabétologie\nDr MEDENOU Lionel\nNeurologie\nDr SESSINOU Marie-Rose\nAnesthésie réanimation\nDr CHOBLI Hervé\nTraumatologie-orthopédie\nDr AGAVOEDO Gipsy\nDr DJEDOU Arnaud\nChirurgie pédiatrique\nUrologie\nDr JACQUET Djamal\nDr SOUMANOU Fouad\nRadiologie\nDr ELEGBEDE Anicet\nLaboratoire\nDr KASSEIN Urbain\nCollaborateurs\nDr AKPAKPO Bruno\nPatient : DZASSI Maurice\nAGE : 22 ans\nRAPPORT D’HOSPITALISATION\nJe soussigné, Dr Gipsy AGAVOEDO, chirurgien orthopédiste à la Clinique Mercy Fiat de Cotonou, certifie avoir hospitalisé du 21 février 2025 au 25 février 2025 Monsieur DZASSI Maurice, âgé de 22 ans, pour un traumatisme fermé du genou droit survenu à la suite d’un accident sportif il y a 2 mois.\nIl a bénéficié, le 21 février 2025, d’une arthroscopie diagnostique.\nLes suites opératoires sont simples.\nNous prévoyons une immobilisation par une artelle de ZIMMER pendant trois (03) semaines suivies d’une rééducation fonctionnelle.\nFait pour servir et valoir ce que de droit.\nFait à Cotonou, le 04/03/25\nDr Gipsy AGAVOEDO\nChirurgien Orthopédiste\nTraumatologue\nPatient : MIDINGOHI Judicaël Y.\nAGE : 25 ans\nRAPPORT D’HOSPITALISATION\nJe soussigné, Dr Gipsy AGAVOEDO, chirurgien orthopédiste à la Clinique Mercy Fiat de Cotonou, certifie avoir hospitalisé du 26 février 2025 au 27 février 2025 Monsieur MIDINGOHI Judicaël Y., âgé de 25 ans, pour un traumatisme ouvert de l’hallux gauche survenue à la suite d’un accident de travail le 15 février 2025.\nIl a bénéficié, le 26 février 2025, d’un parage, suture, ténorrhaphie des extensions et une immobilisation plâtrée complémentaire.\nLes suites opératoires sont favorables.\nIl ressort de ce qui précède un arrêt de travail de soixante (60) jours.\nFait pour servir et valoir ce que de droit.\nFait à Cotonou, le 04/03/25\nDr Gipsy AGAVOEDO\nChirurgien Orthopédiste\nTraumatologue\nMédecine générale\nDr DAH Judith\nPédiatrie\nDr BACHAROU Salwane\nCardiologie\nDr HAZOUME Michèle\nDr LASSISSI Moufidath\nEndocrinologie diabétologie\nDr MEDENOU Lionel\nNeurologie\nDr SESSINOU Marie-Rose\nAnesthésie réanimation\nDr CHOBLI Hervé\nTraumatologie-orthopédie\nDr AGAVOEDO Gipsy\nDr DJEDOU Arnaud\nChirurgie pédiatrique\nUrologie\nDr JACQUET Djamal\nDr SOUMANOU Fouad\nRadiologie\nDr ELEGBEDE Anicet\nLaboratoire\nDr KASSEIN Urbain\nCollaborateurs\nDr AKPAKPO Bruno\nPatient : YARARISSOUNON Malick\nAGE : 20 ans\nRAPPORT D’HOSPITALISATION\nJe soussigné, Dr Gipsy AGAVOEDO, chirurgien orthopédiste à la Clinique Mercy Fiat de Cotonou, certifie avoir hospitalisé du 21 février 2025 au 04 mars 2025 Monsieur YARARISSOUNON Malick, âgé de 20 ans, pour une arthroscopie diagnostique et thérapeutique du genou droit.\nL’exploration arthroscopique faite le 21 février 2025 a révélé une fissure radiaire de la partie moyenne étendue à la corne antérieure du ménisque latérale. On décide de conserver le ménisque et d’envisage une suture méniscale.\nOn réalise alors le 28 février 2025, une suture méniscale par voie conventionnelle.\nLes suites opératoires sont simples.\nCe qui précède justifie le prolongement de son hospitalisation.\nNous prévoyons une immobilisation du genou par une artelle de ZIMMER, une décharge stricte pendant quarante-cinq (45) jours suivie d’une rééducation fonctionnelle.\nFait pour servir et valoir ce que de droit.\nFait à Cotonou, le 04/03/25\nDr Gipsy AGAVOEDO\nChirurgien Orthopédiste\nTraumatologue\nMédecine générale\nDr DAH Judith\nPédiatrie\nDr BACHAROU Salwane\nCardiologie\nDr HAZOUME Michèle\nDr LASSISSI Moufidath\nEndocrinologie diabétologie\nDr MEDENOU Lionel\nNeurologie\nDr SESSINOU Marie-Rose\nAnesthésie réanimation\nDr CHOBLI Hervé\nTraumatologie-orthopédie\nDr AGAVOEDO Gipsy\nDr DJEDOU Arnaud\nChirurgie pédiatrique\nUrologie\nDr JACQUET Djamal\nDr SOUMANOU Fouad\nRadiologie\nDr ELEGBEDE Anicet\nLaboratoire\nDr KASSEIN Urbain\nCollaborateurs\nDr AKPAKPO Bruno\nPatient : SEDJAME Bignon Fréjus T.\nAGE : 35 ans\nRAPPORT D’HOSPITALISATION\nJe soussigné, Dr Gipsy AGAVOEDO, chirurgien orthopédiste à la Clinique Mercy Fiat de Cotonou, certifie avoir hospitalisé du 04 février 2025 au 14 février 2025 Monsieur SEDJAME Bignon Fréjus T., âgé de 35 ans, pour une fracture fermée du plateau tibial médial survenue à la suite d’un accident de la circulation le 04 février 2025.\nIl a bénéficié, le 07 février 2025, d’une ostéosynthèse par plaque vissée.\nLes suites opératoires sont favorables.\nIl ressort de ce qui précède un arrêt de travail de quatre-vingt-dix (90) jours sous réserve de complications ultérieures.\nFait pour servir et valoir ce que de droit.\nFait à Cotonou, le 04/03/25\nDr Gipsy AGAVOEDO\nChirurgien Orthopédiste\nTraumatologue\nMédecine générale\nDr DAH Judith\nPédiatrie\nDr BACHAROU Salwane\nCardiologie\nDr HAZOUME Michèle\nDr LASSISSI Moufidath\nEndocrinologie diabétologie\nDr MEDENOU Lionel\nNeurologie\nDr SESSINOU Marie-Rose\nAnesthésie réanimation\nDr CHOBLI Hervé\nTraumatologie-orthopédie\nDr AGAVOEDO Gipsy\nDr DJEDOU Arnaud\nChirurgie pédiatrique\nUrologie\nDr JACQUET Djamal\nDr SOUMANOU Fouad\nRadiologie\nDr ELEGBEDE Anicet\nLaboratoire\nDr KASSEIN Urbain\nCollaborateurs\nDr AKPAKPO Bruno\nPatient : ALASSANE Aichatou\nAGE : 34 ans\nRAPPORT D’HOSPITALISATION\nJe soussigné, Dr Gipsy AGAVOEDO, chirurgien orthopédiste à la Clinique Mercy Fiat de Cotonou, certifie avoir hospitalisé du 25 février 2025 au 27 février 2025 Madame ALASSANE Aichatou, âgé de 34 ans, pour une fracture articulaire complexe de l’Extrémité Distale du Radius droit survenue à la suite d’un accident domestique le 17 février 2025.\nIl a bénéficié, le 25 février 2025, d’une ostéosynthèse par plaque vissée LCP.\nLes suites opératoires sont favorables.\nIl ressort de ce qui précède une convalescence de soixante (60) jours\nFait pour servir et valoir ce que de droit.\nFait à Cotonou, le 04/03/25\nDr Gipsy AGAVOEDO\nChirurgien Orthopédiste\nTraumatologue\nMédecine générale\nDr DAH Judith\nPédiatrie\nDr BACHAROU Salwane\nCardiologie\nDr HAZOUME Michèle\nDr LASSISSI Moufidath\nEndocrinologie diabétologie\nDr MEDENOU Lionel\nNeurologie\nDr SESSINOU Marie-Rose\nAnesthésie réanimation\nDr CHOBLI Hervé\nTraumatologie-orthopédie\nDr AGAVOEDO Gipsy\nDr DJEDOU Arnaud\nChirurgie pédiatrique\nUrologie\nDr JACQUET Djamal\nDr SOUMANOU Fouad\nRadiologie\nDr ELEGBEDE Anicet\nLaboratoire\nDr KASSEIN Urbain\nCollaborateurs\nDr AKPAKPO Bruno\nPatient : AÏSSI Marie Josée\nAGE : 62 ans\nRAPPORT D’HOSPITALISATION\nJe soussigné, Dr Gipsy AGAVOEDO, chirurgien orthopédiste à la Clinique Mercy Fiat de Cotonou, certifie avoir hospitalisé du 21 janvier 2025 au 04 février 2025 Madame AÏSSI Marie-Josée, âgée de 62 ans, pour une fracture fermée du plateau tibial droit survenue à la suite d’un accident de la circulation le 21 janvier 2025.\nElle a bénéficié, le 22 janvier 2025, d’une ostéosynthèse par plaque vissée.\nLes suites opératoires sont favorables.\nIl ressort de ce qui précède un arrêt de travail de quatre-vingt-dix (90) jours sous réserve de complications ultérieures.\nFait pour servir et valoir ce que de droit.\nFait à Cotonou, le 04/03/25\nDr Gipsy AGAVOEDO\nChirurgien Orthopédiste\nTraumatologue\nMédecine générale\nDr DAH Judith\nPédiatrie\nDr BACHAROU Salwane\nCardiologie\nDr HAZOUME Michèle\nDr LASSISSI Moufidath\nEndocrinologie diabétologie\nDr MEDENOU Lionel\nNeurologie\nDr SESSINOU Marie-Rose\nAnesthésie réanimation\nDr CHOBLI Hervé\nTraumatologie-orthopédie\nDr AGAVOEDO Gipsy\nDr DJEDOU Arnaud\nChirurgie pédiatrique\nUrologie\nDr JACQUET Djamal\nDr SOUMANOU Fouad\nRadiologie\nDr ELEGBEDE Anicet\nLaboratoire\nDr KASSEIN Urbain\nCollaborateurs\nDr AKPAKPO Bruno"
+}
+------------------------------
+Match 6:
+{
+  "id": "DOC-REAL-AUTO-263",
+  "type": "DOC",
+  "category": "Certificat Médical",
+  "title": "Certificat Médical - ADJAGNISSODE",
+  "templateId": "certif_reprise",
+  "patientNom": "ADJAGNISSODE",
+  "patientPrenom": "",
+  "patientAge": "35 ans",
+  "date": "2020-08-26",
+  "diagnosis": "Bilan clinique",
+  "intervention": "",
+  "content": "REPUBLIQUE DU BENIN\nMINISTERE DE LA SANTE\nDIRECTION DEPARTEMENTALE DE LA SANTE\nDE L’ATLANTIQUE ET DU LITTORAL\nZONE SANITAIRE COTONOU 2 -3\nCENTRE HOSPITALIER UNIVERSITAIRE  DE ZONE  SURU-LERE\nSERVICE DE CHIRURGIE\nJe soussigné, Dr Gipsy AGAVOEDO Chirurgien Orthopédiste Traumatologue en service au Centre Hospitalier Universitaire de Zone de Suru-Léré certifie que Monsieur ADJAGNISSODE Patrick, âgé de 28 ans est à la fin du traitement des lésions dues à l’accident de la circulation du 25 Juillet 2018. Il peut être consolidé à la date de ce jour.\nLes différents chefs de préjudice seront évalués par une expertise médicale.\nLe présent certificat médical de guérison est établi à la demande du patient et remis en mains propres pour servir et valoir ce que de droit.\nFait à Cotonou, le 26 août 2020\nDr Gipsy AGAVOEDO\nChirurgien Orthopédiste Traumatologue\nREPUBLIQUE DU BENIN\nMINISTERE DE LA SANTE\nDIRECTION DEPARTEMENTALE DE LA SANTE\nDE L’ATLANTIQUE ET DU LITTORAL\nZONE SANITAIRE COTONOU 2 -3\nCENTRE HOSPITALIER UNIVERSITAIRE  DE ZONE  SURU-LERE\nSERVICE DE CHIRURGIE\nREÇU\nJe soussigné Dr Gipsy AGAVOEDO, certifie avoir reçu la somme de dix mille (10.000) francs cfa pour l’établissement du certificat médical de guérison de Mr PARAISO EDGARD.\nEn foi de quoi le présent reçu lui est délivré pour servir et valoir ce que de droit.\nFait à Cotonou, le 05 juillet 2020\nDr  Gipsy AGAVOEDO"
+}
+------------------------------
+Match 7:
+{
+  "id": "DOC-REAL-AUTO-271",
+  "type": "DOC",
+  "category": "Certificat Médical",
+  "title": "Certificat Médical - PARAISO",
+  "templateId": "certif_reprise",
+  "patientNom": "PARAISO",
+  "patientPrenom": "",
+  "patientAge": "35 ans",
+  "date": "2020-07-05",
+  "diagnosis": "Bilan clinique",
+  "intervention": "",
+  "content": "REPUBLIQUE DU BENIN\nMINISTERE DE LA SANTE\nDIRECTION DEPARTEMENTALE DE LA SANTE\nDE L’ATLANTIQUE ET DU LITTORAL\nZONE SANITAIRE COTONOU 2 -3\nCENTRE HOSPITALIER UNIVERSITAIRE  DE ZONE  SURU-LERE\nSERVICE DE CHIRURGIE\nJe soussigné, Dr Gipsy AGAVOEDO Chirurgien Orthopédiste Traumatologue en service au Centre Hospitalier Universitaire de Zone de Suru-Léré certifie que Monsieur PARAISO EDGARD, âgé de 42 ans est à la fin des soins suite à l’accident de la circulation du 1er Octobre 2019. Il peut être consolidé à la date de ce jour.\nLes différents chefs de préjudice seront évalués par une expertise médicale.\nLe présent certificat médical de guérison est établi à la demande du patient et remis en mains propres pour servir et valoir ce que de droit.\nFait à Cotonou, le 05 juillet 2020\nDr Gipsy AGAVOEDO\nChirurgien Orthopédiste Traumatologique\nREPUBLIQUE DU BENIN\nMINISTERE DE LA SANTE\nDIRECTION DEPARTEMENTALE DE LA SANTE\nDE L’ATLANTIQUE ET DU LITTORAL\nZONE SANITAIRE COTONOU 2 -3\nCENTRE HOSPITALIER UNIVERSITAIRE  DE ZONE  SURU-LERE\nSERVICE DE CHIRURGIE\nREÇU\nJe soussigné Dr Gipsy AGAVOEDO, certifie avoir reçu la somme de dix mille (10.000) francs cfa pour l’établissement du certificat médical de guérison de Mr PARAISO EDGARD.\nEn foi de quoi le présent reçu lui est délivré pour servir et valoir ce que de droit.\nFait à Cotonou, le 05 juillet 2020\nDr  Gipsy AGAVOEDO"
+}
+------------------------------
+Match 8:
+{
+  "id": "DOC-REAL-AUTO-290",
+  "type": "DOC",
+  "category": "Consultation",
+  "title": "Consultation - ADJASSA Benoit",
+  "templateId": "rapport_cs_assurance",
+  "patientNom": "ADJASSA",
+  "patientPrenom": "Benoit",
+  "patientAge": "35 ans",
+  "date": "2020-12-21",
+  "diagnosis": "Bilan clinique",
+  "intervention": "",
+  "content": "REPUBLIQUE DU BENIN\nMINISTERE DE LA SANTE\nDIRECTION DEPARTEMENTALE DE LA SANTE\nDE L’ATLANTIQUE ET DU LITTORAL\nZONE SANITAIRE COTONOU 2 -3\nCENTRE HOSPITALIER UNIVERSITAIRE  DE ZONE  SURU-LERE\nSERVICE DE CHIRURGIE\nCotonou, le 21 Décembre 2020\nNOM : ADJASSA  PRENOMS : Benoit\nÂGE    64 ans (né le 22/03/57)    Profession : Electricien bâtiment\nAdresse : SEKANDJI Quartier Amour, Maison ADJASSA Benoit\nTél : 98718697 / 51373392 \t\tDate de l’accident : 06 Janvier 2017\nJe soussigné Dr AGAVOEDO Gipsy, Chirurgien Orthopédiste Traumatologue au Centre Hospitalier Universitaire de Zone de Suru-Léré, Médécin expert en réparation juridique du dommage corporel, certifie avoir reçu et examiné à sa demande ce jour le nommé ADJASSA Benoit  en vue de lui établir un certificat médical de consolidation.\nREFERENCES DOCUMENTAIRES\n- Carte LEPI NPI 1957100901000658\n- Certificat Médical Initial du 10/11/20 établi par nous et fixant une ITT de 60 jours.\n- Clichés radiographiques du 06/01/2017, et du 10/05/2017\n- Procès-verbal de constat d’accident non présenté.\nCOMMEMORATIFS\nMonsieur ADJASSA Benoit  me déclare avoir été victime d’un accident de la circulation le 06/01/17 près de l’ancien cimetière d’AKPAKPA. La victime à pieds aurait été percutée par un automobiliste. Il s’en était suivi un traumatisme de l’épaule gauche. Il a été transporté par l’agresseur au  Centre Hospitalier universitaire de zone de SURU LERE.\nEVOLUTION\nA l’admission le bilan lésionnel établit une fracture fermée de la clavicule gauche.\nIl a bénéficié d’un traitement médical, d’un bandage claviculaire en 8.\nMonsieur ADJASSA Benoit a fait une dizaine de séances de rééducation fonctionnelle.\nDOLEANCES\nMonsieur ADJASSA Benoit n’allègue aucune plainte.\nETAT ANTERIEUR : La victime ne souffrirait d’aucune affection préalable à l’accident\nEXAMEN PHYSIQUE\nMonsieur ADJASSA Benoit présente un bon état général et un  bon état de conscience. La température est à 36°8, le pouls à 82 ppm,   la tension artérielle à 155/90 mmHg. Il pèse 65 kgs pour mesure 1m70.l’examen physique est sans particularité.\nDISCUSSSION\nMonsieur ADJASSA Benoit a été  victime d’un accident de la circulation le 06/01/2017 ayant entrainé une fracture de la clavicule gauche.\nIl a bénéficié d’un traitement orthopédique. L’évolution a été favorable. Ce jour il ne signale aucune plainte et l’examen physique est sans particularité. Il n’y a donc pas de séquelles imputables à l’accident du 06/01/2017.\nCONCLUSION\nLa victime est consolidée\nLa durée d’ITT a été de 60  jours\nLe pretium doloris est modéré 3/7\nIl n’y a pas de préjudice esthétique\nIl n’y a pas d’IPP.\nLe présent certificat médical de consolidation est délivré et remis en mains propres pour servir et valoir ce que de droit.\nDr AGAVOEDO Gipsy\nChirurgien Orthopédiste Traumatologue\nREPUBLIQUE DU BENIN\nMINISTERE DE LA SANTE\nDIRECTION DEPARTEMENTALE DE LA SANTE\nDE L’ATLANTIQUE ET DU LITTORAL\nZONE SANITAIRE COTONOU 2 -3\nCENTRE HOSPITALIER UNIVERSITAIRE  DE ZONE  SURU-LERE\nSERVICE DE CHIRURGIE\nREÇU\nJe soussigné Dr Gipsy AGAVOEDO, certifie avoir reçu la somme de quarante milles (40.000) francs cfa pour l’établissement du certificat médical de consolidation de ADJASSA Benoit.\nEn foi de quoi le présent reçu lui est délivré pour servir et valoir ce que de droit.\nFait à Cotonou, le 21 Décembre 2020\nDr Gipsy AGAVOEDO"
+}
+------------------------------
+Match 9:
+{
+  "id": "DOC-REAL-AUTO-293",
+  "type": "DOC",
+  "category": "Consultation",
+  "title": "Consultation - ARISSOU AROUNA",
+  "templateId": "rapport_cs_assurance",
+  "patientNom": "ARISSOU",
+  "patientPrenom": "AROUNA",
+  "patientAge": "35 ans",
+  "date": "2020-01-28",
+  "diagnosis": "Bilan clinique",
+  "intervention": "",
+  "content": "REPUBLIQUE DU BENIN\nMINISTERE DE LA SANTE\nDIRECTION DEPARTEMENTALE DE LA SANTE\nDE L’ATLANTIQUE ET DU LITTORAL\nZONE SANITAIRE COTONOU 2 -3\nCENTRE HOSPITALIER UNIVERSITAIRE  DE ZONE  SURU-LERE\nSERVICE DE CHIRURGIE\nCotonou, le 28 Janvier 2020\nNOM : ARISSOU  PRENOMS : AROUNA\nÂGE    20 ans (né le 01/01/99)    Profession : cultivateur et revendeur\nAdresse : Gbégamey, Cotonou, Tél : 68003694 / 97464668\nDate de l’accident : 29 Décembre 2018\nJe soussigné Dr AGAVOEDO Gipsy, Chirurgien Orthopédiste Traumatologue au Centre Hospitalier Universitaire de Zone de Suru-Léré, Médécin expert en réparation juridique du dommage corporel, certifie sur avoir reçu et examiné à sa demande ce jour le nommé ARISSOU AROUNA  en vue de lui établir un certificat médical de consolidation.\nREFERENCES DOCUMENTAIRES\n- Extrait d’acte de naissance.\n- Certificat d’individualité\n- Certificat Médical Initial du 29/10/19 établi par nous et fixant une ITT de 60 jours sous réserve de complications ultérieures.\n- Clichés radiographiques de la cheville gauche réalisés les 29/12/18, 12/02/19 et du 28/01/2020.\n- Procès-verbal de constat d’accident non présenté.\nCOMMEMORATIFS\nMonsieur ARISSOU AROUNA me déclare avoir été victime d’un accident de la circulation le 29/12/18 à Ganhi non loin du passage supérieur. La victime a été percutée par une voiture alors qu’il traversait la route. Il s’en était suivi un traumatisme de la cheville gauche. Il a été transporté par un ami aux urgences du Centre Hospitalier Universitaire de Zone de Suru-Léré.\nEVOLUTION\nA l’admission le bilan lésionnel établit une fracture fermée bi malléolaire gauche.\nIl a bénéficié en urgence d’un traitement antalgique et d’une botte plâtrée. Il a été procédé à l’ablation du plâtre après 2 mois environ.\nMonsieur ARISSOU AROUNA aurait repris ses activités 04 mois après la survenue du traumatisme.\nDOLEANCES\nMonsieur ARISSOU AROUNA allègue quelques douleurs résiduelles climatiques.\nETAT ANTERIEUR\nLa victime présente une cécité droite depuis l’enfance.\nEXAMEN PHYSIQUE\nMonsieur ARISSOU AROUNA présente un bon état général et un  bon état de conscience. La température est à 37°, le pouls à 74 ppm,   la tension artérielle à 116/75 mmHg. La marche est aisée sans aide technique. L’accroupissement et l’appui monopodal sont possibles. Au niveau de la cheville gauche, il existe un discret valgus. Il n’y a pas de douleur à la palpation des reliefs malléolaires ni des interlignes articulaires. Les amplitudes articulaires sont conservées. Le reste de l’examen est sans particularité.\nDISCUSSSION\nMonsieur ARISSOU AROUNA a été  victime d’un accident de la circulation le 29/12/2018 ayant entrainé  une fracture fermée bi malléolaire gauche.\nIl a bénéficié d’un traitement orthopédique par plâtre. L’évolution a été favorable. Ce jour il signale quelques douleurs climatiques sur un discret valgus de la cheville gauche. Ces différentes séquelles sont imputables à l’accident du 29/12/2018.\nCONCLUSION\nLa victime est consolidée\nLa durée d’ITT a été de 60 jours\nLe pretium doloris est modéré 3/7\nIl n’y a pas de préjudice esthétique\nLe taux d’IPP est de 01 %.\nLe présent certificat médical de consolidation est délivré et remis en mains propres pour servir et valoir ce que de droit.\nDr AGAVOEDO Gipsy\nChirurgien Orthopédiste Traumatologue\nREPUBLIQUE DU BENIN\nMINISTERE DE LA SANTE\nDIRECTION DEPARTEMENTALE DE LA SANTE\nDE L’ATLANTIQUE ET DU LITTORAL\nZONE SANITAIRE COTONOU 2 -3\nCENTRE HOSPITALIER UNIVERSITAIRE  DE ZONE  SURU-LERE\nSERVICE DE CHIRURGIE\nREÇU\nJe soussigné Dr Gipsy AGAVOEDO, certifie avoir reçu la somme de quarante milles (40.000) francs cfa pour l’établissement du certificat médical de consolidation de ARISSOU AROUNA.\nEn foi de quoi le présent reçu lui est délivré pour servir et valoir ce que de droit.\nFait à Cotonou, le 28 Janvier 2020\nDr Gipsy AGAVOEDO"
+}
+------------------------------
+Match 10:
+{
+  "id": "DOC-REAL-AUTO-302",
+  "type": "DOC",
+  "category": "Consultation",
+  "title": "Consultation - ADJASSA Bénoit",
+  "templateId": "rapport_cs_assurance",
+  "patientNom": "ADJASSA",
+  "patientPrenom": "Bénoit",
+  "patientAge": "35 ans",
+  "date": "2020-12-19",
+  "diagnosis": "Bilan clinique",
+  "intervention": "",
+  "content": "REPUBLIQUE DU BENIN\nMINISTERE DE LA SANTE\nDIRECTION DEPARTEMENTALE DE LA SANTE\nDE L’ATLANTIQUE ET DU LITTORAL\nZONE SANITAIRE COTONOU 2 -3\nCENTRE HOSPITALIER UNIVERSITAIRE  DE ZONE  SURU-LERE\nSERVICE DE CHIRURGIE\nCotonou, le 19 Décembre 2020\nNOM : ADJASSA  PRENOMS : Bénoit\nÂGE    64 ans (né le 22/03/57)    Profession : Electricien bâtiment\nAdresse : SEKANDJI Quartier Amour, Maison ADJASSA Benoit\nTél : 98718697 / 51373392 \t\tDate de l’accident : 06 Janvier 217\nJe soussigné Dr AGAVOEDO Gipsy, Chirurgien Orthopédiste Traumatologue au Centre Hospitalier Universitaire de Zone de Suru-Léré, Médécin expert en réparation juridique du dommage corporel, certifie avoir reçu et examiné à sa demande ce jour le nommé ADJASSA Benoit  en vue de lui établir un certificat médical de consolidation.\nREFERENCES DOCUMENTAIRES\n- Carte LEPI NPI 1957100901000658\n- Certificat Médical Initial du 10/11/20 établi par nous et fixant une ITT de 60 jours.\n- Clichés radiographiques du 06/01/2017, et du 10/05/2017\n- Procès-verbal de constat d’accident non présenté.\nCOMMEMORATIFS\nMonsieur ADJASSA Benoit  me déclare avoir été victime d’un accident de la circulation le 06/01/197 près de l’ancien cimetière d’AKPAKPA. La victime 0à pieds aurait été percutée par un automobiliste. Il s’en était suivi un traumatisme de l’épaule gauche. Il a été transporté par l’agresseur au  Centre Hospitalier universitaire de zone de SURU LERE.\nEVOLUTION\nA l’admission le bilan lésionnel établit une fracture fermée de la clavicule gauche.\nIl a bénéficié d’un traitement médical, d’un bandage claviculaire en 8.\nMonsieur ADJASSA Benoit a fait une dizaine de séances de rééducation fonctionnelle.\nDOLEANCES\nMonsieur ADJASSA Benoit n’allègue aucune plainte.\nETAT ANTERIEUR\nEXAMEN PHYSIQUE\nMonsieur PARAISO LAURENT présente un bon état général et un  bon état de conscience. La température est à 36°8, le pouls à 82 ppm,   la tension artérielle à 155/90 mmHg. Il pèse 65 kgs pour mesure 1m70.l’examen physique est sans particularité.\nDISCUSSSION\nMonsieur ADJASSA Benoit a été  victime d’un accident de la circulation le 01/10/2019 ayant entrainé un traumatisme crânien léger, une fracture des 4 dernières cotes  droites,  une entorse de la cheville droite, et un dysfonctionnement de l’appareillage prothétique fémorale gauche que portait la victime au moment de l’accident.\nIl a bénéficié d’un traitement médical et orthopédique. L’évolution a été favorable. Ce jour il signale quelques douleurs climatiques du thorax et de la cheville droite et allègue un syndrome subjectif post commotionnel modéré. Ces différentes séquelles sont imputables à l’accident du 01/10/2019.\nCONCLUSION\nLa victime est consolidée\nLa durée d’ITT a été de 90 jours\nLe pretium doloris est modéré 3/7\nIl n’y a pas de préjudice esthétique\nLe taux d’IPP est de 10%.\nNous recommandons le remplacement de l’appareillage orthopédique abimé afin de permettre à la victime de reprendre ses activités. Un aménagement de poste de travail pourrait s’avérer nécessaire afin de lui éviter les efforts et la station debout prolongée.\nLe présent certificat médical de consolidation est délivré et remis en mains propres pour servir et valoir ce que de droit.\nDr AGAVOEDO Gipsy\nChirurgien Orthopédiste Traumatologue\nREPUBLIQUE DU BENIN\nMINISTERE DE LA SANTE\nDIRECTION DEPARTEMENTALE DE LA SANTE\nDE L’ATLANTIQUE ET DU LITTORAL\nZONE SANITAIRE COTONOU 2 -3\nCENTRE HOSPITALIER UNIVERSITAIRE  DE ZONE  SURU-LERE\nSERVICE DE CHIRURGIE\nREÇU\nJe soussigné Dr Gipsy AGAVOEDO, certifie avoir reçu la somme de quarante milles (40.000) francs cfa pour l’établissement du certificat médical de consolidation de PARAISO LAURENT.\nEn foi de quoi le présent reçu lui est délivré pour servir et valoir ce que de droit.\nFait à Cotonou, le 05 Juillet 2020\nDr Gipsy AGAVOEDO"
+}
+------------------------------
+Match 11:
+{
+  "id": "DOC-REAL-AUTO-308",
+  "type": "DOC",
+  "category": "Consultation",
+  "title": "Consultation - ZINSOU GODEFROY",
+  "templateId": "rapport_cs_assurance",
+  "patientNom": "ZINSOU",
+  "patientPrenom": "GODEFROY",
+  "patientAge": "35 ans",
+  "date": "2023-11-11",
+  "diagnosis": "Bilan clinique",
+  "intervention": "",
+  "content": "REPUBLIQUE DU BENIN\nMINISTERE DE LA SANTE\nDIRECTION DEPARTEMENTALE DE LA SANTE\nDE L’ATLANTIQUE ET DU LITTORAL\nZONE SANITAIRE COTONOU 2 -3\nCENTRE HOSPITALIER UNIVERSITAIRE  DE ZONE  SURU-LERE\nSERVICE DE CHIRURGIE\nCotonou, le 11 novembre 2023\nNOM : ZINSOU  PRENOMS : GODEFROY\nÂGE    56 ans (né le 08/11/1967)    Profession : vitrier\nAdresse : VAKON AKPO MISSERETE\nTél : 97013333 \t\tDate de l’accident : 24/02/2021\nJe soussigné Dr AGAVOEDO Gipsy, Chirurgien Orthopédiste Traumatologue au Centre Hospitalier Universitaire de Zone de Suru-Léré, Médécin expert en réparation juridique du dommage corporel, certifie avoir reçu et examiné à sa demande ce jour le nommé ZINSOU Godefroy  en vue de lui établir un certificat médical de consolidation.\nREFERENCES DOCUMENTAIRES\n- Carte ANIP NPI 0028085379\n- Certificat Médical Initial du 17/05/21 établi par nous et fixant une ITT de 90 jours.\n- Clichés radiographiques\n- Procès-verbal de constat d’accident\nCOMMEMORATIFS\nMonsieur ZINSOU Godefroy  me déclare avoir été victime d’un accident de la circulation le 24/02/2021 dans les circonstances décrite au procès-verbal de constat d’accident. Il s’en était suivi un traumatisme du membre pelvien gauche\nEVOLUTION\nA l’admission le bilan lésionnel établit une fracture fermée comminutive sus et inter condylienne du fémur gauche.\nIl a bénéficié d’un traitement médical, et  d’une ostéosynthèse par plaque vissée.\nMonsieur ZINSOU Godefroy a fait la rééducation fonctionnelle après un délai de  3 mois post opératoire et l’évolution a été favorable. Il n’a pas souhaité faire l’ablation du matériel d’ostéosynthèse avec arthrolyse du genou.\nDOLEANCES\nMonsieur ZINSOU Godefroy allègue quelques douleurs du genou gauche.\nETAT ANTERIEUR\nLa victime ne souffrirait d’aucune affection préalable à l’accident\nEXAMEN PHYSIQUE\nMonsieur ZINSOU Godefroy présente un bon état général et un  bon état de conscience. La température est à 36°8, le pouls à 78 ppm,   la tension artérielle à 150/90 mm Hg. Il pèse 70 kgs et mesure 1m76. Il marche sans aide technique. L’appui monopodal est possible mais l’accroupissement est impossible. L’examen physique note essentiellement :\n-une cicatrice antérolatérale du genou remontant à la mi-cuisse\n-une raideur du genou gauche avec une flexion limitée à 40° et une extension complète\n- un raccourcissement du membre pelvien gauche de 2.5 cm.\nDISCUSSSION\nMonsieur ZINSOU Godefroy a été  victime d’un accident de la circulation le 24/02/2021 ayant entrainé une fracture complexe articulaire du fémur distal gauche. Il a bénéficié d’un traitement chirurgical adéquat. L’évolution a été favorable. Ce jour il une raideur du genou gauche avec une flexion à 40° et une inégalité de longueur des membres inférieurs. Ces séquelles sont imputables à l’accident du 24/02/2021.\nCONCLUSION\nLa victime est consolidée.\nL’intervention d’ablation du matériel d’ostéosynthèse peut être provisionnée.\nUne semelle orthopédique est prescrite.\nLa durée d’ITT a été de 90  jours.\nLe pretium doloris est assez important 5/7.\nLe préjudice esthétique est modéré 3/7.\nLe taux  d’IPP est de 12%.\nLe présent certificat médical de consolidation est délivré et remis en mains propres pour servir et valoir ce que de droit.\nDr AGAVOEDO Gipsy\nChirurgien Orthopédiste\nTraumatologue\nREPUBLIQUE DU BENIN\nMINISTERE DE LA SANTE\nDIRECTION DEPARTEMENTALE DE LA SANTE\nDE L’ATLANTIQUE ET DU LITTORAL\nZONE SANITAIRE COTONOU 2 -3\nCENTRE HOSPITALIER UNIVERSITAIRE  DE ZONE  SURU-LERE\nSERVICE DE CHIRURGIE\nREÇU\nJe soussigné Dr Gipsy AGAVOEDO, certifie avoir reçu la somme de quarante milles (40.000) francs cfa pour l’établissement du certificat médical de consolidation de ADJASSA Benoit.\nEn foi de quoi le présent reçu lui est délivré pour servir et valoir ce que de droit.\nFait à Cotonou, le 21 Décembre 2020\nDr Gipsy AGAVOEDO"
+}
+------------------------------
+Match 12:
+{
+  "id": "DOC-REAL-AUTO-329",
+  "type": "DOC",
+  "category": "Consultation",
+  "title": "Consultation - ADJASSA",
+  "templateId": "rapport_cs_assurance",
+  "patientNom": "ADJASSA",
+  "patientPrenom": "",
+  "patientAge": "35 ans",
+  "date": "2020-11-10",
+  "diagnosis": "Bilan clinique",
+  "intervention": "",
+  "content": "REPUBLIQUE DU BENIN\nMINISTERE DE LA SANTE\nDIRECTION DEPARTEMENTALE DE LA SANTE\nDE L’ATLANTIQUE ET DU LITTORAL\nZONE SANITAIRE COTONOU 2 -3\nCENTRE HOSPITALIER UNIVERSITAIRE  DE ZONE  SURU-LERE\nSERVICE DE CHIRURGIE\nJe soussigné, Dr Gipsy AGAVOEDO, Chirurgien orthopédiste traumatologue en service au Centre Hospitalier Universitaire de Zone de Suru-Léré certifie avoir examiné ce jour Monsieur ADJASSA Benoit, âgé de 64 ans. Il aurait été victime d’un accident de la circulation le 06/01/2017.\nLe bilan lésionnel établit une fracture fermée de la clavicule gauche.\nIl a bénéficié d’un traitement médical, d’un bandage claviculaire en 8.\nL’incapacité Temporaire de Travail (ITT) est fixée à 60 jours sous réserve des complications ultérieures.\nLe présent certificat médical est établi à la demande du patient et remis en mains propres pour servir et valoir ce que de droit.\nFait à Cotonou, le 10 Novembre 2020\nDr Gipsy AGAVOEDO\nChirurgien Orthopédiste Traumatologue\nREPUBLIQUE DU BENIN\nMINISTERE DE LA SANTE\nDIRECTION DEPARTEMENTALE DE LA SANTE\nDE L’ATLANTIQUE ET DU LITTORAL\nZONE SANITAIRE COTONOU 2 -3\nCENTRE HOSPITALIER UNIVERSITAIRE  DE ZONE  SURU-LERE\nSERVICE DE CHIRURGIE\nREÇU\nJe soussigné Dr Gipsy AGAVOEDO, certifie avoir reçu la somme de quinze mille (15.000) francs cfa pour l’établissement du certificat médical initial de ADJASSA Benoit.\nEn foi de quoi le présent reçu lui est délivré pour servir et valoir ce que de droit.\nFait à Cotonou, le 10 Novembre 2020\nDr  Gipsy AGAVOEDO"
+}
+------------------------------
+Match 13:
+{
+  "id": "DOC-REAL-AUTO-445",
+  "type": "DOC",
+  "category": "Consultation",
+  "title": "Consultation - PARAISO francois xavier",
+  "templateId": "rapport_cs_assurance",
+  "patientNom": "PARAISO",
+  "patientPrenom": "francois xavier",
+  "patientAge": "35 ans",
+  "date": "2020-08-03",
+  "diagnosis": "Bilan clinique",
+  "intervention": "",
+  "content": "REPUBLIQUE DU BENIN\nMINISTERE DE LA SANTE\nDIRECTION DEPARTEMENTALE DE LA SANTE\nDE L’ATLANTIQUE ET DU LITTORAL\nZONE SANITAIRE COTONOU 2 -3\nCENTRE HOSPITALIER UNIVERSITAIRE  DE ZONE  SURU-LERE\nSERVICE DE CHIRURGIE\nJe soussigné, Dr Gipsy AGAVOEDO Chirurgien orthopédiste traumatologue en service au Centre Hospitalier Universitaire de Zone de Suru-Léré certifie que le nommé PARAISO FRANCOIS-XAVIER, âgé de 22 ans a été hospitalisé du 12/07/20 au 14/07/20. IL aurait été victime d’un accident de la circulation 4 jours avant son admission.\nA l’examen on note un syndrome douloureux abdominal.\nUne NFS, la CRP, une échographie abdominale ont été faites.\nIl a bénéficié d’un traitement médical fait d’antalgiques et antibiotiques.\nL’évolution a été favorable.\nLe présent rapport médical est établi à la demande de la mère et remis en mains propres pour servir et valoir ce que de droit.\nFait à Cotonou, le 03 Août 2020\nDr Gipsy AGAVOEDO\nChirurgien Orthopédiste Traumatologue\nREPUBLIQUE DU BENIN\nMINISTERE DE LA SANTE\nDIRECTION DEPARTEMENTALE DE LA SANTE\nDE L’ATLANTIQUE ET DU LITTORAL\nZONE SANITAIRE COTONOU 2 -3\nCENTRE HOSPITALIER UNIVERSITAIRE  DE ZONE  SURU-LERE\nSERVICE DE CHIRURGIE\nREÇU\nJe soussigné Dr Gipsy AGAVOEDO, certifie avoir reçu la somme de quinze mille (15.000) francs cfa pour l’établissement du certificat médical initial de Mlle KOUDOSSODJI CATHERINE.\nEn foi de quoi le présent reçu lui est délivré pour servir et valoir ce que de droit.\nFait à Cotonou, le 7 Mai 2020\nDr  Gipsy AGAVOEDO"
+}
+------------------------------
+Total matches in documents_db.json: 13

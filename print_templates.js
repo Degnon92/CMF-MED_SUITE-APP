@@ -39,5 +39,157 @@ window.MercyFiatTemplates = {
                 <span style="display: block;"><strong>C -</strong> Aucune autre tarification n'est acceptée à part celle pratiquée à la Clinique.</span>
             </div>
         `;
+    },
+
+    // Sépare dynamiquement le contenu en plusieurs pages A4 virtuelles
+    paginateReport: function(options) {
+        const {
+            paragraphs,
+            patientInfoHtml,
+            titleHtml,
+            diagnosticHtml,
+            sigBlockHtml,
+            specialites
+        } = options;
+
+        const sidebarContentHtml = specialites.map(s => `
+            <div style="margin-bottom:16px;">
+                <div style="font-weight:900; text-decoration:underline; font-size:13px; color:#1a202c; margin-bottom:4px; line-height:1.25;">${s.spec}</div>
+                ${s.doctors.map(d => `<div style="font-size:12px; color:#2d3748; padding-left:2px; margin-bottom:2px; font-weight:600; line-height:1.25;">${d}</div>`).join('')}
+            </div>
+        `).join('');
+
+        let tempContainer = document.getElementById('temp-pagination-container');
+        if (!tempContainer) {
+            tempContainer = document.createElement('div');
+            tempContainer.id = 'temp-pagination-container';
+            tempContainer.style.position = 'absolute';
+            tempContainer.style.left = '-9999px';
+            tempContainer.style.top = '-9999px';
+            tempContainer.style.width = '21cm';
+            tempContainer.style.height = 'auto';
+            document.body.appendChild(tempContainer);
+        }
+        tempContainer.innerHTML = '';
+
+        // Mesurer la hauteur physique cible d'une page A4 (29.7cm) dans la résolution courante à zoom 1
+        const dummyPage = document.createElement('div');
+        dummyPage.className = 'clinical-page';
+        dummyPage.style.zoom = '1';
+        dummyPage.style.visibility = 'hidden';
+        dummyPage.style.position = 'absolute';
+        tempContainer.appendChild(dummyPage);
+        const targetHeight = dummyPage.offsetHeight;
+        tempContainer.removeChild(dummyPage);
+
+        function createNewPage() {
+            const pageDiv = document.createElement('div');
+            pageDiv.className = 'clinical-page';
+            // Forcer zoom 1 temporairement pour une mesure physique 1:1 fiable
+            pageDiv.style.zoom = '1'; 
+            pageDiv.style.height = 'auto'; // Forcer height auto pour permettre la mesure lors de l'empilement
+            
+            pageDiv.innerHTML = `
+                ${window.MercyFiatTemplates.getPrintHeaderHtml()}
+                <div class="doc-flex-body" style="display:flex; gap:0; flex-grow:1 !important; align-items:stretch; border-bottom:2px solid #2d3748; overflow:hidden;">
+                    <div class="doc-sidebar" style="width:150px; flex-shrink:0; border-right:1px solid #2d3748; padding:10px 8px 10px 2px; font-family:'Times New Roman',serif; align-self:stretch;">
+                        ${sidebarContentHtml}
+                    </div>
+                    <div class="doc-content-col" style="flex:1; padding:10px 12px; display:flex; flex-direction:column; overflow:hidden;">
+                    </div>
+                </div>
+                ${window.MercyFiatTemplates.getPrintFooterHtml()}
+            `;
+            tempContainer.appendChild(pageDiv);
+            return pageDiv;
+        }
+
+        let currentPage = createNewPage();
+        let currentContentCol = currentPage.querySelector('.doc-content-col');
+        
+        console.log("[DEBUG] TargetHeight:", targetHeight);
+        console.log("[DEBUG] Initial currentPage height:", currentPage.offsetHeight);
+        const sidebarEl = currentPage.querySelector('.doc-sidebar');
+        if (sidebarEl) {
+            console.log("[DEBUG] Sidebar dimensions:", {
+                clientHeight: sidebarEl.clientHeight,
+                offsetHeight: sidebarEl.offsetHeight,
+                scrollHeight: sidebarEl.scrollHeight
+            });
+        }
+
+        // 1. Infos Patient sur la page 1 uniquement
+        const patientInfoDiv = document.createElement('div');
+        patientInfoDiv.innerHTML = patientInfoHtml;
+        currentContentCol.appendChild(patientInfoDiv);
+
+        // 2. Titre du rapport sur la page 1 uniquement
+        const titleDiv = document.createElement('div');
+        titleDiv.innerHTML = titleHtml;
+        currentContentCol.appendChild(titleDiv);
+
+        // 3. Diagnostic s'il existe (page 1)
+        if (diagnosticHtml) {
+            const diagDiv = document.createElement('div');
+            diagDiv.innerHTML = diagnosticHtml;
+            currentContentCol.appendChild(diagDiv);
+        }
+
+        // 4. Distribution des paragraphes de texte
+        let paraIndex = 0;
+        for (const paraHtml of paragraphs) {
+            const paraDiv = document.createElement('div');
+            paraDiv.innerHTML = paraHtml;
+            currentContentCol.appendChild(paraDiv);
+            paraIndex++;
+
+            console.log(`[DEBUG] Para ${paraIndex} added. Page offsetHeight: ${currentPage.offsetHeight}, targetHeight: ${targetHeight}, contentCol children: ${currentContentCol.children.length}`);
+
+            // Si la hauteur de page réelle dépasse la hauteur A4 cible
+            if (currentPage.offsetHeight > targetHeight) {
+                if (currentContentCol.children.length > 1) {
+                    console.log(`[DEBUG] Para ${paraIndex} overflows! Removing and pushing to next page.`);
+                    currentContentCol.removeChild(paraDiv);
+                    
+                    // Rétablir la hauteur fixe par défaut pour finaliser la page courante
+                    currentPage.style.height = '';
+
+                    // Nouvelle page
+                    currentPage = createNewPage();
+                    currentContentCol = currentPage.querySelector('.doc-content-col');
+                    currentContentCol.appendChild(paraDiv);
+                    console.log(`[DEBUG] Created new page for Para ${paraIndex}. New page height: ${currentPage.offsetHeight}`);
+                }
+            }
+        }
+
+        // 5. Bloc de signature sur la dernière page
+        const sigDiv = document.createElement('div');
+        sigDiv.innerHTML = sigBlockHtml;
+        currentContentCol.appendChild(sigDiv);
+
+        if (currentPage.offsetHeight > targetHeight) {
+            if (currentContentCol.children.length > 1) {
+                currentContentCol.removeChild(sigDiv);
+                
+                // Rétablir la hauteur fixe par défaut pour finaliser la page courante
+                currentPage.style.height = '';
+                
+                currentPage = createNewPage();
+                currentContentCol = currentPage.querySelector('.doc-content-col');
+                currentContentCol.appendChild(sigDiv);
+            }
+        }
+
+        // Enlever le zoom forcé et laisser la hauteur revenir aux 29.7cm standard de la classe CSS
+        Array.from(tempContainer.children).forEach(page => {
+            page.style.zoom = '';
+            page.style.height = '';
+        });
+
+        const resultHtml = tempContainer.innerHTML;
+        tempContainer.innerHTML = '';
+        return resultHtml;
     }
 };
+

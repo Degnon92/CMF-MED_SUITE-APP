@@ -1,5 +1,5 @@
 import openpyxl, re
-wb = openpyxl.load_workbook(r"C:\Users\Degnon\Documents\2.MERCY FIAT CLINIQUE\2. Dr Gipsy\PROFORMA CHIRURGIE\EXEMPLAIRE PROFORMA.xlsx", read_only=True)
+wb = openpyxl.load_workbook(r"C:\Users\Farus\Documents\2.MERCY FIAT CLINIQUE\2. Dr Gipsy\PROFORMA CHIRURGIE\EXEMPLAIRE PROFORMA.xlsx", read_only=True)
 
 has_patient_colon = 0
 has_patient_any = 0

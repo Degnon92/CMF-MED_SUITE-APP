@@ -58,7 +58,7 @@ function exportFullRegisterToExcel() {
             "ID Fiche": b.id,
             "Nom Patient": b.patientNom,
             "Prénom Patient": b.patientPrenom,
-            "Type Fiche": b.type === 'PROFORMA' ? 'Facture Proforma' : (b.type === 'DETAIL_ASSUR' ? 'Détail Assurance Proforma' : (b.type === 'AVOIR' ? 'Facture d\'Avoir' : 'Point d\'Hospitalisation')),
+            "Type Fiche": b.type === 'PROFORMA' ? 'Facture Proforma' : (b.type === 'DETAIL_ASSUR' ? (b.insurance === 'PRIVE' ? 'Détail Prestations Proforma' : 'Détail Assurance Proforma') : (b.type === 'AVOIR' ? 'Facture d\'Avoir' : 'Point d\'Hospitalisation')),
             "Assurance": b.insurance,
             "Couverture (%)": b.coverage,
             "Matricule": b.matricule,
@@ -129,11 +129,11 @@ function exportSingleBillToExcel() {
         const useSplitRaw = document.getElementById('bill-use-split')?.checked || false;
         const useSplit = (patientType !== 'PRIVE') && (billType === 'DETAIL_ASSUR' || useSplitRaw);
         
-        // A. Collecte et validation des items
-        const itemsData = [];
+        // A. Collecte et validation des items (avec gestion de la remise et de l'assurance)
+        const items = [];
         let grossTotal = 0;
-        let totalAssurance = 0;
-        let totalPatient = 0;
+        let totalPartAssurance = 0;
+        let totalPartPatient = 0;
         
         const rows = document.querySelectorAll('#billing-items-container .item-row');
         rows.forEach(row => {
@@ -143,27 +143,98 @@ function exportSingleBillToExcel() {
             const subtotal = price * qty;
             
             if (name) {
-                grossTotal += subtotal;
-                if (useSplit) {
-                    const limit = parseFloat(row.querySelector('.item-split-limit')?.value) || subtotal;
-                    const rate = parseFloat(row.querySelector('.item-split-rate')?.value) || 0;
-                    const partAssurance = Math.round(limit * (rate / 100));
-                    const partPatient = subtotal - partAssurance;
-                    
-                    totalAssurance += partAssurance;
-                    totalPatient += partPatient;
-                    
-                    itemsData.push([name, qty, price, subtotal, partAssurance, partPatient]);
-                } else {
-                    itemsData.push([name, qty, price, subtotal]);
+                let partAssurance = 0;
+                let partPatient = subtotal;
+                let itemLimit = subtotal;
+                let itemRate = (patientType !== 'PRIVE') ? coverage : 0;
+                
+                if (patientType !== 'PRIVE') {
+                    if (useSplit) {
+                        const limitRaw = parseFloat(row.querySelector('.item-split-limit')?.value);
+                        itemLimit = isNaN(limitRaw) ? subtotal : limitRaw;
+                        const rateRaw = parseFloat(row.querySelector('.item-split-rate')?.value);
+                        itemRate = isNaN(rateRaw) ? 0 : rateRaw;
+                        partAssurance = Math.round(itemLimit * (itemRate / 100));
+                        partPatient = subtotal - partAssurance;
+                    } else {
+                        partAssurance = Math.round(subtotal * (coverage / 100));
+                        partPatient = subtotal - partAssurance;
+                    }
                 }
+                
+                grossTotal += subtotal;
+                totalPartAssurance += partAssurance;
+                totalPartPatient += partPatient;
+                
+                items.push({
+                    name,
+                    qty,
+                    price,
+                    subtotal,
+                    limit: itemLimit,
+                    rate: itemRate,
+                    partAssurance,
+                    partPatient
+                });
             }
         });
         
-        if (itemsData.length === 0) {
+        if (items.length === 0) {
             alert("Veuillez saisir des frais avant d'exporter.");
             return;
         }
+        
+        // Calcul des réductions (identique à la logique applicative de billing.js)
+        const discountTypeEl = document.getElementById('bill-discount-type');
+        const discountValueEl = document.getElementById('bill-discount-value');
+        let discountPct = 0;
+        let reductionAmount = 0;
+        let discountType = 'PERCENT';
+
+        if (discountTypeEl && discountValueEl) {
+            discountType = discountTypeEl.value;
+            const val = parseFloat(discountValueEl.value || 0);
+            if (discountType === 'PERCENT') {
+                discountPct = val;
+                reductionAmount = Math.round(grossTotal * (discountPct / 100));
+            } else {
+                reductionAmount = Math.round(val);
+                discountPct = grossTotal > 0 ? (reductionAmount / grossTotal) * 100 : 0;
+            }
+        }
+        const discountedTotal = grossTotal - reductionAmount;
+        
+        // Ajustement proportionnel aux parts splitées/assurance
+        if (reductionAmount > 0) {
+            const splitDiscountRatio = grossTotal > 0 ? discountedTotal / grossTotal : 1;
+            totalPartAssurance = Math.round(totalPartAssurance * splitDiscountRatio);
+            totalPartPatient = discountedTotal - totalPartAssurance;
+            
+            items.forEach(item => {
+                const itemDiscountedSubtotal = Math.round(item.subtotal * splitDiscountRatio);
+                item.partAssurance = Math.round(item.partAssurance * splitDiscountRatio);
+                item.partPatient = itemDiscountedSubtotal - item.partAssurance;
+            });
+        }
+        
+        const discountLabel = discountType === 'PERCENT' ? `(${Math.round(discountPct)}%)` : `(Remise)`;
+        
+        // Mode de règlement et montants encaissés/reste à charge
+        const paymentMethodId = document.getElementById('bill-payment-method')?.value || "CASH";
+        const rawAmountPaid = parseFloat(document.getElementById('bill-amount-paid-patient')?.value);
+        
+        const totalPatientShare = (patientType !== 'PRIVE') ? totalPartPatient : discountedTotal;
+        const amountPaidPatient = isNaN(rawAmountPaid) ? totalPatientShare : Math.min(rawAmountPaid, totalPatientShare);
+        const balancePatient = totalPatientShare - amountPaidPatient;
+        
+        const paymentNames = {
+            CASH: 'Espèces (Cash)',
+            BANK_TRANSFER: 'Virement Bancaire',
+            CHECK: 'Chèque Bancaire',
+            MOBILE_MONEY: 'Mobile Money',
+            TIERS_PAYANT: 'Attente Tiers-Payant'
+        };
+        const paymentName = paymentNames[paymentMethodId] || 'Espèces';
         
         // B. Création du Workbook ExcelJS
         const workbook = new ExcelJS.Workbook();
@@ -187,7 +258,6 @@ function exportSingleBillToExcel() {
         delete worksheet.pageSetup.fitToHeight;
         
         // Pied de page officiel sur 2 lignes — \n dans oddFooter est supporté nativement par ExcelJS
-        // Les 2 lignes sont dans oddFooter (pages impaires ET paires car differentOddEven = false)
         worksheet.headerFooter.oddFooter =
             '&C&8SEME AGUE PK 18  |  Tel : +229 69 62 02 02 / 98 00 00 55  |  Cotonou Vodje  |  Tel : +229 69 02 11 11 / 98 70 98 98\n' +
             '&C&8E-mail : cliniquemercyfiat@gmail.com  /  ORABANK Cpte bancaire : 02170730 0 201  /  N IFU : 3201710045937  /  N RCCM-RB-COT-17-B-19317';
@@ -196,11 +266,12 @@ function exportSingleBillToExcel() {
         
         // Configuration des largeurs de colonnes
         worksheet.columns = useSplit ? [
-            { key: 'desc', width: 38 },
+            { key: 'desc', width: 34 },
             { key: 'qty', width: 6 },
             { key: 'price', width: 12 },
-            { key: 'subtotal', width: 14 },
-            { key: 'assurance', width: 14 },
+            { key: 'subtotal', width: 13 },
+            { key: 'limit', width: 13 },
+            { key: 'assurance', width: 13 },
             { key: 'patient', width: 14 }
         ] : [
             { key: 'desc', width: 48 },
@@ -229,8 +300,8 @@ function exportSingleBillToExcel() {
         }
         
         // D. Construction de l'en-tête
-        const lastColLetter = useSplit ? 'F' : 'D';
-        const numCols = useSplit ? 6 : 4;
+        const lastColLetter = useSplit ? 'G' : 'D';
+        const numCols = useSplit ? 7 : 4;
         
         worksheet.getRow(1).height = 30;
         worksheet.getRow(2).height = 18;
@@ -238,7 +309,7 @@ function exportSingleBillToExcel() {
         worksheet.getRow(4).height = 14;
         worksheet.getRow(5).height = 13;
         
-        // 1. Titre Principal centré sur toute la largeur (le logo flotte par-dessus col A, le texte centré est visible)
+        // 1. Titre Principal centré sur toute la largeur
         worksheet.mergeCells(`A1:${lastColLetter}1`);
         const titleCell = worksheet.getCell('A1');
         titleCell.value = 'CLINIQUE MERCY FIAT';
@@ -259,7 +330,7 @@ function exportSingleBillToExcel() {
         cardCell.font = { name: 'Inter', size: 8.5, bold: true, color: { argb: 'FF4A5568' } };
         cardCell.alignment = { vertical: 'middle', horizontal: 'center' };
         
-        // 4. Ligne Adresse — centrée, résumée (les détails complets sont dans le footer)
+        // 4. Ligne Adresse — centrée, résumée
         worksheet.mergeCells(`A4:${lastColLetter}4`);
         const addrCell = worksheet.getCell('A4');
         addrCell.value = 'SEME AGUE PK 18  |  Tel : +229 69 62 02 02 / 98 00 00 55  |  Cotonou Vodje  |  Tel : +229 69 02 11 11 / 98 70 98 98';
@@ -281,6 +352,11 @@ function exportSingleBillToExcel() {
         worksheet.getRow(9).height = 12; // Vide
         
         // Patient & Date
+        const billDateInput = document.getElementById('bill-date')?.value;
+        const dateFormatted = billDateInput
+            ? new Date(billDateInput + 'T12:00:00').toLocaleDateString('fr-FR')
+            : new Date().toLocaleDateString('fr-FR');
+            
         worksheet.mergeCells(`A6:${useSplit ? 'D' : 'B'}6`);
         const patCell = worksheet.getCell('A6');
         patCell.value = `Patient : ${patientNom} ${patientPrenom}`;
@@ -289,7 +365,7 @@ function exportSingleBillToExcel() {
         
         worksheet.mergeCells(`${useSplit ? 'E' : 'C'}6:${lastColLetter}6`);
         const dateCell = worksheet.getCell(`${useSplit ? 'E' : 'C'}6`);
-        dateCell.value = `Date : ${new Date().toLocaleDateString('fr-FR')}`;
+        dateCell.value = `Date : ${dateFormatted}`;
         dateCell.font = { name: 'Inter', size: 10, bold: true, color: { argb: 'FF2D3748' } };
         dateCell.alignment = { vertical: 'middle', horizontal: 'right' };
         
@@ -351,7 +427,7 @@ function exportSingleBillToExcel() {
         
         worksheet.mergeCells(`${useSplit ? 'E' : 'C'}8:${lastColLetter}8`);
         const typeCell = worksheet.getCell(`${useSplit ? 'E' : 'C'}8`);
-        const billTypeName = billType === 'PROFORMA' ? 'Facture Proforma (Devis)' : (billType === 'DETAIL_ASSUR' ? 'Détail Assurance' : 'Point d\'Hospitalisation');
+        const billTypeName = billType === 'PROFORMA' ? 'Facture Proforma (Devis)' : (billType === 'DETAIL_ASSUR' ? (patientType === 'PRIVE' ? 'Détail Prestations' : 'Détail Assurance') : 'Point d\'Hospitalisation');
         typeCell.value = `(${billTypeName})`;
         typeCell.font = { name: 'Inter', size: 10, italic: true, color: { argb: 'FF718096' } };
         typeCell.alignment = { vertical: 'middle', horizontal: 'right' };
@@ -392,14 +468,14 @@ function exportSingleBillToExcel() {
         const docTitleCell = worksheet.getCell(`A${titleRowIdx}`);
         const customTitle = document.getElementById('bill-title-custom')?.value || 'POINT DEFINITIF';
         const titleStr = billType === 'PROFORMA' ? 'FACTURE PROFORMA' : 
-                         (billType === 'DETAIL_ASSUR' ? (patientType === 'SINISTRE' ? 'DETAIL PRISE EN CHARGE SINISTRE AUTOMOBILE' : 'DETAIL ASSURANCE FACTURE PROFORMA') : customTitle.toUpperCase());
+                         (billType === 'DETAIL_ASSUR' ? (patientType === 'SINISTRE' ? 'DETAIL PRISE EN CHARGE SINISTRE AUTOMOBILE' : (patientType === 'PRIVE' ? 'DETAIL PRESTATIONS FACTURE PROFORMA' : 'DETAIL ASSURANCE FACTURE PROFORMA')) : customTitle.toUpperCase());
         docTitleCell.value = titleStr;
         docTitleCell.font = { name: 'Outfit', size: 13, bold: true, color: { argb: 'FF2D3748' } };
         docTitleCell.alignment = { vertical: 'middle', horizontal: 'center' };
         
         // G. En-tête du Tableau
         const tableHeaders = useSplit ? 
-            ['ACTES / DESIGNATIONS', 'QTE', 'P. UNITAIRE', 'MONTANT CLINIQUE', 'PART ASSURANCE', 'PART PATIENT'] :
+            ['ACTES / DESIGNATIONS', 'QTE', 'P. UNITAIRE', 'MONTANT CLINIQUE', 'PLAFOND', 'PART ASSURANCE', 'PART PATIENT'] :
             ['Désignation des Prestations et Consommables', 'Qté', 'P.U.', 'Total'];
             
         const headerRow = worksheet.getRow(currentTableStartRow);
@@ -425,6 +501,18 @@ function exportSingleBillToExcel() {
         
         // H. Injection des items
         let currentRow = currentTableStartRow + 1;
+        
+        const itemsData = [];
+        items.forEach(item => {
+            if (useSplit) {
+                const assuranceVal = (billType === 'PROFORMA') ? 0 : item.partAssurance;
+                const patientVal = (billType === 'PROFORMA') ? 0 : item.partPatient;
+                itemsData.push([item.name, item.qty, item.price, item.subtotal, item.limit, assuranceVal, patientVal]);
+            } else {
+                itemsData.push([item.name, item.qty, item.price, item.subtotal]);
+            }
+        });
+
         itemsData.forEach(item => {
             const row = worksheet.getRow(currentRow);
             row.height = 22;
@@ -454,8 +542,11 @@ function exportSingleBillToExcel() {
         });
         
         // I. Ligne de Totalisation (TOTAL)
+        const totalAssurance = (billType === 'PROFORMA') ? 0 : totalPartAssurance;
+        const totalPatient = (billType === 'PROFORMA') ? 0 : totalPartPatient;
+        
         const totalRow = useSplit ?
-            ['TOTAL ', '', '', grossTotal, totalAssurance, totalPatient] :
+            ['TOTAL ', '', '', grossTotal, '', totalAssurance, totalPatient] :
             ['TOTAL ', '', '', grossTotal];
             
         const totalRowObj = worksheet.getRow(currentRow);
@@ -485,36 +576,134 @@ function exportSingleBillToExcel() {
             };
         }
         
-        // J. Bas de page : Somme en toutes lettres & Date & Clauses
-        currentRow += 2;
+        // J. Bas de page : Somme en toutes lettres & Synthèse financière (Côte à côte)
+        const startSummaryRow = currentRow + 2;
         
-        worksheet.getRow(currentRow).height = 18;
-        worksheet.mergeCells(currentRow, 1, currentRow, numCols);
-        const wordsHeaderCell = worksheet.getCell(currentRow, 1);
+        // 1. Gauche : Somme en toutes lettres & Mode de règlement
+        worksheet.getRow(startSummaryRow).height = 18;
+        const wordsLeftColLimit = useSplit ? 4 : 2;
+        worksheet.mergeCells(startSummaryRow, 1, startSummaryRow, wordsLeftColLimit);
+        const wordsHeaderCell = worksheet.getCell(startSummaryRow, 1);
         wordsHeaderCell.value = "Arrêtée la présente facture à la somme de :";
-        wordsHeaderCell.font = { name: 'Inter', size: 10, color: { argb: 'FF718096' } };
+        wordsHeaderCell.font = { name: 'Inter', size: 9.5, italic: true, color: { argb: 'FF718096' } };
         wordsHeaderCell.alignment = { vertical: 'middle', horizontal: 'left' };
-        currentRow++;
         
-        worksheet.getRow(currentRow).height = 20;
-        worksheet.mergeCells(currentRow, 1, currentRow, numCols);
-        const wordsValueCell = worksheet.getCell(currentRow, 1);
-        const totalToAcquitter = (useSplit && patientType !== 'PRIVE') ? totalPatient : grossTotal;
-        
-        // Appel résilient à la fonction mutualisée issue de billing_utils.js
-        const sumInWords = window.numberToFrenchWords(totalToAcquitter).toUpperCase();
+        worksheet.getRow(startSummaryRow + 1).height = 28;
+        worksheet.mergeCells(startSummaryRow + 1, 1, startSummaryRow + 1, wordsLeftColLimit);
+        const wordsValueCell = worksheet.getCell(startSummaryRow + 1, 1);
+        const displayTotalShare = (billType === 'PROFORMA' && patientType !== 'PRIVE') ? discountedTotal : totalPatientShare;
+        const sumInWords = window.numberToFrenchWords(displayTotalShare).toUpperCase() + " FRANCS CFA";
         wordsValueCell.value = sumInWords;
-        wordsValueCell.font = { name: 'Inter', size: 11, bold: true, color: { argb: 'FF2D3748' } };
-        wordsValueCell.alignment = { vertical: 'middle', horizontal: 'left' };
+        wordsValueCell.font = { name: 'Inter', size: 10.5, bold: true, color: { argb: 'FF2D3748' } };
+        wordsValueCell.alignment = { vertical: 'middle', horizontal: 'left', wrapText: true };
         
-        currentRow += 2;
+        if (billType === 'DEFINITIF') {
+            worksheet.getRow(startSummaryRow + 3).height = 18;
+            worksheet.mergeCells(startSummaryRow + 3, 1, startSummaryRow + 3, wordsLeftColLimit);
+            const pmtCell = worksheet.getCell(startSummaryRow + 3, 1);
+            pmtCell.value = `Mode de Règlement : ${paymentName}`;
+            pmtCell.font = { name: 'Inter', size: 9, bold: true, color: { argb: 'FF718096' } };
+            pmtCell.alignment = { vertical: 'middle', horizontal: 'left' };
+        }
+        
+        if (billType === 'PROFORMA' || billType === 'DETAIL_ASSUR') {
+            worksheet.getRow(startSummaryRow + 4).height = 24;
+            worksheet.mergeCells(startSummaryRow + 4, 1, startSummaryRow + 4, wordsLeftColLimit);
+            const profCell = worksheet.getCell(startSummaryRow + 4, 1);
+            profCell.value = "La part exacte du patient sera définie après accord formel de l'assurance.";
+            profCell.font = { name: 'Inter', size: 8, italic: true, color: { argb: 'FF718096' } };
+            profCell.alignment = { vertical: 'middle', horizontal: 'left', wrapText: true };
+        }
+        
+        // 2. Droite : Résumé financier structuré
+        const summaryRows = [];
+        summaryRows.push({ label: "Montant Brut Clinique :", val: grossTotal, isBold: false });
+        if (reductionAmount > 0) {
+            summaryRows.push({ label: `Réduction Accordée ${discountLabel} :`, val: -reductionAmount, isBold: false, color: 'FFC0392B' });
+            summaryRows.push({ label: "Total Net Clinique :", val: discountedTotal, isBold: false });
+        }
+        if (patientType !== 'PRIVE') {
+            summaryRows.push({ label: `Part Assurance (${coverage}%) :`, val: -totalAssurance, isBold: false, color: 'FF2980B9' });
+            summaryRows.push({ label: "Part Patient (Ticket Mod.) :", val: totalPatient, isBold: true, color: 'FFC0392B' });
+        }
+        summaryRows.push({ label: "Total à Acquitter Patient :", val: displayTotalShare, isBold: true, isTotal: true });
+
+        if (billType === 'DEFINITIF') {
+            summaryRows.push({ label: "Montant Encaissé Patient :", val: amountPaidPatient, isBold: false, color: 'FF38A169' });
+            if (balancePatient > 0) {
+                summaryRows.push({ label: "Reste à payer Patient :", val: balancePatient, isBold: true, color: 'FFE53E3E' });
+            } else {
+                summaryRows.push({ label: "Statut Patient :", val: "SOLDÉ", isString: true, isBold: true, color: 'FF38A169' });
+            }
+        }
+        
+        let summaryCurrentRow = startSummaryRow;
+        summaryRows.forEach(row => {
+            worksheet.getRow(summaryCurrentRow).height = 20;
+            
+            let labelCell, valCell;
+            if (useSplit) {
+                worksheet.mergeCells(summaryCurrentRow, 5, summaryCurrentRow, 6); // Fusionne E et F
+                labelCell = worksheet.getCell(summaryCurrentRow, 5);
+                valCell = worksheet.getCell(summaryCurrentRow, 7); // G
+            } else {
+                worksheet.mergeCells(summaryCurrentRow, 2, summaryCurrentRow, 3); // Fusionne B et C
+                labelCell = worksheet.getCell(summaryCurrentRow, 2);
+                valCell = worksheet.getCell(summaryCurrentRow, 4); // D
+            }
+            
+            labelCell.value = row.label;
+            labelCell.alignment = { vertical: 'middle', horizontal: 'right' };
+            labelCell.font = { name: 'Inter', size: row.isTotal ? 9.5 : 9, bold: row.isBold || row.isTotal, color: row.color ? { argb: row.color } : { argb: 'FF2D3748' } };
+            
+            valCell.value = row.val;
+            valCell.alignment = { vertical: 'middle', horizontal: 'right' };
+            valCell.font = { name: 'Inter', size: row.isTotal ? 9.5 : 9, bold: row.isBold || row.isTotal, color: row.color ? { argb: row.color } : { argb: 'FF2D3748' } };
+            
+            if (!row.isString) {
+                valCell.numFmt = '#,##0';
+            }
+            
+            // Bordures et arrière-plans
+            const cellBorder = {
+                top: { style: 'thin', color: { argb: 'FFCBD5E0' } },
+                bottom: { style: 'thin', color: { argb: 'FFCBD5E0' } },
+                left: { style: 'thin', color: { argb: 'FFCBD5E0' } },
+                right: { style: 'thin', color: { argb: 'FFCBD5E0' } }
+            };
+            
+            labelCell.border = cellBorder;
+            valCell.border = cellBorder;
+            
+            if (row.isTotal) {
+                const fill = {
+                    type: 'pattern',
+                    pattern: 'solid',
+                    fgColor: { argb: 'FFF0F6FC' }
+                };
+                const totalBorder = {
+                    top: { style: 'thin', color: { argb: 'FFCBD5E0' } },
+                    bottom: { style: 'double', color: { argb: 'FF2D3748' } },
+                    left: { style: 'thin', color: { argb: 'FFCBD5E0' } },
+                    right: { style: 'thin', color: { argb: 'FFCBD5E0' } }
+                };
+                labelCell.fill = fill;
+                valCell.fill = fill;
+                labelCell.border = totalBorder;
+                valCell.border = totalBorder;
+            }
+            
+            summaryCurrentRow++;
+        });
+        
+        currentRow = Math.max(startSummaryRow + 5, summaryCurrentRow) + 2;
         
         const dateRowObj = worksheet.getRow(currentRow);
         dateRowObj.height = 20;
         const dateCellIdx = useSplit ? 5 : 3;
         worksheet.mergeCells(currentRow, dateCellIdx, currentRow, numCols);
         const dateCellObj = worksheet.getCell(currentRow, dateCellIdx);
-        dateCellObj.value = `Cotonou, le ${new Date().toLocaleDateString('fr-FR')}`;
+        dateCellObj.value = `Cotonou, le ${dateFormatted}`;
         dateCellObj.font = { name: 'Inter', size: 10, italic: true, color: { argb: 'FF2D3748' } };
         dateCellObj.alignment = { vertical: 'middle', horizontal: 'center' };
         
@@ -627,7 +816,7 @@ function exportDMEToExcel() {
         const billingData = matchedBills.map(b => ({
             "Référence": b.reference || "N/A",
             "Date": b.date,
-            "Type de Fiche": b.type === 'PROFORMA' ? 'Facture Proforma' : (b.type === 'DETAIL_ASSUR' ? 'Détail Assurance' : (b.type === 'AVOIR' ? 'Facture d\'Avoir' : 'Point d\'Hospitalisation')),
+            "Type de Fiche": b.type === 'PROFORMA' ? 'Facture Proforma' : (b.type === 'DETAIL_ASSUR' ? (b.insurance === 'PRIVE' ? 'Détail Prestations' : 'Détail Assurance') : (b.type === 'AVOIR' ? 'Facture d\'Avoir' : 'Point d\'Hospitalisation')),
             "Assurance / Tiers-Payant": b.insurance,
             "Couverture (%)": b.coverage,
             "Montant Brut (FCFA)": b.grossTotal,

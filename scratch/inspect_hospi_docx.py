@@ -1,7 +1,7 @@
 import docx
 from docx.oxml.ns import qn
 
-file_path = r"c:\Users\Degnon\Documents\2.MERCY FIAT CLINIQUE\2. Dr Gipsy\RAPPORT HOSPI CMF\RAPPORT D'HOSPI CMF.docx"
+file_path = r"c:\Users\Farus\Documents\2.MERCY FIAT CLINIQUE\2. Dr Gipsy\RAPPORT HOSPI CMF\RAPPORT D'HOSPI CMF.docx"
 doc = docx.Document(file_path)
 
 print(f"Total paragraphs: {len(doc.paragraphs)}")

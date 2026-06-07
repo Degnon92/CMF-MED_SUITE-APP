@@ -215,6 +215,7 @@ function savePDFBuffer(filePath, data, pdfPassword) {
 }
 
 // Écouteur pour l'export PDF natif haute définition
+// Écouteur pour l'export PDF natif haute définition
 ipcMain.on('save-to-pdf', (event, patientName, docType, htmlContent, pdfPassword) => {
   if (!mainWindow) return;
 
@@ -237,7 +238,7 @@ ipcMain.on('save-to-pdf', (event, patientName, docType, htmlContent, pdfPassword
       };
 
       if (htmlContent) {
-        const tempHtmlPath = path.join(app.getAppPath(), `temp_print_save_${Date.now()}.html`);
+        const tempHtmlPath = path.join(app.getPath('temp'), `temp_print_save_${Date.now()}.html`);
         fs.writeFile(tempHtmlPath, htmlContent, 'utf8', (err) => {
           if (err) {
             event.reply('pdf-save-result', { success: false, error: err.message });
@@ -248,7 +249,8 @@ ipcMain.on('save-to-pdf', (event, patientName, docType, htmlContent, pdfPassword
             show: false,
             webPreferences: {
               nodeIntegration: false,
-              contextIsolation: true
+              contextIsolation: true,
+              webSecurity: false
             }
           });
 
@@ -309,7 +311,7 @@ ipcMain.on('print-to-pdf-temp', (event, patientName, htmlContent) => {
   };
 
   if (htmlContent) {
-    const tempHtmlPath = path.join(app.getAppPath(), `temp_print_temp_${Date.now()}.html`);
+    const tempHtmlPath = path.join(app.getPath('temp'), `temp_print_temp_${Date.now()}.html`);
     fs.writeFile(tempHtmlPath, htmlContent, 'utf8', (err) => {
       if (err) {
         event.reply('pdf-temp-result', { success: false, error: err.message });
@@ -320,7 +322,8 @@ ipcMain.on('print-to-pdf-temp', (event, patientName, htmlContent) => {
         show: false,
         webPreferences: {
           nodeIntegration: false,
-          contextIsolation: true
+          contextIsolation: true,
+          webSecurity: false
         }
       });
 
@@ -391,16 +394,110 @@ ipcMain.on('silent-print', (event, printOptions) => {
     color: !printOptions.isMono,
     pageSize: 'A4',
     printBackground: true,
-    margins: { marginType: printOptions.marginsType }
+    margins: { marginType: printOptions.marginsType === 'none' ? 'none' : 'default' }
   };
 
-  mainWindow.webContents.print(options, (success, failureReason) => {
-    if (success) {
-      event.reply('print-result', { success: true });
-    } else {
-      event.reply('print-result', { success: false, error: failureReason });
-    }
-  });
+  const htmlContent = printOptions.htmlContent;
+
+  if (htmlContent) {
+    const tempHtmlPath = path.join(app.getPath('temp'), `temp_print_silent_${Date.now()}.html`);
+    fs.writeFile(tempHtmlPath, htmlContent, 'utf8', (err) => {
+      if (err) {
+        event.reply('print-result', { success: false, error: err.message });
+        return;
+      }
+
+      const workerWindow = new BrowserWindow({
+        show: false,
+        webPreferences: {
+          nodeIntegration: false,
+          contextIsolation: true,
+          webSecurity: false
+        }
+      });
+
+      workerWindow.loadFile(tempHtmlPath);
+
+      workerWindow.webContents.on('did-finish-load', () => {
+        setTimeout(() => {
+          workerWindow.webContents.print(options, (success, failureReason) => {
+            workerWindow.destroy();
+            fs.unlink(tempHtmlPath, () => {});
+            if (success) {
+              event.reply('print-result', { success: true });
+            } else {
+              event.reply('print-result', { success: false, error: failureReason });
+            }
+          });
+        }, 100);
+      });
+    });
+  } else {
+    mainWindow.webContents.print(options, (success, failureReason) => {
+      if (success) {
+        event.reply('print-result', { success: true });
+      } else {
+        event.reply('print-result', { success: false, error: failureReason });
+      }
+    });
+  }
+});
+
+// Écouteur pour déclencher l'impression physique via le dialogue système (A4)
+ipcMain.on('system-print', (event, printOptions) => {
+  if (!mainWindow) return;
+
+  const options = {
+    silent: false,
+    printBackground: true,
+    pageSize: 'A4',
+    margins: { marginType: 'none' } // respecte les marges de la feuille A4 consolidée
+  };
+
+  const htmlContent = printOptions.htmlContent;
+
+  if (htmlContent) {
+    const tempHtmlPath = path.join(app.getPath('temp'), `temp_print_system_${Date.now()}.html`);
+    fs.writeFile(tempHtmlPath, htmlContent, 'utf8', (err) => {
+      if (err) {
+        event.reply('print-result', { success: false, error: err.message });
+        return;
+      }
+
+      const workerWindow = new BrowserWindow({
+        show: false,
+        webPreferences: {
+          nodeIntegration: false,
+          contextIsolation: true,
+          webSecurity: false
+        }
+      });
+
+      workerWindow.loadFile(tempHtmlPath);
+
+      workerWindow.webContents.on('did-finish-load', () => {
+        setTimeout(() => {
+          workerWindow.webContents.print(options, (success, failureReason) => {
+            workerWindow.destroy();
+            fs.unlink(tempHtmlPath, () => {});
+            if (success) {
+              event.reply('print-result', { success: true });
+            } else {
+              event.reply('print-result', { success: false, error: failureReason });
+            }
+          });
+        }, 500); // 500ms delay to make sure styles/images are loaded
+      });
+    });
+  } else {
+    mainWindow.webContents.print(options, (success, failureReason) => {
+      if (success) {
+        event.reply('print-result', { success: true });
+      } else {
+        event.reply('print-result', { success: false, error: failureReason });
+      }
+    });
+  }
 });
 
 // Écouteur pour basculer le Mode Développeur (Console)

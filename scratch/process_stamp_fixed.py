@@ -4,9 +4,9 @@ from PIL import Image
 
 def process_stamp_fixed():
     # Paths
-    ref_path = r"C:\Users\Degnon\.gemini\antigravity-ide\brain\7cd223db-09d4-4d6d-b877-ad294933360a\media__1780516168149.png"
-    mary_path = r"c:\Users\Degnon\Documents\2.MERCY FIAT CLINIQUE\2. Dr Gipsy\MercyFiatMedSuiteDesktop\scratch\extracted_mary.png"
-    dest_path = r"c:\Users\Degnon\Documents\2.MERCY FIAT CLINIQUE\2. Dr Gipsy\MercyFiatMedSuiteDesktop\assets\cachet_centre.png"
+    ref_path = r"C:\Users\Farus\.gemini\antigravity-ide\brain\7cd223db-09d4-4d6d-b877-ad294933360a\media__1780516168149.png"
+    mary_path = r"c:\Users\Farus\Documents\2.MERCY FIAT CLINIQUE\2. Dr Gipsy\MercyFiatMedSuiteDesktop\scratch\extracted_mary.png"
+    dest_path = r"c:\Users\Farus\Documents\2.MERCY FIAT CLINIQUE\2. Dr Gipsy\MercyFiatMedSuiteDesktop\assets\cachet_centre.png"
     
     print("Loading stamp outline...")
     stamp_img = Image.open(ref_path).convert("RGBA")
@@ -72,7 +72,7 @@ def process_stamp_fixed():
     print(f"Successfully processed stamp saved to {dest_path}")
     
     # Also save to the brain folder so we can copy it/inspect it easily
-    brain_dest = r"C:\Users\Degnon\.gemini\antigravity-ide\brain\7cd223db-09d4-4d6d-b877-ad294933360a\cachet_centre_fixed.png"
+    brain_dest = r"C:\Users\Farus\.gemini\antigravity-ide\brain\7cd223db-09d4-4d6d-b877-ad294933360a\cachet_centre_fixed.png"
     final_stamp.save(brain_dest, "PNG")
     print(f"Saved to brain folder: {brain_dest}")
 

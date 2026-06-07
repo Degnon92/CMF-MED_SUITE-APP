@@ -1,6 +1,6 @@
 import docx
 
-file_path = r"c:\Users\Degnon\Documents\2.MERCY FIAT CLINIQUE\2. Dr Gipsy\RAPPORT HOSPI CMF\RAPPORT D'HOSPI CMF.docx"
+file_path = r"c:\Users\Farus\Documents\2.MERCY FIAT CLINIQUE\2. Dr Gipsy\RAPPORT HOSPI CMF\RAPPORT D'HOSPI CMF.docx"
 doc = docx.Document(file_path)
 
 non_empty_p = [p.text.strip() for p in doc.paragraphs if p.text.strip()]

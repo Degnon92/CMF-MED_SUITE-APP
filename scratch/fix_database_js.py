@@ -1,7 +1,7 @@
 import os
 import re
 
-database_js_path = r"c:\Users\Degnon\Documents\2.MERCY FIAT CLINIQUE\2. Dr Gipsy\MercyFiatMedSuiteDesktop\database.js"
+database_js_path = r"c:\Users\Farus\Documents\2.MERCY FIAT CLINIQUE\2. Dr Gipsy\MercyFiatMedSuiteDesktop\database.js"
 
 if not os.path.exists(database_js_path):
     print("database.js not found!")

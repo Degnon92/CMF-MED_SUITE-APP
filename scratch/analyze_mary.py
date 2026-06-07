@@ -3,7 +3,7 @@ import numpy as np
 from PIL import Image
 
 def analyze_mary():
-    p = r"C:\Users\Degnon\.gemini\antigravity-ide\brain\7cd223db-09d4-4d6d-b877-ad294933360a\media__1780517416594.png"
+    p = r"C:\Users\Farus\.gemini\antigravity-ide\brain\7cd223db-09d4-4d6d-b877-ad294933360a\media__1780517416594.png"
     img = Image.open(p).convert("RGBA")
     arr = np.array(img)
     h, w = arr.shape[:2]
@@ -40,7 +40,7 @@ def analyze_mary():
         
         # Crop to bounding box
         cropped = Image.fromarray(gold_arr).crop((min_x, min_y, max_x + 1, max_y + 1))
-        cropped.save(r"c:\Users\Degnon\Documents\2.MERCY FIAT CLINIQUE\2. Dr Gipsy\MercyFiatMedSuiteDesktop\scratch\extracted_mary.png")
+        cropped.save(r"c:\Users\Farus\Documents\2.MERCY FIAT CLINIQUE\2. Dr Gipsy\MercyFiatMedSuiteDesktop\scratch\extracted_mary.png")
         print("Saved extracted_mary.png")
     else:
         print("No gold pixels found!")

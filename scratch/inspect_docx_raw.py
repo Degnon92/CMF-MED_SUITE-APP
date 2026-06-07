@@ -2,7 +2,7 @@ import docx
 import os
 import zipfile
 
-f = r"c:\Users\Degnon\Documents\2.MERCY FIAT CLINIQUE\2. Dr Gipsy\1. Document PC DR GIPSY\proforma\Dispense de sport AHAMADA.docx"
+f = r"c:\Users\Farus\Documents\2.MERCY FIAT CLINIQUE\2. Dr Gipsy\1. Document PC DR GIPSY\proforma\Dispense de sport AHAMADA.docx"
 print("File size:", os.path.getsize(f))
 
 # Check zip structure

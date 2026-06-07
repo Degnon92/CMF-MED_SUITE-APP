@@ -659,6 +659,22 @@ function initializeDatalists() {
     setupCustomAutocomplete(billDiag, 'diagnoses', () => {
         if (typeof updateBillPreview === 'function') updateBillPreview();
     });
+
+    // Autocomplétion sur le formulaire d'enregistrement de nouveau patient
+    const modalDiag = document.getElementById('new-patient-diag');
+    const modalInterv = document.getElementById('new-patient-interv');
+
+    if (modalDiag) {
+        setupCustomAutocomplete(modalDiag, 'diagnoses');
+    }
+    if (modalInterv) {
+        setupCustomAutocomplete(modalInterv, 'interventions', (item) => {
+            const modalKCode = document.getElementById('new-patient-kcode');
+            if (modalKCode && item && item.kCode) {
+                modalKCode.value = `K${item.kCode}`;
+            }
+        });
+    }
 }
 window.initializeDatalists = initializeDatalists;
 

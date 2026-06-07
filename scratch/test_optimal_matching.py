@@ -4,7 +4,7 @@ from datetime import datetime
 # Import helper functions
 from reimport_bills_from_excel import parse_french_date, detect_insurer, detect_bill_type_from_sheet, clean_patient_name, date_diff_days
 
-workspace_dir = r"c:\Users\Degnon\Documents\2.MERCY FIAT CLINIQUE\2. Dr Gipsy"
+workspace_dir = r"c:\Users\Farus\Documents\2.MERCY FIAT CLINIQUE\2. Dr Gipsy"
 excel_path = os.path.join(workspace_dir, "EXEMPLAIRE PROFORMA.xlsx")
 wb = openpyxl.load_workbook(excel_path, data_only=True)
 

@@ -13,7 +13,7 @@ except ImportError:
 
 from pathlib import Path
 
-EXCEL_FILE = Path(r"C:\Users\Degnon\Documents\2.MERCY FIAT CLINIQUE\2. Dr Gipsy\PROFORMA CHIRURGIE\EXEMPLAIRE PROFORMA.xlsx")
+EXCEL_FILE = Path(r"C:\Users\Farus\Documents\2.MERCY FIAT CLINIQUE\2. Dr Gipsy\PROFORMA CHIRURGIE\EXEMPLAIRE PROFORMA.xlsx")
 
 print(f"\n=== Inspection de : {EXCEL_FILE.name} ===\n")
 wb = openpyxl.load_workbook(EXCEL_FILE, data_only=True)

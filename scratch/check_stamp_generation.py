@@ -3,8 +3,8 @@ from PIL import Image
 import numpy as np
 
 def check_stamp():
-    brain_dir = r"C:\Users\Degnon\.gemini\antigravity-ide\brain\7cd223db-09d4-4d6d-b877-ad294933360a"
-    assets_dir = r"c:\Users\Degnon\Documents\2.MERCY FIAT CLINIQUE\2. Dr Gipsy\MercyFiatMedSuiteDesktop\assets"
+    brain_dir = r"C:\Users\Farus\.gemini\antigravity-ide\brain\7cd223db-09d4-4d6d-b877-ad294933360a"
+    assets_dir = r"c:\Users\Farus\Documents\2.MERCY FIAT CLINIQUE\2. Dr Gipsy\MercyFiatMedSuiteDesktop\assets"
     
     # Let's see if cachet_centre.png has the Virgin Mary in the center
     cachet_path = os.path.join(assets_dir, "cachet_centre.png")

@@ -2,7 +2,7 @@ import os
 import json
 import openpyxl
 
-workspace_dir = r"c:\Users\Degnon\Documents\2.MERCY FIAT CLINIQUE\2. Dr Gipsy"
+workspace_dir = r"c:\Users\Farus\Documents\2.MERCY FIAT CLINIQUE\2. Dr Gipsy"
 patients_db_path = os.path.join(workspace_dir, "MercyFiatMedSuiteDesktop", "patients_db.json")
 excel_path = os.path.join(workspace_dir, "EXEMPLAIRE PROFORMA.xlsx")
 

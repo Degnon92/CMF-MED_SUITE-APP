@@ -3,7 +3,7 @@ import os
 import re
 import difflib
 
-desktop_dir = r"c:\Users\Degnon\Documents\2.MERCY FIAT CLINIQUE\2. Dr Gipsy\MercyFiatMedSuiteDesktop"
+desktop_dir = r"c:\Users\Farus\Documents\2.MERCY FIAT CLINIQUE\2. Dr Gipsy\MercyFiatMedSuiteDesktop"
 patients_path = os.path.join(desktop_dir, "patients_db.json")
 
 with open(patients_path, "r", encoding="utf-8") as f:

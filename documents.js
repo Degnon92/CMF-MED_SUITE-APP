@@ -149,6 +149,15 @@ const MEDECINS_CMF = [
         numONMB: '',
         signature: '', cachet: '', hasSig: false,
         avatar: '👨‍⚕️'
+    },
+    {
+        id: 'hounsou',
+        nom: 'Dr HOUNSOU Bignon',
+        nomAffichage: 'Dr Bignon HOUNSOU',
+        specialite: 'Médecine Physique',
+        numONMB: '',
+        signature: '', cachet: '', hasSig: false,
+        avatar: '👨‍⚕️'
     }
 ];
 
@@ -164,6 +173,7 @@ const SPECIALITES_CMF = [
     { spec: 'Anesthésie réanimation',      doctors: ['Dr CHOBLI Hervé'] },
     { spec: 'Traumatologie-orthopédie',    doctors: ['Dr AGAVOEDO Gipsy', 'Dr DJEDOU Arnaud'] },
     { spec: 'Chirurgie pédiatrique',       doctors: ['Dr AMOUSSOU Aristide'] },
+    { spec: 'Médecine Physique',           doctors: ['Dr HOUNSOU Bignon'] },
     { spec: 'Urologie',                    doctors: ['Dr JACQUET Djamal', 'Dr SOUMANOU Fouad'] },
     { spec: 'Radiologie',                  doctors: ['Dr HOUNTON Emmanuel'] },
     { spec: 'Laboratoire',                 doctors: ['Dr KASSEIN Urbain'] },
@@ -192,6 +202,25 @@ let selectedMedecinId = 'agavoedo';
 function getSelectedMedecin() {
     return MEDECINS_CMF.find(m => m.id === selectedMedecinId) || MEDECINS_CMF[0];
 }
+
+window.MEDECINS_CMF = MEDECINS_CMF;
+window.SPECIALITES_CMF = SPECIALITES_CMF;
+window.getSelectedMedecin = getSelectedMedecin;
+
+window.setSelectedDoctor = function(doctorId) {
+    selectedMedecinId = doctorId;
+    const s = document.getElementById('doc-medecin-select');
+    if (s) s.value = doctorId;
+    document.querySelectorAll('.cmf-doctor-card').forEach(card => {
+        card.classList.toggle('active-doctor', card.dataset.doctorId === doctorId);
+    });
+    if (typeof updateDoctorSignaturePreview === 'function') {
+        updateDoctorSignaturePreview();
+    }
+    if (typeof updateDocPreview === 'function') {
+        updateDocPreview();
+    }
+};
 
 
 // ============================================================
@@ -988,25 +1017,31 @@ function updateDocPreview() {
     });
 
     // Formatage HTML du texte (paragraphes justifiés)
-    const paragraphsHtml = rawText
-        .split('\n\n')
-        .map(para => {
-            const trimmed = para.trim();
+    // Formatage HTML du texte (paragraphes justifiés par ligne)
+    const paragraphs = rawText
+        .split(/\r?\n/)
+        .map(line => {
+            const trimmed = line.trim();
             if (!trimmed) return '';
-            if (trimmed.match(/^\d+\./m)) {
-                return '<div style="margin-bottom:10px;">' +
-                    trimmed.split('\n').map(line => `<p style="margin-left:18px; margin-bottom:3px; text-align:justify;">${line}</p>`).join('') +
-                    '</div>';
+            
+            // Titres de sections (Tout en majuscules, courts, pas de puce)
+            if (trimmed === trimmed.toUpperCase() && trimmed.length < 80 && trimmed.length > 3 && !trimmed.startsWith('-') && !trimmed.startsWith('•') && !trimmed.match(/^\d+\./)) {
+                return `<p style="font-weight:900; font-size:0.85rem; color:#2d3748; margin:10px 0 4px 0; text-transform:uppercase; font-family:'Times New Roman',serif;">${trimmed}</p>`;
             }
-            if (trimmed.startsWith('-')) {
-                return '<div style="margin-bottom:10px;">' +
-                    trimmed.split('\n').map(line => `<p style="margin-left:15px; margin-bottom:3px;">${line}</p>`).join('') +
-                    '</div>';
+            
+            // Éléments numérotés ou à puces
+            if (trimmed.match(/^\d+\./)) {
+                return `<p style="margin-left:18px; margin-bottom:3px; text-align:justify; font-size:0.82rem; line-height:1.8; font-family:'Times New Roman',serif;">${trimmed}</p>`;
             }
-            return `<p style="margin-bottom:10px; text-align:justify;">${trimmed.replace(/\n/g, '<br>')}</p>`;
+            if (trimmed.startsWith('-') || trimmed.startsWith('•')) {
+                const text = trimmed.substring(1).trim();
+                return `<p style="margin:2px 0 2px 20px; padding-left:10px; border-left:2px solid #d4a76a; text-align:justify; font-size:0.82rem; line-height:1.8; font-family:'Times New Roman',serif;">• ${text}</p>`;
+            }
+            
+            // Paragraphe standard
+            return `<p style="margin:4px 0; text-align:justify; font-size:0.82rem; line-height:1.8; font-family:'Times New Roman',serif;">${trimmed}</p>`;
         })
-        .filter(Boolean)
-        .join('');
+        .filter(Boolean);
 
     // Lecture directe des checkboxes (fix bug : pas d'optional chaining sur .checked)
     const sigEl  = document.getElementById('toggle-sig-image');
@@ -1036,7 +1071,7 @@ function updateDocPreview() {
 
     // Bloc signature du médecin sélectionné
     const sigBlockHtml = `
-        <div style="display:flex; align-items:flex-start; gap:18px; justify-content:flex-end; margin-top:20px;">
+        <div style="display:flex; align-items:flex-start; gap:18px; justify-content:flex-end; margin-top:20px; page-break-inside:avoid;">
             <div style="text-align:center; min-width:160px;">
                 <div style="font-size:0.75rem; color:#555; margin-bottom:4px;">Fait à Cotonou, le ${fmtDate(docDateRaw)}</div>
                 <div class="signature-seal-container">
@@ -1050,54 +1085,28 @@ function updateDocPreview() {
         </div>
     `;
 
-    preview.innerHTML = `
-        <div style="font-family:'Times New Roman', Times, serif; color:#2d3748; background:white; padding:0;">
-            
-            <!-- EN-TÊTE CLINIQUE -->
-            ${window.MercyFiatTemplates.getPrintHeaderHtml()}
-
-            <!-- CORPS DU DOCUMENT : colonne gauche (médecins) + contenu principal -->
-            <div style="display:flex; gap:0; min-height:400px; border-bottom:2px solid #2d3748;">
-
-                <!-- COLONNE GAUCHE : Liste des médecins par spécialité -->
-                <div style="width:145px; flex-shrink:0; border-right:1px solid #2d3748; padding:10px 8px 10px 2px; font-family:'Times New Roman',serif;">
-                    ${SPECIALITES_CMF.map(s => `
-                        <div style="margin-bottom:7px;">
-                            <div style="font-weight:900; text-decoration:underline; font-size:0.62rem; color:#2d3748; margin-bottom:2px;">${s.spec}</div>
-                            ${s.doctors.map(d => `<div style="font-size:0.6rem; color:#2d3748; padding-left:2px;">${d}</div>`).join('')}
-                        </div>
-                    `).join('')}
-                </div>
-
-                <!-- COLONNE DROITE : Contenu du rapport -->
-                <div style="flex:1; padding:10px 12px;">
-
-                    <!-- Infos patient (en-tête du rapport) -->
-                    <div style="margin-bottom:10px; font-size:0.78rem; font-weight:700; font-family:'Times New Roman',serif;">
-                        <div><span style="text-transform:uppercase; text-decoration:underline;">Patient :</span> <strong>${patientNom} ${patientPrenom}</strong></div>
-                        <div><span style="text-decoration:underline;">Age :</span> <strong>${patientAge}</strong></div>
-                        ${assuranceInfo ? `<div><span style="text-decoration:underline;">Assurance :</span> <strong>${assuranceInfo.toUpperCase()}</strong></div>` : ''}
-                    </div>
-
-                    <!-- Titre du rapport -->
-                    <div style="text-align:center; font-size:0.95rem; font-weight:900; text-transform:uppercase; text-decoration:underline; letter-spacing:0.5px; margin:12px 0 14px; font-family:'Times New Roman',serif;">
-                        ${titleText}
-                    </div>
-
-                    <!-- Corps du texte -->
-                    <div style="font-size:0.82rem; line-height:1.8; font-family:'Times New Roman',serif; text-align:justify;">
-                        ${paragraphsHtml}
-                    </div>
-
-                    <!-- Bloc signature -->
-                    ${sigBlockHtml}
-                </div>
-            </div>
-
-            <!-- PIED DE PAGE -->
-            ${window.MercyFiatTemplates.getPrintFooterHtml()}
+    const patientInfoHtml = `
+        <div style="margin-bottom:10px; font-size:0.78rem; font-weight:700; font-family:'Times New Roman',serif;">
+            <div><span style="text-transform:uppercase; text-decoration:underline;">Patient :</span> <strong>${patientNom} ${patientPrenom}</strong></div>
+            <div><span style="text-decoration:underline;">Age :</span> <strong>${patientAge}</strong></div>
+            ${assuranceInfo ? `<div><span style="text-decoration:underline;">Assurance :</span> <strong>${assuranceInfo.toUpperCase()}</strong></div>` : ''}
         </div>
     `;
+
+    const titleHtml = `
+        <div style="text-align:center; font-size:0.95rem; font-weight:900; text-transform:uppercase; text-decoration:underline; letter-spacing:0.5px; margin:12px 0 14px; font-family:'Times New Roman',serif;">
+            ${titleText}
+        </div>
+    `;
+
+    preview.innerHTML = window.MercyFiatTemplates.paginateReport({
+        paragraphs: paragraphs,
+        patientInfoHtml: patientInfoHtml,
+        titleHtml: titleHtml,
+        diagnosticHtml: '',
+        sigBlockHtml: sigBlockHtml,
+        specialites: SPECIALITES_CMF
+    });
 }
 
 

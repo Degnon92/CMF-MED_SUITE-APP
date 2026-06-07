@@ -4,10 +4,10 @@
 
 // Initialisation globale au chargement de l'application
 document.addEventListener('DOMContentLoaded', () => {
-    // Purger les anciens caches d'apprentissage utilisateur résiduels corrompus
-    localStorage.removeItem('mercyfiat_custom_patients');
-    localStorage.removeItem('mercyfiat_custom_diagnoses');
-    localStorage.removeItem('mercyfiat_custom_interventions');
+    // Les caches d'apprentissage utilisateur persistent désormais pour permettre l'ajout et la conservation de nouveaux diagnostics/interventions
+    // localStorage.removeItem('mercyfiat_custom_patients');
+    // localStorage.removeItem('mercyfiat_custom_diagnoses');
+    // localStorage.removeItem('mercyfiat_custom_interventions');
 
     // Lancer la routine d'assainissement et de déduplication complète
     // (inclut la fusion propre de window.MercyFiatRealDocs depuis real_data.js)
@@ -584,7 +584,7 @@ function openArchiveDocPreview(docId) {
         return;
     }
     
-    let patientName = (doc.patientNom || 'Patient inconnu').trim();
+    let patientName = `${doc.patientNom || ''} ${doc.patientPrenom || ''}`.trim() || 'Patient inconnu';
     if (patientName.length > 100) {
         patientName = patientName.split(/[A-Z]{3,}/)[0].trim() || patientName.substring(0, 50) + '...';
     }
@@ -597,7 +597,7 @@ function openArchiveDocPreview(docId) {
     };
     const catLabel = catLabels[doc.category] || doc.category || 'Document Médical';
     
-    let contentHtml = '';
+    let paragraphs = [];
     if (doc.content) {
         let cleanContent = doc.content;
         const clinicHeaderPattern = /(?:MEDECINE GENERALE.*?LABORATOIRE|CLINIQUE MERCY FIAT|SEME AGUE PK 18.*?RCCM.*?\d+|Cotonou.*?hospitalisations\).*?\d+|E-mail\s*:\s*cliniquemercyfiat.*?\d+)\\?\n?/gi;
@@ -609,61 +609,140 @@ function openArchiveDocPreview(docId) {
         cleanContent = cleanContent.replace(/\n{3,}/g, '\n\n');
         
         const lines = cleanContent.split(/\r?\n/).filter(l => l.trim().length > 0);
-        contentHtml = lines.map(line => {
+        paragraphs = lines.map(line => {
             const trimmed = line.trim();
             if (trimmed === trimmed.toUpperCase() && trimmed.length < 80 && trimmed.length > 3 && !trimmed.startsWith('-')) {
-                return `<p style="font-weight:800; font-size:1rem; color:#1a202c; margin:10px 0 4px 0; text-transform:uppercase;">${trimmed}</p>`;
+                return `<p style="font-weight:900; font-size:0.85rem; color:#2d3748; margin:10px 0 4px 0; text-transform:uppercase; font-family:'Times New Roman',serif;">${trimmed}</p>`;
             }
             if (trimmed.startsWith('-') || trimmed.startsWith('•')) {
-                return `<p style="margin:2px 0 2px 20px; padding-left:10px; border-left:2px solid #d4a76a;">• ${trimmed.substring(1).trim()}</p>`;
+                return `<p style="margin:2px 0 2px 20px; padding-left:10px; border-left:2px solid #d4a76a; font-family:'Times New Roman',serif;">• ${trimmed.substring(1).trim()}</p>`;
             }
-            return `<p style="margin:4px 0; line-height:1.6;">${trimmed}</p>`;
-        }).join('');
+            return `<p style="margin:4px 0; line-height:1.8; text-align:justify; font-family:'Times New Roman',serif;">${trimmed}</p>`;
+        });
     }
+    
+    // Auto-détection du médecin signataire à partir du contenu
+    const fullText = (doc.content || doc.text || '').toLowerCase();
+    let matchedMedecinId = 'agavoedo'; // par défaut
+    
+    const docKeywords = [
+        { id: 'agavoedo', keys: ['agavoedo', 'gipsy'] },
+        { id: 'djedou', keys: ['djedou'] },
+        { id: 'hazoume', keys: ['hazoume'] },
+        { id: 'dah', keys: ['dah'] },
+        { id: 'lassissi', keys: ['lassissi'] },
+        { id: 'medenou', keys: ['medenou'] },
+        { id: 'sessinou', keys: ['sessinou'] },
+        { id: 'chobli', keys: ['chobli'] },
+        { id: 'amoussou', keys: ['amoussou'] },
+        { id: 'bacharou', keys: ['bacharou'] },
+        { id: 'jacquet', keys: ['jacquet'] },
+        { id: 'soumanou', keys: ['soumanou'] },
+        { id: 'hounton', keys: ['hounton'] },
+        { id: 'kassein', keys: ['kassein'] },
+        { id: 'akpakpo', keys: ['akpakpo'] },
+        { id: 'hounsou', keys: ['hounsou'] }
+    ];
+    
+    for (const dk of docKeywords) {
+        if (dk.keys.some(k => fullText.includes(k))) {
+            matchedMedecinId = dk.id;
+            break;
+        }
+    }
+    
+    const medecins = window.MEDECINS_CMF || [
+        { id: 'agavoedo', nomAffichage: 'Dr Gipsy AGAVOEDO', nom: 'Dr AGAVOEDO Gipsy', specialite: 'Chirurgien Orthopédiste Traumatologue', signature: 'assets/signature.png', cachet: 'assets/cachet_centre.png', hasSig: true },
+        { id: 'djedou', nomAffichage: 'Dr Arnaud DJEDOU', nom: 'Dr DJEDOU Arnaud', specialite: 'Chirurgien Orthopédiste Traumatologue', numONMB: 'N° 1134 / ONMB / ATL / 2012', signature: 'assets/signature_djedou.png', cachet: 'assets/cachet_djedou.png', hasSig: true },
+        { id: 'hazoume', nomAffichage: 'Dr Michèle HAZOUME', nom: 'Dr HAZOUME Michèle', specialite: 'Cardiologue', signature: 'assets/signature_hazoume.png', cachet: 'assets/cachet_hazoume.png', hasSig: true },
+        { id: 'dah', nomAffichage: 'Dr Judith DAH', nom: 'Dr DAH Judith', specialite: 'Médecin Généraliste', signature: 'assets/signature_dah.png', cachet: 'assets/cachet_dah.png', hasSig: true },
+        { id: 'hounsou', nomAffichage: 'Dr Bignon HOUNSOU', nom: 'Dr HOUNSOU Bignon', specialite: 'Médecine Physique', hasSig: false }
+    ];
+    const medecin = medecins.find(m => m.id === matchedMedecinId) || medecins[0];
+    
+    const specialites = window.SPECIALITES_CMF || [
+        { spec: 'Médecine générale',           doctors: ['Dr DAH Judith'] },
+        { spec: 'Pédiatrie',                   doctors: ['Dr BACHAROU Salwane'] },
+        { spec: 'Cardiologie',                 doctors: ['Dr HAZOUME Michèle', 'Dr LASSISSI Moufidath'] },
+        { spec: 'Endocrinologie diabétologie', doctors: ['Dr MEDENOU Lionel'] },
+        { spec: 'Neurologie',                  doctors: ['Dr SESSINOU Marie-Rose'] },
+        { spec: 'Anesthésie réanimation',      doctors: ['Dr CHOBLI Hervé'] },
+        { spec: 'Traumatologie-orthopédie',    doctors: ['Dr AGAVOEDO Gipsy', 'Dr DJEDOU Arnaud'] },
+        { spec: 'Chirurgie pédiatrique',       doctors: ['Dr AMOUSSOU Aristide'] },
+        { spec: 'Médecine Physique',           doctors: ['Dr HOUNSOU Bignon'] },
+        { spec: 'Urologie',                    doctors: ['Dr JACQUET Djamal', 'Dr SOUMANOU Fouad'] },
+        { spec: 'Radiologie',                  doctors: ['Dr HOUNTON Emmanuel'] },
+        { spec: 'Laboratoire',                 doctors: ['Dr KASSEIN Urbain'] },
+        { spec: 'Collaborateurs',              doctors: ['Dr AKPAKPO Bruno'] }
+    ];
+    
+    const sidebarHtml = `
+        <div class="doc-sidebar" style="width:145px; flex-shrink:0; border-right:1px solid #2d3748; padding:10px 8px 10px 2px; font-family:'Times New Roman',serif; align-self:stretch;">
+            ${specialites.map(s => `
+                <div style="margin-bottom:16px;">
+                    <div style="font-weight:900; text-decoration:underline; font-size:13px; color:#2d3748; margin-bottom:4px;">${s.spec}</div>
+                    ${s.doctors.map(d => `<div style="font-size:12px; color:#2d3748; padding-left:2px; margin-bottom:2px;">${d}</div>`).join('')}
+                </div>
+            `).join('')}
+        </div>
+    `;
+    
+    const docDateRaw = doc.date;
+    const fmtDate = raw => {
+        if (!raw) return 'N/A';
+        const d = new Date(raw + (raw.includes('T') ? '' : 'T12:00:00'));
+        if (isNaN(d.getTime())) return raw;
+        return d.toLocaleDateString('fr-FR');
+    };
+    
+    const sigBlockHtml = `
+        <div style="display:flex; align-items:flex-start; gap:18px; justify-content:flex-end; margin-top:20px;">
+            <div style="text-align:center; min-width:160px;">
+                <div style="font-size:0.75rem; color:#555; margin-bottom:4px;">Fait à Cotonou, le ${fmtDate(docDateRaw)}</div>
+                <div class="signature-seal-container">
+                    ${medecin.hasSig && medecin.cachet ? `<img src="${medecin.cachet}?t=${Date.now()}" class="seal-img" style="display:block;">` : ''}
+                    ${medecin.hasSig && medecin.signature ? `<img src="${medecin.signature}?t=${Date.now()}" class="signature-img" style="display:block;">` : ''}
+                </div>
+                <p style="font-size:0.8rem; font-weight:900; text-decoration:underline; margin:0 0 2px 0; color:#2d3748;">${medecin.nomAffichage || medecin.nom}</p>
+                <p style="font-size:0.75rem; font-weight:700; text-decoration:underline; color:#2d3748; margin:0;">${medecin.specialite}</p>
+                ${medecin.numONMB ? `<p style="font-size:0.62rem; color:#718096; margin:2px 0 0 0;">${medecin.numONMB}</p>` : ''}
+            </div>
+        </div>
+    `;
     
     const previewContainer = document.getElementById('doc-print-preview');
     if (!previewContainer) return;
     
-    previewContainer.innerHTML = `
-        <div style="font-family:'Times New Roman', Times, serif; color:#1a202c; background:white; position:relative; min-height:29.7cm; padding-bottom:80px;">
-        
-        <!-- EN-TÊTE -->
-        ${window.MercyFiatTemplates.getPrintHeaderHtml()}
-        
-        <!-- INFOS PATIENT & DOCUMENT -->
-        <div style="display:flex; justify-content:space-between; margin-bottom:12px; font-size:0.85rem; color:#1a202c;">
-            <div>
-                <p style="margin:0 0 3px 0;"><strong>Patient :</strong> ${patientName}</p>
-                <p style="margin:0;"><strong>Catégorie :</strong> ${catLabel}</p>
-            </div>
-            <div style="text-align:right;">
-                <p style="margin:0 0 3px 0;"><strong>Date :</strong> ${doc.date ? new Date(doc.date).toLocaleDateString('fr-FR') : 'N/A'}</p>
-                <p style="margin:0;"><strong>Réf :</strong> <span style="font-family:monospace; font-size:0.78rem; color:var(--text-secondary);">${doc.id} (Archive)</span></p>
-            </div>
-        </div>
-        
-        <!-- TITRE DU DOCUMENT -->
-        <div style="text-align:center; margin:20px 0; padding:12px; border:2px solid #2d3748; border-radius:4px;">
-            <h2 style="margin:0; font-size:1.15rem; font-weight:900; text-transform:uppercase; letter-spacing:1px; color:#2d3748;">${doc.title || catLabel}</h2>
-        </div>
-        
-        <!-- DIAGNOSTIC -->
-        ${doc.diagnosis && doc.diagnosis !== 'Bilan et traitement clinique' ? `
-        <div style="margin-bottom:12px; padding:8px 12px; background:#f7fafc; border-left:4px solid #4a6fa5; border-radius:0 6px 6px 0;">
-            <strong style="font-size:0.82rem; color:#4a6fa5;">Diagnostic :</strong>
-            <span style="font-size:0.88rem;">${doc.diagnosis}</span>
-        </div>` : ''}
-        
-        <!-- CONTENU DU RAPPORT -->
-        <div style="font-size:0.88rem; line-height:1.65; color:#2d3748; text-align:justify;">
-            ${contentHtml || '<p style="font-style:italic; color:#999;">Contenu du document non disponible.</p>'}
-        </div>
-        
-        <!-- PIED DE PAGE OFFICIEL -->
-        ${window.MercyFiatTemplates.getPrintFooterHtml()}
-        
+    const assuranceInfo = doc.insurance || '';
+    
+    const patientInfoHtml = `
+        <div style="margin-bottom:10px; font-size:0.78rem; font-weight:700; font-family:'Times New Roman',serif;">
+            <div><span style="text-transform:uppercase; text-decoration:underline;">Patient :</span> <strong>${patientName}</strong></div>
+            <div><span style="text-decoration:underline;">Age :</span> <strong>${doc.patientAge || 'N/A'}</strong></div>
+            ${assuranceInfo ? `<div><span style="text-decoration:underline;">Assurance :</span> <strong>${assuranceInfo.toUpperCase()}</strong></div>` : ''}
         </div>
     `;
+
+    const titleHtml = `
+        <div style="text-align:center; font-size:0.95rem; font-weight:900; text-transform:uppercase; text-decoration:underline; letter-spacing:0.5px; margin:12px 0 14px; font-family:'Times New Roman',serif;">
+            ${doc.title || catLabel}
+        </div>
+    `;
+
+    const diagnosticHtml = (doc.diagnosis && doc.diagnosis !== 'Bilan et traitement clinique') ? `
+        <div style="margin-bottom:12px; padding:8px 12px; background:#f7fafc; border-left:4px solid #4a6fa5; border-radius:0 6px 6px 0; font-family:'Times New Roman',serif;">
+            <strong style="font-size:0.82rem; color:#4a6fa5;">Diagnostic :</strong>
+            <span style="font-size:0.88rem;">${doc.diagnosis}</span>
+        </div>` : '';
+
+    previewContainer.innerHTML = window.MercyFiatTemplates.paginateReport({
+        paragraphs: paragraphs.length > 0 ? paragraphs : [`<p style="font-style:italic; color:#999;">Contenu du document non disponible.</p>`],
+        patientInfoHtml: patientInfoHtml,
+        titleHtml: titleHtml,
+        diagnosticHtml: diagnosticHtml,
+        sigBlockHtml: sigBlockHtml,
+        specialites: specialites
+    });
     
     if (typeof openPrintPreview === 'function') {
         openPrintPreview('documents');
@@ -696,3 +775,16 @@ window.resetBillEditorForm = resetBillEditorForm;
 window.resetDocEditorForm = resetDocEditorForm;
 window.openArchiveDocPreview = openArchiveDocPreview;
 window.printArchiveDoc = printArchiveDoc;
+
+// Auto-open first document preview for screen validation
+document.addEventListener('DOMContentLoaded', () => {
+    setTimeout(() => {
+        const docs = window.savedDocuments || [];
+        if (docs.length > 0) {
+            console.log("[DEBUG] Auto-previewing first document for validation:", docs[0].id);
+            if (typeof openArchiveDocPreview === 'function') {
+                openArchiveDocPreview(docs[0].id);
+            }
+        }
+    }, 2000);
+});

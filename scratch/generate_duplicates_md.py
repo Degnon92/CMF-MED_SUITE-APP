@@ -3,9 +3,9 @@ import os
 import re
 import unicodedata
 
-workspace_dir = r"c:\Users\Degnon\Documents\2.MERCY FIAT CLINIQUE\2. Dr Gipsy"
+workspace_dir = r"c:\Users\Farus\Documents\2.MERCY FIAT CLINIQUE\2. Dr Gipsy"
 patients_db_path = os.path.join(workspace_dir, "MercyFiatMedSuiteDesktop", "patients_db.json")
-output_md_path = r"C:\Users\Degnon\.gemini\antigravity-ide\brain\2cb7ad05-b670-4d7d-9cd6-e600fa5ea152\doublons_detectes.md"
+output_md_path = r"C:\Users\Farus\.gemini\antigravity-ide\brain\2cb7ad05-b670-4d7d-9cd6-e600fa5ea152\doublons_detectes.md"
 
 def strip_accents(text):
     text = unicodedata.normalize('NFD', text)

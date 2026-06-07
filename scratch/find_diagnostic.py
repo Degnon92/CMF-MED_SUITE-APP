@@ -2,7 +2,7 @@ import os
 import sys
 
 files = ['app.js', 'billing.js', 'index.html', 'styles.css', 'exports.js']
-base_dir = r"c:\Users\Degnon\Documents\2.MERCY FIAT CLINIQUE\2. Dr Gipsy\MercyFiatMedSuiteDesktop"
+base_dir = r"c:\Users\Farus\Documents\2.MERCY FIAT CLINIQUE\2. Dr Gipsy\MercyFiatMedSuiteDesktop"
 
 out_path = os.path.join(base_dir, "scratch", "search_results.txt")
 

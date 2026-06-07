@@ -3,9 +3,9 @@ import os
 import glob
 
 paths = [
-    r"c:\Users\Degnon\Documents\2.MERCY FIAT CLINIQUE\2. Dr Gipsy\RAPPORT CONS\*.docx",
-    r"c:\Users\Degnon\Documents\2.MERCY FIAT CLINIQUE\2. Dr Gipsy\RAPPORT HOSPI CMF\*.docx",
-    r"c:\Users\Degnon\Documents\2.MERCY FIAT CLINIQUE\2. Dr Gipsy\1. Document PC DR GIPSY\RAPPORT\*.docx"
+    r"c:\Users\Farus\Documents\2.MERCY FIAT CLINIQUE\2. Dr Gipsy\RAPPORT CONS\*.docx",
+    r"c:\Users\Farus\Documents\2.MERCY FIAT CLINIQUE\2. Dr Gipsy\RAPPORT HOSPI CMF\*.docx",
+    r"c:\Users\Farus\Documents\2.MERCY FIAT CLINIQUE\2. Dr Gipsy\1. Document PC DR GIPSY\RAPPORT\*.docx"
 ]
 
 found_text_docs = []

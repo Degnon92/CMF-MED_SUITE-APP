@@ -3,7 +3,7 @@ import os
 import glob
 from docx.oxml.ns import qn
 
-workspace = r"c:\Users\Degnon\Documents\2.MERCY FIAT CLINIQUE\2. Dr Gipsy"
+workspace = r"c:\Users\Farus\Documents\2.MERCY FIAT CLINIQUE\2. Dr Gipsy"
 proforma_dir = os.path.join(workspace, "1. Document PC DR GIPSY", "proforma")
 
 files = glob.glob(os.path.join(proforma_dir, "*.docx"))

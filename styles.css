@@ -515,8 +515,8 @@ body {
     justify-content: space-between;
     flex-shrink: 0;
     z-index: 100;
-    backdrop-filter: blur(20px) saturate(1.4);
     -webkit-backdrop-filter: blur(20px) saturate(1.4);
+    backdrop-filter: blur(20px) saturate(1.4);
     box-shadow: 4px 0 32px rgba(0, 0, 0, 0.04), 1px 0 0 rgba(255,255,255,0.6) inset;
     position: fixed;
     top: 0;
@@ -652,6 +652,7 @@ body.emerald-theme .sidebar::after {
     border: 1px solid transparent;
     position: relative;
     letter-spacing: 0.1px;
+    -webkit-user-select: none;
     user-select: none;
 }
 
@@ -999,8 +1000,8 @@ body.sidebar-collapsed .main-content {
     border-radius: var(--radius-lg);
     padding: 24px;
     box-shadow: var(--shadow-soft);
-    backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
     transition: var(--transition-normal);
     position: relative;
     overflow: hidden;
@@ -1344,8 +1345,8 @@ body.emerald-theme .split-wrapper {
     gap: 10px;
     overflow-y: auto;
     box-shadow: var(--shadow-soft);
-    backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
 }
 
 /* ============================================================
@@ -1438,8 +1439,9 @@ body.emerald-theme .cmf-doctor-card.active-doctor { background: linear-gradient(
     min-height: 700px;
     overflow: auto;
     display: flex;
-    justify-content: center;
-    align-items: flex-start;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
 }
 
 .preview-panel > div {
@@ -1447,7 +1449,7 @@ body.emerald-theme .cmf-doctor-card.active-doctor { background: linear-gradient(
     color: #1a202c !important;
     width: 100%;
     max-width: 21cm;
-    min-height: 28.5cm !important;
+    min-height: 29.7cm !important;
     padding: 0.6cm 1.2cm !important;
     box-shadow: var(--shadow-hover);
     border-radius: 4px;
@@ -1456,6 +1458,19 @@ body.emerald-theme .cmf-doctor-card.active-doctor { background: linear-gradient(
     flex-direction: column !important;
     transition: var(--transition-normal);
     zoom: 0.72;
+    background-image: repeating-linear-gradient(
+        to bottom,
+        transparent 0px,
+        transparent calc(29.7cm - 12px),
+        #cbd5e0 calc(29.7cm - 12px),
+        #cbd5e0 calc(29.7cm - 10px),
+        #e2e8f0 calc(29.7cm - 10px),
+        #e2e8f0 calc(29.7cm - 2px),
+        #cbd5e0 calc(29.7cm - 2px),
+        #cbd5e0 29.7cm
+    ) !important;
+    background-size: 100% 29.7cm !important;
+    background-origin: padding-box !important;
 }
 
 /* En-tête papier à lettre clinique - Compacté pour tenir sur une seule page */
@@ -1579,12 +1594,12 @@ tr:hover td {
 
 /* Styles pour factures proforma en rendu */
 .bill-summary {
-    margin-top: 12px; /* Rapproche le total du tableau */
+    margin-top: 0px; /* Aligné au sommet */
     display: flex;
     flex-direction: column;
     gap: 4px; /* Resserre les totaux */
-    width: 290px;
-    align-self: flex-end;
+    width: 370px;
+    align-self: flex-start;
     margin-left: auto;
     border-top: 2px solid var(--border-color);
     padding-top: 8px;
@@ -1594,6 +1609,11 @@ tr:hover td {
     display: flex;
     justify-content: space-between;
     font-size: 0.82rem; /* Légèrement plus petit */
+}
+
+.summary-row strong,
+.summary-row span:last-child {
+    white-space: nowrap !important;
 }
 
 .summary-row.total {
@@ -1688,11 +1708,24 @@ tr:hover td {
     flex-direction: column;
     gap: 8px; /* Espacement minime entre les éléments */
     position: relative !important; /* Pour positionner le pied de page absolu */
+    background-image: repeating-linear-gradient(
+        to bottom,
+        transparent 0px,
+        transparent calc(29.7cm - 12px),
+        #cbd5e0 calc(29.7cm - 12px),
+        #cbd5e0 calc(29.7cm - 10px),
+        #e2e8f0 calc(29.7cm - 10px),
+        #e2e8f0 calc(29.7cm - 2px),
+        #cbd5e0 calc(29.7cm - 2px),
+        #cbd5e0 29.7cm
+    ) !important;
+    background-size: 100% 29.7cm !important;
+    background-origin: padding-box !important;
 }
 
 /* Pied de page officiel clinique (PDF & Impression) */
 .print-footer {
-    margin-top: auto !important;
+    margin-top: 15px !important;
     page-break-inside: avoid !important;
     text-align: center;
     border: 1px solid #4b807b;
@@ -1710,13 +1743,32 @@ tr:hover td {
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
 }
 
+.clinical-page .print-footer {
+    margin-top: 28px !important;
+}
+
+/* Styles spécifiques pour les factures / proformas (Strictement 1 page) */
+.preview-panel > .bill-page, .a4-sheet:has(.bill-page), .bill-page {
+    background-image: none !important;
+}
+.bill-page table {
+    margin: 5px 0 !important;
+}
+.bill-page th, .bill-page td {
+    padding: 4px 8px !important;
+}
+
 .bill-page-bottom-block {
     margin-top: auto !important;
     width: 100% !important;
     display: flex !important;
     flex-direction: column !important;
-    gap: 12px !important;
+    gap: 6px !important; /* Réduit de 12px à 6px */
     page-break-inside: avoid !important;
+}
+
+.bill-page-bottom-block .print-footer {
+    margin-top: 5px !important; /* Réduit pour laisser de la place et éviter le débordement */
 }
 
 .a4-sheet > div {
@@ -1725,6 +1777,39 @@ tr:hover td {
     flex-grow: 1 !important;
     min-height: 28.5cm !important;
     box-sizing: border-box !important;
+}
+
+/* Pages A4 individuelles pour les rapports médicaux paginés */
+.clinical-page {
+    background-color: #ffffff !important;
+    background-image: none !important;
+    color: #1a202c !important;
+    width: 21cm;
+    height: 29.7cm;
+    padding: 0.6cm 1.2cm !important;
+    box-shadow: var(--shadow-hover);
+    border-radius: 4px;
+    box-sizing: border-box;
+    display: flex !important;
+    flex-direction: column !important;
+    position: relative;
+    zoom: 0.72;
+    transition: var(--transition-normal);
+}
+
+/* Annuler le zoom à l'intérieur de la feuille de prévisualisation d'impression finale */
+#modal-a4-sheet .clinical-page {
+    zoom: 1 !important;
+}
+
+/* Rendre transparent l'arrière-plan du modal s'il contient des pages paginées */
+.a4-sheet:has(.clinical-page) {
+    background-color: transparent !important;
+    box-shadow: none !important;
+    border: none !important;
+    padding: 0 !important;
+    min-height: auto !important;
+    gap: 20px;
 }
 
 
@@ -1795,8 +1880,30 @@ body.emerald-theme #modal-a4-sheet th {
 }
 
 @media print {
+    .preview-panel > div, .a4-sheet {
+        background-image: none !important;
+        background-color: white !important;
+    }
+
+    .clinical-page {
+        zoom: 1 !important;
+        box-shadow: none !important;
+        border: none !important;
+        margin: 0 !important;
+        padding: 0.6cm 1.2cm !important;
+        height: 29.7cm !important;
+        page-break-after: always !important;
+        break-after: page !important;
+    }
+
+    .a4-sheet:has(.clinical-page) {
+        background-color: transparent !important;
+        padding: 0 !important;
+        gap: 0 !important;
+    }
+
     /* Cache toute l'application principale */
-    .app-container, body > *:not(#print-preview-modal) {
+    .app-container, body > *:not(#print-preview-modal):not(.a4-sheet) {
         display: none !important;
     }
     
@@ -1862,8 +1969,8 @@ body.emerald-theme #modal-a4-sheet th {
     box-shadow: var(--shadow-hover);
     z-index: 99999;
     margin-top: 6px;
-    backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
     animation: slideDown 0.18s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -1956,16 +2063,16 @@ body.emerald-theme .autocomplete-suggestion.active {
     width: 100%;
     height: 100%;
     background-color: rgba(6, 8, 20, 0.4);
-    backdrop-filter: blur(0px);
     -webkit-backdrop-filter: blur(0px);
+    backdrop-filter: blur(0px);
     opacity: 0;
     transition: opacity 0.3s ease, backdrop-filter 0.3s ease, -webkit-backdrop-filter 0.3s ease;
 }
 
 .dme-drawer-overlay.open .dme-drawer-backdrop {
     opacity: 1;
-    backdrop-filter: blur(4px);
     -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: blur(4px);
 }
 
 .dme-drawer-content {
@@ -1980,6 +2087,7 @@ body.emerald-theme .autocomplete-suggestion.active {
     z-index: 10;
     transform: translateX(100%);
     transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    -webkit-backdrop-filter: blur(15px);
     backdrop-filter: blur(15px);
 }
 
@@ -2230,6 +2338,7 @@ body.emerald-theme .autocomplete-suggestion.active {
 }
 .item-row input[type=number] {
     -moz-appearance: textfield;
+    appearance: textfield;
     text-align: center;
 }
 
@@ -2372,9 +2481,9 @@ body.emerald-theme .autocomplete-suggestion.active {
     position: absolute;
     right: 0;
     top: 100%;
-    background-color: white;
+    background-color: var(--bg-card);
     min-width: 195px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+    box-shadow: var(--shadow-soft);
     border: 1px solid var(--border-color);
     border-radius: 10px;
     z-index: 9999 !important;
@@ -2409,7 +2518,7 @@ body.emerald-theme .autocomplete-suggestion.active {
 }
 
 .dropdown-menu-content button:hover {
-    background-color: #f5f3f0;
+    background-color: var(--border-color);
     color: var(--accent-blue);
 }
 

@@ -5,7 +5,7 @@ import sys
 # Forcer l'encodage UTF-8 pour stdout
 sys.stdout.reconfigure(encoding='utf-8')
 
-db_path = r'c:\Users\Degnon\Documents\2.MERCY FIAT CLINIQUE\2. Dr Gipsy\MercyFiatMedSuiteDesktop\bills_db.json'
+db_path = r'c:\Users\Farus\Documents\2.MERCY FIAT CLINIQUE\2. Dr Gipsy\MercyFiatMedSuiteDesktop\bills_db.json'
 
 with open(db_path, 'r', encoding='utf-8') as f:
     bills = json.load(f)

@@ -6,7 +6,7 @@ import openpyxl
 import docx
 from docx.oxml.ns import qn
 
-workspace = r"c:\Users\Degnon\Documents\2.MERCY FIAT CLINIQUE\2. Dr Gipsy"
+workspace = r"c:\Users\Farus\Documents\2.MERCY FIAT CLINIQUE\2. Dr Gipsy"
 app_dir = os.path.join(workspace, "MercyFiatMedSuiteDesktop")
 
 print("Démarrage de l'extraction complète du plan de travail...")

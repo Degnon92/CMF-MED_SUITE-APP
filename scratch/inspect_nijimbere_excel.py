@@ -1,6 +1,6 @@
 import openpyxl
 
-path = r"c:\Users\Degnon\Documents\2.MERCY FIAT CLINIQUE\2. Dr Gipsy\PROFORMA CHIRURGIE\FIDELIA\EXEMPLAIRE PROFORMA2.xlsx"
+path = r"c:\Users\Farus\Documents\2.MERCY FIAT CLINIQUE\2. Dr Gipsy\PROFORMA CHIRURGIE\FIDELIA\EXEMPLAIRE PROFORMA2.xlsx"
 wb = openpyxl.load_workbook(path, data_only=True)
 sheet = "Feuil2 (2)"
 ws = wb[sheet]

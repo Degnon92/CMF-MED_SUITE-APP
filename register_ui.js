@@ -75,7 +75,7 @@ function renderRegisterTable() {
                         }
                         return rawName;
                     })(),
-                    category: b.type === 'PROFORMA' ? 'Facture Proforma (Devis)' : (b.type === 'DETAIL_ASSUR' ? 'Détail Assurance Proforma' : (b.type === 'AVOIR' ? 'Facture d\'Avoir (Annulation)' : 'Point d\'Hospitalisation')),
+                    category: b.type === 'PROFORMA' ? 'Facture Proforma (Devis)' : (b.type === 'DETAIL_ASSUR' ? (b.insurance === 'PRIVE' ? 'Détail Prestations Proforma' : 'Détail Assurance Proforma') : (b.type === 'AVOIR' ? 'Facture d\'Avoir (Annulation)' : 'Point d\'Hospitalisation')),
                     detail: (b.items || []).map(item => item.name || '').join(', '),
                     insurance: `${b.insurance || 'PRIVE'} (${b.coverage || 0}%)`,
                     value: b.discountedTotal || 0,
@@ -641,6 +641,7 @@ function printDMEConsolidated() {
     
     // Construction de la structure de la synthèse DME
     let html = `
+        <div style="font-family:'Times New Roman', Times, serif; color:#1a202c; background:white; display:flex; flex-direction:column; min-height:28.5cm; box-sizing:border-box; width:100%;">
         ${window.MercyFiatTemplates.getPrintHeaderHtml()}
 
         <div style="margin: 10px 0 8px 0; padding: 10px 16px; background: #eae6df; border-left: 4px solid var(--accent-blue); border-radius: 4px; font-size: 0.95rem; font-weight:800; display:flex; justify-content:space-between; align-items:center;">
@@ -692,7 +693,7 @@ function printDMEConsolidated() {
                     </thead>
                     <tbody>
                         ${matchedBills.map(b => {
-                            const bType = b.type === 'PROFORMA' ? 'Proforma' : (b.type === 'DETAIL_ASSUR' ? 'Détail Assur.' : (b.type === 'AVOIR' ? 'Avoir' : 'Point'));
+                            const bType = b.type === 'PROFORMA' ? 'Proforma' : (b.type === 'DETAIL_ASSUR' ? (b.insurance === 'PRIVE' ? 'Détail Prest.' : 'Détail Assur.') : (b.type === 'AVOIR' ? 'Avoir' : 'Point'));
                             return `
                                 <tr>
                                     <td><strong>${bType}</strong> - ${b.reference || 'N/A'} <span style="font-size:0.7rem; color:#718096;">(${new Date(b.date).toLocaleDateString('fr-FR')})</span></td>
@@ -751,6 +752,7 @@ function printDMEConsolidated() {
         </div>
 
         ${window.MercyFiatTemplates.getPrintFooterHtml()}
+        </div>
     `;
 
     sheet.innerHTML = html;

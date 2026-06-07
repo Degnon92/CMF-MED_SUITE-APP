@@ -33,6 +33,22 @@ function openPrintPreview(type) {
     // Déterminer la source à cloner
     const sourceId = type === 'billing' ? 'bill-print-preview' : 'doc-print-preview';
     const sourceEl = document.getElementById(sourceId);
+
+    if (type === 'documents') {
+        sheet.style.backgroundColor = 'transparent';
+        sheet.style.boxShadow = 'none';
+        sheet.style.padding = '0';
+        sheet.style.display = 'flex';
+        sheet.style.flexDirection = 'column';
+        sheet.style.gap = '20px';
+    } else {
+        sheet.style.backgroundColor = '';
+        sheet.style.boxShadow = '';
+        sheet.style.padding = '';
+        sheet.style.display = '';
+        sheet.style.flexDirection = '';
+        sheet.style.gap = '';
+    }
     
     if (sourceEl) {
         // Copier les enfants de la prévisualisation dans la feuille A4 (sans la div parent .preview-panel)
@@ -89,6 +105,7 @@ function getConsolidatedHTMLForPDF() {
     try {
         const path = require('path');
         appBasePath = 'file:///' + __dirname.replace(/\\/g, '/') + '/';
+        appBasePath = encodeURI(appBasePath);
     } catch(e) {
         appBasePath = '';
     }
@@ -179,7 +196,7 @@ function getConsolidatedHTMLForPDF() {
         th:nth-child(7), td:nth-child(7) { text-align: right !important; }
         th:nth-child(8), td:nth-child(8) { text-align: right !important; }
         .doc-flex-header { display: flex; align-items: center; gap: 12px; border-bottom: 3px solid #2d3748; padding-bottom: 10px; margin-bottom: 0; }
-        .doc-flex-body { display: flex; min-height: 350px; border-bottom: 2px solid #2d3748; }
+        .doc-flex-body { display: flex; flex-grow: 1 !important; border-bottom: 2px solid #2d3748; }
         .doc-sidebar { width: 145px; flex-shrink: 0; border-right: 1px solid #2d3748; padding: 10px 8px; font-size: 0.62rem; }
         .doc-main { flex: 1; padding: 10px 14px; }
         img { display: inline-block; }
@@ -217,7 +234,7 @@ function getConsolidatedHTMLForPDF() {
             print-color-adjust: exact !important;
         }
         .print-footer {
-            margin-top: auto !important;
+            margin-top: 15px !important;
             text-align: center !important;
             border: 1px solid #4b807b !important;
             background-color: #f4f8f7 !important;
@@ -237,6 +254,18 @@ function getConsolidatedHTMLForPDF() {
             page-break-inside: avoid !important;
             width: 100% !important;
         }
+        .clinical-page .print-footer {
+            margin-top: 28px !important;
+        }
+        .bill-page {
+            background-image: none !important;
+        }
+        .bill-page table {
+            margin: 5px 0 !important;
+        }
+        .bill-page th, .bill-page td {
+            padding: 4px 8px !important;
+        }
         .bill-page-bottom-block {
             margin-top: auto !important;
             width: 100% !important;
@@ -244,6 +273,9 @@ function getConsolidatedHTMLForPDF() {
             flex-direction: column !important;
             gap: 4px !important;
             page-break-inside: avoid !important;
+        }
+        .bill-page-bottom-block .print-footer {
+            margin-top: 5px !important;
         }
         .a4-sheet > div {
             display: flex !important;
@@ -253,12 +285,12 @@ function getConsolidatedHTMLForPDF() {
             box-sizing: border-box !important;
         }
         .bill-summary {
-            margin-top: 6px !important;
+            margin-top: 0px !important;
             display: flex !important;
             flex-direction: column !important;
             gap: 4px !important;
-            width: 320px !important;
-            align-self: flex-end !important;
+            width: 370px !important;
+            align-self: flex-start !important;
             margin-left: auto !important;
             border-top: 2px solid #cbd5e0 !important;
             padding-top: 8px !important;
@@ -270,13 +302,28 @@ function getConsolidatedHTMLForPDF() {
             font-size: 0.82rem !important;
             width: 100% !important;
         }
-        .summary-row.total {
-            font-size: 0.98rem !important;
-            font-weight: 800 !important;
-            color: #1a202c !important;
-            border-top: 1px dashed #cbd5e0 !important;
-            padding-top: 5px !important;
-            margin-top: 2px !important;
+        .summary-row strong,
+        .summary-row span:last-child {
+            white-space: nowrap !important;
+        }
+        .clinical-page {
+            background-color: white !important;
+            width: 21cm !important;
+            height: 29.7cm !important;
+            padding: 0.6cm 1.2cm !important;
+            box-sizing: border-box !important;
+            display: flex !important;
+            flex-direction: column !important;
+            page-break-after: always !important;
+            break-after: page !important;
+            margin: 0 !important;
+        }
+        .a4-sheet:has(.clinical-page) {
+            background: transparent !important;
+            padding: 0 !important;
+            box-shadow: none !important;
+            border: none !important;
+            gap: 0 !important;
         }
     </style>
 </head>
@@ -416,7 +463,7 @@ if (typeof require !== 'undefined') {
     }
 }
 
-// Fonction d'impression haute-fidélité via iframe
+// Fonction d'impression haute-fidélité via iframe (repli) ou IPC natif (Electron)
 function printDOMElement(elementId) {
     const element = document.getElementById(elementId);
     if (!element) {
@@ -424,12 +471,24 @@ function printDOMElement(elementId) {
         return;
     }
 
+    // Si exécuté sous Electron, utiliser l'impression native propre pour éviter les pages blanches d'iframe
+    if (typeof require !== 'undefined') {
+        try {
+            const { ipcRenderer } = require('electron');
+            const htmlContent = getConsolidatedHTMLForPDF();
+            ipcRenderer.send('system-print', { htmlContent });
+            return;
+        } catch (e) {
+            console.error("Erreur system-print IPC, repli sur l'iframe :", e);
+        }
+    }
+
     const iframe = document.createElement('iframe');
-    iframe.style.position = 'fixed';
-    iframe.style.right = '0';
-    iframe.style.bottom = '0';
-    iframe.style.width = '0';
-    iframe.style.height = '0';
+    iframe.style.position = 'absolute';
+    iframe.style.left = '-9999px';
+    iframe.style.top = '-9999px';
+    iframe.style.width = '1024px';
+    iframe.style.height = '768px';
     iframe.style.border = '0';
     iframe.style.zIndex = '-99999';
     
@@ -439,6 +498,15 @@ function printDOMElement(elementId) {
     let stylesHtml = '';
     stylesHtml += `<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,800;1,600&display=swap" rel="stylesheet">`;
     
+    let appBasePath = '';
+    try {
+        const path = require('path');
+        appBasePath = 'file:///' + __dirname.replace(/\\/g, '/') + '/';
+        appBasePath = encodeURI(appBasePath);
+    } catch(e) {
+        appBasePath = '';
+    }
+
     Array.from(document.querySelectorAll('link[rel="stylesheet"], style')).forEach(styleEl => {
         stylesHtml += styleEl.outerHTML;
     });
@@ -553,6 +621,18 @@ function printDOMElement(elementId) {
                 page-break-inside: avoid !important;
                 width: 100% !important;
             }
+            .clinical-page .print-footer {
+                margin-top: 28px !important;
+            }
+            .bill-page {
+                background-image: none !important;
+            }
+            .bill-page table {
+                margin: 5px 0 !important;
+            }
+            .bill-page th, .bill-page td {
+                padding: 4px 8px !important;
+            }
             .bill-page-bottom-block {
                 margin-top: auto !important;
                 width: 100% !important;
@@ -560,6 +640,9 @@ function printDOMElement(elementId) {
                 flex-direction: column !important;
                 gap: 4px !important;
                 page-break-inside: avoid !important;
+            }
+            .bill-page-bottom-block .print-footer {
+                margin-top: 5px !important;
             }
             .a4-sheet > div {
                 display: flex !important;
@@ -569,12 +652,12 @@ function printDOMElement(elementId) {
                 box-sizing: border-box !important;
             }
             .bill-summary {
-                margin-top: 6px !important;
+                margin-top: 0px !important;
                 display: flex !important;
                 flex-direction: column !important;
                 gap: 4px !important;
-                width: 320px !important;
-                align-self: flex-end !important;
+                width: 370px !important;
+                align-self: flex-start !important;
                 margin-left: auto !important;
                 border-top: 2px solid #cbd5e0 !important;
                 padding-top: 8px !important;
@@ -585,6 +668,10 @@ function printDOMElement(elementId) {
                 align-items: center !important;
                 font-size: 0.82rem !important;
                 width: 100% !important;
+            }
+            .summary-row strong,
+            .summary-row span:last-child {
+                white-space: nowrap !important;
             }
             .summary-row.total {
                 font-size: 0.98rem !important;
@@ -603,6 +690,7 @@ function printDOMElement(elementId) {
         <html>
         <head>
             <title>Impression Clinique Mercy Fiat</title>
+            ${appBasePath ? `<base href="${appBasePath}">` : ''}
             ${stylesHtml}
         </head>
         <body>
@@ -614,7 +702,7 @@ function printDOMElement(elementId) {
                     setTimeout(function() {
                         window.focus();
                         window.print();
-                    }, 250);
+                    }, 500);
                 };
             </script>
         </body>
@@ -643,11 +731,14 @@ function launchSilentPrint() {
                 return;
             }
             
+            const htmlContent = getConsolidatedHTMLForPDF();
+            
             ipcRenderer.send('silent-print', {
                 printerName,
                 copies,
                 isMono: colorMode === 'mono',
-                marginsType
+                marginsType,
+                htmlContent
             });
         } catch (e) {
             console.error("Erreur Impression Silencieuse :", e);

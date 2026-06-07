@@ -5,7 +5,7 @@ import os
 from docx.oxml.ns import qn
 
 # File path
-file_path = r"c:\Users\Degnon\Documents\2.MERCY FIAT CLINIQUE\2. Dr Gipsy\RAPPORT CONS\RAPPORT DE CONSULTATION CMF.docx"
+file_path = r"c:\Users\Farus\Documents\2.MERCY FIAT CLINIQUE\2. Dr Gipsy\RAPPORT CONS\RAPPORT DE CONSULTATION CMF.docx"
 doc = docx.Document(file_path)
 
 # Extract textbox text

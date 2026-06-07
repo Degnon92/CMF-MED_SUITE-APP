@@ -1,6 +1,6 @@
 import os
 
-database_js_path = r"c:\Users\Degnon\Documents\2.MERCY FIAT CLINIQUE\2. Dr Gipsy\MercyFiatMedSuiteDesktop\database.js"
+database_js_path = r"c:\Users\Farus\Documents\2.MERCY FIAT CLINIQUE\2. Dr Gipsy\MercyFiatMedSuiteDesktop\database.js"
 
 original_content = """/* ==========================================
    database.js - Base de Données Modulaire & Nomenclature MercyFiat

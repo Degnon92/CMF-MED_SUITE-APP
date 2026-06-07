@@ -2,7 +2,7 @@ import json
 import os
 
 def read_transcript():
-    log_path = r"C:\Users\Degnon\.gemini\antigravity-ide\brain\7cd223db-09d4-4d6d-b877-ad294933360a\.system_generated\logs\transcript.jsonl"
+    log_path = r"C:\Users\Farus\.gemini\antigravity-ide\brain\7cd223db-09d4-4d6d-b877-ad294933360a\.system_generated\logs\transcript.jsonl"
     if not os.path.exists(log_path):
         print("Transcript log does not exist!")
         return

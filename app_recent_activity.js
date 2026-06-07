@@ -89,7 +89,7 @@ function viewRecentItem(category, itemId) {
                 if (typeEl) typeEl.value = bill.type || 'PROFORMA';
                 
                 const partner = window.MercyFiatDB?.INSURERS?.find(ins => ins.id === bill.insurance);
-                const pType = (partner && partner.category === 'Sinistres & Accidents Auto') ? 'SINISTRE' : (bill.insurance === 'PRIVE' ? 'PRIVE' : 'MALADIE');
+                const pType = (partner && partner.category === 'Sinistres & Accidents Auto') ? 'SINISTRE' : ((!bill.insurance || bill.insurance === 'PRIVE') ? 'PRIVE' : 'MALADIE');
                 const patientTypeEl = document.getElementById('bill-patient-type');
                 if (patientTypeEl) {
                     patientTypeEl.value = pType;
@@ -277,6 +277,40 @@ function viewRecentItem(category, itemId) {
                 
                 const docTemplateEl = document.getElementById('doc-template');
                 if (docTemplateEl) docTemplateEl.value = doc.templateId || 'rapport_cs_simple';
+                
+                // Auto-détection du médecin signataire à partir du contenu
+                const fullText = (doc.content || doc.text || '').toLowerCase();
+                let matchedMedecinId = 'agavoedo'; // par défaut
+                
+                const docKeywords = [
+                    { id: 'agavoedo', keys: ['agavoedo'] },
+                    { id: 'djedou', keys: ['djedou'] },
+                    { id: 'hazoume', keys: ['hazoume'] },
+                    { id: 'dah', keys: ['dah'] },
+                    { id: 'lassissi', keys: ['lassissi'] },
+                    { id: 'medenou', keys: ['medenou'] },
+                    { id: 'sessinou', keys: ['sessinou'] },
+                    { id: 'chobli', keys: ['chobli'] },
+                    { id: 'amoussou', keys: ['amoussou'] },
+                    { id: 'bacharou', keys: ['bacharou'] },
+                    { id: 'jacquet', keys: ['jacquet'] },
+                    { id: 'soumanou', keys: ['soumanou'] },
+                    { id: 'hounton', keys: ['hounton'] },
+                    { id: 'kassein', keys: ['kassein'] },
+                    { id: 'akpakpo', keys: ['akpakpo'] },
+                    { id: 'hounsou', keys: ['hounsou'] }
+                ];
+                
+                for (const dk of docKeywords) {
+                    if (dk.keys.some(k => fullText.includes(k))) {
+                        matchedMedecinId = dk.id;
+                        break;
+                    }
+                }
+                
+                if (typeof window.setSelectedDoctor === 'function') {
+                    window.setSelectedDoctor(matchedMedecinId);
+                }
                 
                 // Déterminer la bonne sous-section clinique et activer
                 let subType = 'consult';

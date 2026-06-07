@@ -1,7 +1,7 @@
 import os
 import glob
 
-workspace = r"c:\Users\Degnon\Documents\2.MERCY FIAT CLINIQUE\2. Dr Gipsy"
+workspace = r"c:\Users\Farus\Documents\2.MERCY FIAT CLINIQUE\2. Dr Gipsy"
 
 print("--- ALL DOCX FILES IN WORKSPACE (EXCEPT APP DIR) ---")
 docx_files = []

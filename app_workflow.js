@@ -210,7 +210,7 @@ function convertProformaToDefinitifSplit(billId) {
     document.getElementById('bill-type').value = 'DEFINITIF'; // Forcer Point Définitif
     
     const partner = window.MercyFiatDB?.INSURERS?.find(ins => ins.id === bill.insurance);
-    const pType = (partner && partner.category === 'Sinistres & Accidents Auto') ? 'SINISTRE' : (bill.insurance === 'PRIVE' ? 'PRIVE' : 'MALADIE');
+    const pType = (partner && partner.category === 'Sinistres & Accidents Auto') ? 'SINISTRE' : ((!bill.insurance || bill.insurance === 'PRIVE') ? 'PRIVE' : 'MALADIE');
     const patientTypeEl = document.getElementById('bill-patient-type');
     if (patientTypeEl) {
         patientTypeEl.value = pType;
@@ -257,7 +257,13 @@ function convertProformaToDefinitifSplit(billId) {
         container.innerHTML = '';
         bill.items.forEach(item => {
             if (typeof addCustomBillingRow === 'function') {
-                addCustomBillingRow(item.name, item.price, item.qty);
+                addCustomBillingRow(
+                    item.name, 
+                    item.price, 
+                    item.qty,
+                    item.splitLimit !== undefined ? item.splitLimit : null,
+                    item.splitRate !== undefined ? item.splitRate : null
+                );
             }
         });
     }
@@ -302,7 +308,7 @@ function convertProformaToDetailAssurance(billId) {
     document.getElementById('bill-type').value = 'DETAIL_ASSUR'; // Forcer Détail Assurance
     
     const partner = window.MercyFiatDB?.INSURERS?.find(ins => ins.id === bill.insurance);
-    const pType = (partner && partner.category === 'Sinistres & Accidents Auto') ? 'SINISTRE' : (bill.insurance === 'PRIVE' ? 'PRIVE' : 'MALADIE');
+    const pType = (partner && partner.category === 'Sinistres & Accidents Auto') ? 'SINISTRE' : ((!bill.insurance || bill.insurance === 'PRIVE') ? 'PRIVE' : 'MALADIE');
     const patientTypeEl = document.getElementById('bill-patient-type');
     if (patientTypeEl) {
         patientTypeEl.value = pType;
@@ -328,8 +334,13 @@ function convertProformaToDetailAssurance(billId) {
     const splitContainer = document.getElementById('split-mode-container');
     
     if (splitContainer) {
-        splitContainer.style.display = 'flex';
-        if (splitCheckbox) splitCheckbox.checked = true; // Activer le split
+        if (!bill.insurance || bill.insurance === 'PRIVE') {
+            splitContainer.style.display = 'none';
+            if (splitCheckbox) splitCheckbox.checked = false;
+        } else {
+            splitContainer.style.display = 'flex';
+            if (splitCheckbox) splitCheckbox.checked = true; // Activer le split
+        }
     }
     
     // 3. Charger les lignes de la proforma

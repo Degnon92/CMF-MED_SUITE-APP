@@ -1,7 +1,7 @@
 import openpyxl, re, sys
 sys.stdout.reconfigure(encoding='utf-8', errors='replace')
 
-EXCEL_FILE = r"C:\Users\Degnon\Documents\2.MERCY FIAT CLINIQUE\2. Dr Gipsy\PROFORMA CHIRURGIE\EXEMPLAIRE PROFORMA.xlsx"
+EXCEL_FILE = r"C:\Users\Farus\Documents\2.MERCY FIAT CLINIQUE\2. Dr Gipsy\PROFORMA CHIRURGIE\EXEMPLAIRE PROFORMA.xlsx"
 wb = openpyxl.load_workbook(EXCEL_FILE, data_only=True)
 
 for sheet_name in wb.sheetnames:

@@ -1,6 +1,6 @@
 import os
 
-base_dir = r"c:\Users\Degnon\Documents\2.MERCY FIAT CLINIQUE\2. Dr Gipsy\MercyFiatMedSuiteDesktop"
+base_dir = r"c:\Users\Farus\Documents\2.MERCY FIAT CLINIQUE\2. Dr Gipsy\MercyFiatMedSuiteDesktop"
 styles_path = os.path.join(base_dir, "styles.css")
 out_path = os.path.join(base_dir, "scratch", "print_styles.txt")
 

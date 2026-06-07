@@ -3,7 +3,7 @@ import numpy as np
 from PIL import Image
 
 def inspect_ref():
-    p = r"C:\Users\Degnon\.gemini\antigravity-ide\brain\7cd223db-09d4-4d6d-b877-ad294933360a\media__1780516168149.png"
+    p = r"C:\Users\Farus\.gemini\antigravity-ide\brain\7cd223db-09d4-4d6d-b877-ad294933360a\media__1780516168149.png"
     img = Image.open(p).convert("RGBA")
     arr = np.array(img)
     h, w = arr.shape[:2]

@@ -89,8 +89,9 @@ window.MercyFiatCalculations = {
             partPatient = discountedTotal - partAssurance;
             
             processedItems.forEach(item => {
+                const itemDiscountedSubtotal = Math.round(item.subtotal * splitDiscountRatio);
                 item.partAssurance = Math.round(item.partAssurance * splitDiscountRatio);
-                item.partPatient = item.subtotal - item.partAssurance;
+                item.partPatient = itemDiscountedSubtotal - item.partAssurance;
             });
         }
 

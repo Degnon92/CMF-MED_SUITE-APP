@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
     updateBillDiscountDisplay();
     updateBillPreview();
     
-// Écouteur pour le remplissage automatique d'intervention et du code K
+// Écouteur pour le remplissage automatique d'intervention, du code K, et auto-cochage
     const billInt = document.getElementById('bill-intervention');
     if (billInt) {
         billInt.addEventListener('change', (e) => {
@@ -43,6 +43,44 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         billInt.addEventListener('input', (e) => {
             autoFillKCodeFromIntervention(e.target.value);
+            if (!window.isLoadingRecentItem) {
+                const cb = document.getElementById('bill-show-interv');
+                if (cb) {
+                    if (e.target.value.trim() !== '') {
+                        if (!cb.checked) {
+                            cb.checked = true;
+                            updateBillPreview();
+                        }
+                    } else {
+                        if (cb.checked) {
+                            cb.checked = false;
+                            updateBillPreview();
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    const billDiag = document.getElementById('bill-diagnostic');
+    if (billDiag) {
+        billDiag.addEventListener('input', (e) => {
+            if (!window.isLoadingRecentItem) {
+                const cb = document.getElementById('bill-show-diag');
+                if (cb) {
+                    if (e.target.value.trim() !== '') {
+                        if (!cb.checked) {
+                            cb.checked = true;
+                            updateBillPreview();
+                        }
+                    } else {
+                        if (cb.checked) {
+                            cb.checked = false;
+                            updateBillPreview();
+                        }
+                    }
+                }
+            }
         });
     }
 
@@ -138,6 +176,18 @@ function handleBillPriseEnChargeChange() {
             if (insSelect && insSelect.value === 'PRIVE') {
                 insSelect.value = 'SANLAM';
             }
+        }
+    }
+    
+    // Mettre à jour dynamiquement le libellé de l'option DETAIL_ASSUR
+    const detailOption = document.querySelector('#bill-type option[value="DETAIL_ASSUR"]');
+    if (detailOption) {
+        if (type === 'PRIVE') {
+            detailOption.textContent = "Détail Prestations (Proforma)";
+        } else if (type === 'SINISTRE') {
+            detailOption.textContent = "Détail Prise en Charge (Accord Proforma)";
+        } else {
+            detailOption.textContent = "Détail Assurance (Accord Proforma)";
         }
     }
     
@@ -545,7 +595,13 @@ function updateBillPreview() {
     
     let docTitle = "Facture Proforma";
     if (billType === "DETAIL_ASSUR") {
-        docTitle = patientType === "SINISTRE" ? "Détail Prise en Charge Sinistre Automobile" : "Détail Assurance Facture Proforma";
+        if (patientType === "SINISTRE") {
+            docTitle = "Détail Prise en Charge Sinistre Automobile";
+        } else if (patientType === "PRIVE") {
+            docTitle = "Détail Prestations Facture Proforma";
+        } else {
+            docTitle = "Détail Assurance Facture Proforma";
+        }
     } else if (billType === "DEFINITIF") {
         docTitle = document.getElementById('bill-title-custom')?.value || "Point Définitif d'Hospitalisation";
     }
@@ -589,14 +645,16 @@ function updateBillPreview() {
         if (name) {
             let rowPartAssurance = 0;
             let rowPartPatient = subtotal;
+            let rowLimit = subtotal;
+            let rowRate = coverage;
             
             if (useSplit && patientType !== 'PRIVE') {
                 const limitInput = row.querySelector('.item-split-limit');
                 const rateInput = row.querySelector('.item-split-rate');
-                const limit = parseFloat(limitInput?.value) || 0;
-                const rate = parseFloat(rateInput?.value) || 0;
+                rowLimit = parseFloat(limitInput?.value) || 0;
+                rowRate = parseFloat(rateInput?.value) || 0;
                 
-                rowPartAssurance = Math.round(limit * (rate / 100));
+                rowPartAssurance = Math.round(rowLimit * (rowRate / 100));
                 rowPartPatient = subtotal - rowPartAssurance;
             } else if (patientType !== 'PRIVE') {
                 rowPartAssurance = Math.round(subtotal * (coverage / 100));
@@ -608,6 +666,8 @@ function updateBillPreview() {
                 price, 
                 qty, 
                 subtotal,
+                limit: rowLimit,
+                rate: rowRate,
                 partAssurance: rowPartAssurance,
                 partPatient: rowPartPatient
             });
@@ -644,8 +704,9 @@ function updateBillPreview() {
         totalPartPatient = discountedTotal - totalPartAssurance;
         
         items.forEach(item => {
+            const itemDiscountedSubtotal = Math.round(item.subtotal * splitDiscountRatio);
             item.partAssurance = Math.round(item.partAssurance * splitDiscountRatio);
-            item.partPatient = item.subtotal - item.partAssurance; // Ajustement sur le sous-total brut
+            item.partPatient = itemDiscountedSubtotal - item.partAssurance; // Ajustement sur le sous-total net
         });
     }
 
@@ -677,12 +738,13 @@ function updateBillPreview() {
         // En-tête multi-colonnes pour split d'assurance
         tableHeaderHTML = `
             <tr>
-                <th style="width:40%;">ACTES / DESIGNATIONS</th>
-                <th style="width:8%; text-align:center;">QTÉ</th>
-                <th style="width:12%; text-align:right;">P. UNITAIRE</th>
-                <th style="width:14%; text-align:right;">MONTANT CLINIQUE</th>
-                <th style="width:13%; text-align:right;">PART ASSURANCE</th>
-                <th style="width:13%; text-align:right;">PART PATIENT</th>
+                <th style="width:28%; text-align:left; vertical-align:middle;">ACTES / DESIGNATIONS</th>
+                <th style="width:6%; text-align:center; vertical-align:middle;">QTÉ</th>
+                <th style="width:12%; text-align:center; vertical-align:middle; line-height:1.2;">PRIX<br>UNITAIRE</th>
+                <th style="width:13%; text-align:center; vertical-align:middle;">MONTANT CLINIQUE</th>
+                <th style="width:13%; text-align:center; vertical-align:middle;">PLAFOND</th>
+                <th style="width:14%; text-align:center; vertical-align:middle; line-height:1.2;">PART<br>ASSURANCE</th>
+                <th style="width:14%; text-align:center; vertical-align:middle; line-height:1.2;">PART<br>PATIENT</th>
             </tr>
         `;
         
@@ -722,13 +784,15 @@ function updateBillPreview() {
     // Lire les options d'affichage des checkboxes
     const showSig    = document.getElementById('bill-show-sig')?.checked !== false;
     const showCachet = document.getElementById('bill-show-cachet')?.checked !== false;
-    const showDiag   = document.getElementById('bill-show-diag')?.checked || false;
-    const showInterv = document.getElementById('bill-show-interv')?.checked || false;
 
     // Récupérer le diagnostic, l'intervention et le code K depuis les champs du formulaire
     const diagnostic = document.getElementById('bill-diagnostic')?.value?.trim() || '';
     const intervention = document.getElementById('bill-intervention')?.value?.trim() || '';
     const kCodeValue = document.getElementById('bill-k-code')?.value?.trim() || '';
+
+    // Lire l'état des options d'affichage diagnostic / intervention
+    const showDiag = document.getElementById('bill-show-diag')?.checked || false;
+    const showInterv = document.getElementById('bill-show-interv')?.checked || false;
 
     // Récupérer le médecin sélectionné pour le cachet/signature
     const medecinSel = (typeof getSelectedMedecin === 'function') ? getSelectedMedecin() : null;
@@ -819,6 +883,7 @@ function updateBillPreview() {
                 <span>Total à Acquitter Patient :</span>
                 <span style="font-size:1.02rem; font-weight:900;">${formatCurrency(totalPatientShare)}</span>
             </div>
+            ${billType === 'DEFINITIF' ? `
             <div class="summary-row" style="border-top:1px dashed #e2e8f0; padding-top:3px; margin-top:3px; font-size:0.78rem; color:#718096;">
                 <span>Mode de Règlement :</span>
                 <strong>${paymentName}</strong>
@@ -835,19 +900,19 @@ function updateBillPreview() {
             <div class="summary-row" style="font-size:0.8rem; color:#38a169; font-weight:bold; text-transform:uppercase;">
                 <span>Statut Patient :</span>
                 <strong style="font-size:0.85rem;">SOLDÉ ✅</strong>
-            </div>`}`;
+            </div>`}` : ''}`;
     }
 
-    const proformaMentionsBlock = billType === 'PROFORMA' ? window.MercyFiatTemplates.getProformaNotesHtml() : '';
+    const proformaMentionsBlock = (billType === 'PROFORMA' || billType === 'DETAIL_ASSUR') ? window.MercyFiatTemplates.getProformaNotesHtml() : '';
 
     preview.innerHTML = `
-        <div style="font-family:'Times New Roman', Times, serif; color:#1a202c; background:white; display:flex; flex-direction:column; min-height:28.5cm; box-sizing:border-box;">
+        <div class="bill-page" style="font-family:'Times New Roman', Times, serif; color:#1a202c; background:white; display:flex; flex-direction:column; min-height:28.5cm; box-sizing:border-box;">
 
         <!-- EN-TÊTE -->
         ${window.MercyFiatTemplates.getPrintHeaderHtml()}
 
         <!-- INFO PATIENT -->
-        <div style="display:flex; justify-content:space-between; margin-bottom:10px; font-size:0.83rem; color:#1a202c;">
+        <div style="display:flex; justify-content:space-between; margin-bottom:6px; font-size:0.83rem; color:#1a202c;">
             <div>
                 <p style="margin:0 0 3px 0;"><strong>Patient :</strong> ${patientNom} ${patientPrenom}</p>
                 ${patientType === 'PRIVE' ? `
@@ -871,21 +936,22 @@ function updateBillPreview() {
         ${diagBlock}
 
         <!-- TITRE -->
-        <div style="text-align:center; font-size:1.05rem; font-weight:900; text-transform:uppercase; color:#1a202c; letter-spacing:1.5px; border-top:2px solid #2d3748; border-bottom:2px solid #2d3748; padding:4px 0; margin-bottom:12px;">
+        <div style="text-align:center; font-size:1.05rem; font-weight:900; text-transform:uppercase; color:#1a202c; letter-spacing:1.5px; border-top:2px solid #2d3748; border-bottom:2px solid #2d3748; padding:4px 0; margin-bottom:8px;">
             ${docTitle}
         </div>
 
         <!-- TABLEAU DES PRESTATIONS -->
-        <table style="width:100%; border-collapse:collapse; margin-bottom:12px; font-size:0.82rem;">
+        <table style="width:100%; border-collapse:collapse; margin-bottom:6px; font-size:0.82rem;">
             <thead>
                 <tr style="background:#2d3748; color:#ffffff;">
                     ${useSplit && patientType !== 'PRIVE' ? `
-                    <th style="padding:6px 10px; text-align:left; font-weight:700; border:1px solid #2d3748; width:38%;">ACTES / DÉSIGNATIONS</th>
-                    <th style="padding:6px 10px; text-align:center; font-weight:700; border:1px solid #2d3748; width:7%;">QTÉ</th>
-                    <th style="padding:6px 10px; text-align:right; font-weight:700; border:1px solid #2d3748; width:12%;">P. UNITAIRE</th>
-                    <th style="padding:6px 10px; text-align:right; font-weight:700; border:1px solid #2d3748; width:14%;">MONTANT</th>
-                    <th style="padding:6px 10px; text-align:right; font-weight:700; border:1px solid #2d3748; width:14%;">PART ASSUR.</th>
-                    <th style="padding:6px 10px; text-align:right; font-weight:700; border:1px solid #2d3748; width:15%;">PART PATIENT</th>
+                    <th style="padding:4px 6px; text-align:left; vertical-align:middle; font-weight:700; border:1px solid #2d3748; width:28%;">ACTES / DÉSIGNATIONS</th>
+                    <th style="padding:4px 6px; text-align:center; vertical-align:middle; font-weight:700; border:1px solid #2d3748; width:6%;">QTÉ</th>
+                    <th style="padding:4px 6px; text-align:center; vertical-align:middle; font-weight:700; border:1px solid #2d3748; width:12%; line-height:1.2;">PRIX<br>UNITAIRE</th>
+                    <th style="padding:4px 6px; text-align:center; vertical-align:middle; font-weight:700; border:1px solid #2d3748; width:13%;">MONTANT</th>
+                    <th style="padding:4px 6px; text-align:center; vertical-align:middle; font-weight:700; border:1px solid #2d3748; width:13%;">PLAFOND</th>
+                    <th style="padding:4px 6px; text-align:center; vertical-align:middle; font-weight:700; border:1px solid #2d3748; width:14%; line-height:1.2;">PART<br>ASSURANCE</th>
+                    <th style="padding:4px 6px; text-align:center; vertical-align:middle; font-weight:700; border:1px solid #2d3748; width:14%; line-height:1.2;">PART<br>PATIENT</th>
                     ` : `
                     <th style="padding:6px 10px; text-align:left; font-weight:700; border:1px solid #2d3748; width:52%;">Désignation des Prestations et Consommables</th>
                     <th style="padding:6px 10px; text-align:center; font-weight:700; border:1px solid #2d3748; width:10%;">Qté</th>
@@ -895,7 +961,7 @@ function updateBillPreview() {
                 </tr>
             </thead>
             <tbody>
-                ${items.length === 0 ? `<tr><td colspan="${useSplit && patientType !== 'PRIVE' ? 6 : 4}" style="text-align:center; font-style:italic; padding:6px; border:1px solid #cbd5e0; color:#2d3748;">Aucun frais renseigné.</td></tr>` :
+                ${items.length === 0 ? `<tr><td colspan="${useSplit && patientType !== 'PRIVE' ? 7 : 4}" style="text-align:center; font-style:italic; padding:6px; border:1px solid #cbd5e0; color:#2d3748;">Aucun frais renseigné.</td></tr>` :
                   items.map((item, idx) => `
                     <tr style="background:${idx % 2 === 0 ? '#ffffff' : '#f7f8fa'};">
                         <td style="padding:5px 10px; border:1px solid #cbd5e0; color:#1a202c; font-weight:500;">${item.name}</td>
@@ -903,6 +969,7 @@ function updateBillPreview() {
                         <td style="padding:5px 10px; text-align:right; border:1px solid #cbd5e0; color:#1a202c;">${formatGridNumber(item.price)}</td>
                         <td style="padding:5px 10px; text-align:right; border:1px solid #cbd5e0; color:#1a202c; font-weight:700;">${formatGridNumber(item.subtotal)}</td>
                         ${useSplit && patientType !== 'PRIVE' ? `
+                        <td style="padding:5px 10px; text-align:right; border:1px solid #cbd5e0; color:#4a5568; font-weight:600;">${formatGridNumber(item.limit)}</td>
                         <td style="padding:5px 10px; text-align:right; border:1px solid #cbd5e0; color:#2980b9; font-weight:600;">${formatGridNumber(billType === 'PROFORMA' ? 0 : item.partAssurance)}</td>
                         <td style="padding:5px 10px; text-align:right; border:1px solid #cbd5e0; color:#c0392b; font-weight:600;">${formatGridNumber(billType === 'PROFORMA' ? 0 : item.partPatient)}</td>
                         ` : ''}
@@ -910,23 +977,23 @@ function updateBillPreview() {
             </tbody>
         </table>
 
-        <!-- BLOC RÉSUMÉ FINANCIER + SOMME EN LETTRES SOUS LE TABLEAU -->
-        <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:12px; width:100%; gap:12px;">
-            <!-- Gauche : Somme en lettres -->
-            <div style="flex:1; font-size:0.86rem; color:#2d3748; text-align:left; padding-bottom:8px;">
-                <p style="margin:0 0 3px 0; color:#4a5568; font-size:0.75rem;">Arrêtée la présente facture à la somme de :</p>
-                <p style="font-weight:900; text-transform:uppercase; color:#1a202c; margin:0; font-size:0.9rem; line-height:1.45; font-family:'Times New Roman', Times, serif;">
+        <!-- RÉSUMÉ FINANCIER + SOMME EN LETTRES SOUS LE TABLEAU (côte à côte, alignés en haut) -->
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:6px; width:100%; gap:12px;">
+            <!-- Gauche : Somme en lettres (alignée en haut avec le cadre) -->
+            <div style="flex:1; padding:8px 12px; border-left:4px solid #2d3748; background:#fafbfc; border-radius:2px; font-size:0.84rem; color:#2d3748;">
+                <span style="color:#4a5568; font-size:0.75rem; display:block; margin-bottom:2px;">Arrêtée la présente facture à la somme de :</span>
+                <span style="font-weight:900; text-transform:uppercase; color:#1a202c; font-size:0.9rem; line-height:1.45; font-family:'Times New Roman', Times, serif; display:block;">
                     ${numberToFrenchWords(billType === 'PROFORMA' && patientType !== 'PRIVE' ? discountedTotal : totalPatientShare)} Francs CFA
-                </p>
+                </span>
             </div>
             <!-- Droite : Résumé financier -->
-            <div class="bill-summary" style="border:1.5px solid #c3d9f0; border-radius:8px; padding:10px 14px; width:320px; flex-shrink:0; background:linear-gradient(135deg, #f0f6fc, #f8fbff); box-sizing:border-box; box-shadow:0 2px 8px rgba(44,82,130,0.08);">
+            <div class="bill-summary" style="border:1.5px solid #c3d9f0; border-radius:0 0 8px 8px; border-top:2px solid #2d3748; padding:8px 14px 10px 14px; min-width:370px; max-width:420px; flex-shrink:0; background:linear-gradient(135deg, #f0f6fc, #f8fbff); box-sizing:border-box; box-shadow:0 3px 8px rgba(44,82,130,0.10);">
                 ${summaryHtml}
             </div>
         </div>
 
         <!-- BLOC PIED DE FACTURE (Collé au bas de la page A4, aligné sur les mêmes bords que le tableau) -->
-        <div class="bill-page-bottom-block" style="margin-top:8px; display:flex; flex-direction:column; gap:4px; page-break-inside:avoid; width:100%;">
+        <div class="bill-page-bottom-block" style="margin-top:4px; display:flex; flex-direction:column; gap:4px; page-break-inside:avoid; width:100%;">
 
         <!-- NOTES & CONDITIONS (gauche) + SIGNATURE (droite) côte à côte -->
         <div style="display:flex; justify-content:space-between; align-items:flex-end; width:100%; gap:10px;">
@@ -938,7 +1005,7 @@ function updateBillPreview() {
             </div>` : `<div style="flex:1;"></div>`}
 
             <!-- Droite : Signature / Cachet (38%) -->
-            <div style="width:${proformaMentionsBlock ? '38%' : '100%'}; text-align:center; box-sizing:border-box;">
+            <div style="width:38%; margin-left:auto; text-align:center; box-sizing:border-box;">
                 <p style="font-size:0.85rem; font-weight:800; color:#1a202c; margin-top:0; margin-bottom:0;">Pour le Centre</p>
                 <div class="signature-seal-container">
                     ${showCachet ? `<img src="${cachetSrc}" class="seal-img" id="preview-bill-seal" style="display:block;">` : ''}
@@ -1057,10 +1124,12 @@ function toggleBillingSplitMode() {
             const limitInput = row.querySelector('.item-split-limit');
             const rateInput = row.querySelector('.item-split-rate');
             
-            if (limitInput && (limitInput.value === "" || parseFloat(limitInput.value) === 0)) {
+            const limitVal = parseFloat(limitInput?.value);
+            if (limitInput && (limitInput.value === "" || isNaN(limitVal))) {
                 limitInput.value = subtotal;
             }
-            if (rateInput && (rateInput.value === "" || parseFloat(rateInput.value) === 0)) {
+            const rateVal = parseFloat(rateInput?.value);
+            if (rateInput && (rateInput.value === "" || isNaN(rateVal))) {
                 rateInput.value = document.getElementById('bill-coverage').value || 80;
             }
             
@@ -1147,15 +1216,23 @@ function handleBillTypeChange() {
         }
     }
     
-    if (type === 'DETAIL_ASSUR') {
+    const patientType = document.getElementById('bill-patient-type')?.value || "PRIVE";
+    if (patientType === 'PRIVE') {
         if (splitCheckbox) {
-            splitCheckbox.checked = true;
+            splitCheckbox.checked = false;
             toggleBillingSplitMode();
         }
-    } else if (type === 'DEFINITIF' && document.getElementById('bill-patient-type').value !== 'PRIVE') {
-        if (splitCheckbox) {
-            splitCheckbox.checked = true;
-            toggleBillingSplitMode();
+    } else {
+        if (type === 'DETAIL_ASSUR' || type === 'DEFINITIF') {
+            if (splitCheckbox) {
+                splitCheckbox.checked = true;
+                toggleBillingSplitMode();
+            }
+        } else {
+            if (splitCheckbox) {
+                splitCheckbox.checked = false;
+                toggleBillingSplitMode();
+            }
         }
     }
 }
@@ -1163,9 +1240,11 @@ window.handleBillTypeChange = handleBillTypeChange;
 
 // Permet d'imprimer ou d'exporter une facture/proforma directement depuis le registre général
 function printBillDirectlyFromRegister(itemId) {
+    window.isLoadingRecentItem = true;
     const bill = savedBills.find(b => b.id === itemId);
     if (!bill) {
         alert("Facture introuvable.");
+        window.isLoadingRecentItem = false;
         return;
     }
     
@@ -1187,7 +1266,7 @@ function printBillDirectlyFromRegister(itemId) {
     let effectiveInsurance  = bill.insurance  || 'PRIVE';
     let effectiveCoverage   = bill.coverage   || 0;
     const partner = window.MercyFiatDB?.INSURERS?.find(ins => ins.id === effectiveInsurance);
-    let effectivePatientType = bill.patientType || ((partner && partner.category === 'Sinistres & Accidents Auto') ? 'SINISTRE' : (effectiveInsurance === 'PRIVE' ? 'PRIVE' : 'MALADIE'));
+    let effectivePatientType = bill.patientType || ((partner && partner.category === 'Sinistres & Accidents Auto') ? 'SINISTRE' : ((!effectiveInsurance || effectiveInsurance === 'PRIVE') ? 'PRIVE' : 'MALADIE'));
     let effectiveUseSplit    = bill.useSplit   || false;
 
     const isInsuredBillType = (bill.type === 'DETAIL_ASSUR' || bill.type === 'DEFINITIF');
@@ -1322,6 +1401,7 @@ function printBillDirectlyFromRegister(itemId) {
     }
     
     window.activeBillReference = bill.reference || '';
+    window.isLoadingRecentItem = false;
     
     if (typeof openPrintPreview === 'function') {
         openPrintPreview('billing');

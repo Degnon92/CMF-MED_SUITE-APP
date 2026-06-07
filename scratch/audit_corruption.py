@@ -2,7 +2,7 @@ import json
 import os
 import re
 
-desktop_dir = r"c:\Users\Degnon\Documents\2.MERCY FIAT CLINIQUE\2. Dr Gipsy\MercyFiatMedSuiteDesktop"
+desktop_dir = r"c:\Users\Farus\Documents\2.MERCY FIAT CLINIQUE\2. Dr Gipsy\MercyFiatMedSuiteDesktop"
 docs_path = os.path.join(desktop_dir, "documents_db.json")
 real_data_path = os.path.join(desktop_dir, "real_data.js")
 

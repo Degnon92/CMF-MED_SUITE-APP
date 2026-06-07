@@ -443,9 +443,9 @@
                                 <!-- Card 3: Réduction & Plafonds d'Assurance -->
                                 <div class="form-card">
                                     <div class="form-group col-12 discount-wrapper">
-                                        <label style="margin-bottom:0; font-weight:700; color:var(--text-primary); display:flex; align-items:center; gap:5px;">🎁 Réduction Clinique Accordée</label>
+                                        <label for="bill-discount-type" style="margin-bottom:0; font-weight:700; color:var(--text-primary); display:flex; align-items:center; gap:5px;">🎁 Réduction Clinique Accordée</label>
                                         <div style="display:flex; gap:10px; align-items:center; width:100%;">
-                                            <select id="bill-discount-type" onchange="updateBillDiscountDisplay(); updateBillPreview();" style="width:40%; padding:8px; border-radius:var(--radius-sm); border:1px solid var(--border-color); font-weight:600; cursor:pointer;">
+                                            <select id="bill-discount-type" title="Type de remise" onchange="updateBillDiscountDisplay(); updateBillPreview();" style="width:40%; padding:8px; border-radius:var(--radius-sm); border:1px solid var(--border-color); font-weight:600; cursor:pointer;">
                                                 <option value="PERCENT">% (Pourcentage)</option>
                                                 <option value="AMOUNT">FCFA (Montant Fixe)</option>
                                             </select>
@@ -544,11 +544,11 @@
                                     Afficher Cachet
                                 </label>
                                 <label style="display:inline-flex; align-items:center; gap:7px; font-weight:600; cursor:pointer; font-size:0.82rem; color:var(--text-primary);">
-                                    <input type="checkbox" id="bill-show-diag" onchange="updateBillPreview()" style="width:16px;height:16px;cursor:pointer;margin:0;">
+                                    <input type="checkbox" id="bill-show-diag" checked onchange="updateBillPreview()" style="width:16px;height:16px;cursor:pointer;margin:0;">
                                     Afficher Diagnostic
                                 </label>
                                 <label style="display:inline-flex; align-items:center; gap:7px; font-weight:600; cursor:pointer; font-size:0.82rem; color:var(--text-primary);">
-                                    <input type="checkbox" id="bill-show-interv" onchange="updateBillPreview()" style="width:16px;height:16px;cursor:pointer;margin:0;">
+                                    <input type="checkbox" id="bill-show-interv" checked onchange="updateBillPreview()" style="width:16px;height:16px;cursor:pointer;margin:0;">
                                     Afficher Intervention
                                 </label>
                             </div>
@@ -607,14 +607,20 @@
                     <!-- Panneau de rédaction / Formulaire -->
                     <div class="card form-panel" style="display:flex; flex-direction:column; gap:16px; overflow-y:auto;">
 
-                        <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-color); padding-bottom:10px; margin-bottom: 5px;">
+                        <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-color); padding-bottom:10px; margin-bottom: 5px; flex-wrap:wrap; gap:8px;">
                             <h3 style="font-weight:800; font-size:1.1rem; color:#2d3748; margin:0; display:flex; align-items:center; gap:8px;">
                                 <span style="font-size:1.2rem;">📋</span> Génération Automatique de Rapports Médicaux
                             </h3>
-                            <!-- Commutateur de Layout Premium -->
-                            <div class="layout-toggle-group">
-                                <button type="button" class="layout-toggle-btn active" id="layout-toggle-documents-split" onclick="setEditorLayout('documents', 'split')" title="Écran Partagé">🌓 Écran Partagé</button>
-                                <button type="button" class="layout-toggle-btn" id="layout-toggle-documents-focus" onclick="setEditorLayout('documents', 'focus')" title="Saisie Large (Focus Mode)">🖥️ Saisie Large</button>
+                            <div style="display:flex; align-items:center; gap:10px;">
+                                <button type="button" class="btn" id="btn-header-reset-doc" onclick="resetDocEditorForm()" style="background:linear-gradient(135deg,#38b2ac,#2f9e97); color:white; font-weight:800; font-size:0.82rem; padding:7px 16px; border-radius:8px; border:none; cursor:pointer; box-shadow:0 2px 8px rgba(56,178,172,0.25); display:flex; align-items:center; gap:6px; white-space:nowrap;" title="Créer un nouveau document de zéro">
+                                    <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2.5" fill="none"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                    Nouveau Document
+                                </button>
+                                <!-- Commutateur de Layout Premium -->
+                                <div class="layout-toggle-group">
+                                    <button type="button" class="layout-toggle-btn active" id="layout-toggle-documents-split" onclick="setEditorLayout('documents', 'split')" title="Écran Partagé">🌓 Écran Partagé</button>
+                                    <button type="button" class="layout-toggle-btn" id="layout-toggle-documents-focus" onclick="setEditorLayout('documents', 'focus')" title="Saisie Large (Focus Mode)">🖥️ Saisie Large</button>
+                                </div>
                             </div>
                         </div>
 
@@ -655,10 +661,10 @@
 
                                     <!-- AUTO-REMPLISSAGE PATIENT -->
                                     <div class="form-group col-12" style="background:linear-gradient(135deg,rgba(56,178,172,0.08),rgba(255,255,255,0.9)); padding:12px 14px; border-radius:var(--radius-md); border:1px solid rgba(56,178,172,0.3);">
-                                        <label style="font-weight:800; color:var(--accent-teal); font-size:0.83rem; display:flex; align-items:center; gap:5px; margin-bottom:7px;">
+                                        <label for="doc-patient-selector" style="font-weight:800; color:var(--accent-teal); font-size:0.83rem; display:flex; align-items:center; gap:5px; margin-bottom:7px;">
                                             🔍 Auto-remplissage depuis un patient existant
                                         </label>
-                                        <select id="doc-patient-selector" style="width:100%; font-size:0.85rem;" onchange="autoFillFromPatient()">
+                                        <select id="doc-patient-selector" title="Sélectionner un patient" style="width:100%; font-size:0.85rem;" onchange="autoFillFromPatient()">
                                             <option value="">— Choisir un patient pour préremplir le rapport —</option>
                                         </select>
                                         <span style="font-size:0.69rem; color:var(--text-secondary); font-style:italic; display:block; margin-top:4px;">Les données (nom, âge, diagnostic, assurance) sont chargées automatiquement.</span>
@@ -880,8 +886,8 @@
                             
                             <!-- Sélecteur médecin -->
                             <div style="margin-bottom:10px;">
-                                <label style="font-size:0.72rem; color:var(--text-secondary); font-weight:600; display:block; margin-bottom:4px;">👨‍⚕️ Choisir le médecin signataire :</label>
-                                <select id="doc-medecin-select" style="width:100%; font-size:0.83rem; padding:6px 10px; border-radius:var(--radius-sm); border:1px solid var(--border-color); background:var(--bg-card); color:var(--text-primary); font-weight:600;">
+                                <label for="doc-medecin-select" style="font-size:0.72rem; color:var(--text-secondary); font-weight:600; display:block; margin-bottom:4px;">👨‍⚕️ Choisir le médecin signataire :</label>
+                                <select id="doc-medecin-select" title="Choisir le médecin signataire" style="width:100%; font-size:0.83rem; padding:6px 10px; border-radius:var(--radius-sm); border:1px solid var(--border-color); background:var(--bg-card); color:var(--text-primary); font-weight:600;">
                                     <!-- Rempli par documents.js -->
                                 </select>
                             </div>
@@ -890,11 +896,11 @@
                             <div class="signature-preview-card">
                                 <div style="flex:1; text-align:center;">
                                     <p style="font-size:0.68rem; color:var(--text-secondary); margin-bottom:3px; font-weight:600;">CACHET</p>
-                                    <img id="cachet-preview-img" src="assets/cachet_centre.png" style="max-height:50px; max-width:80px; object-fit:contain;">
+                                    <img id="cachet-preview-img" alt="Aperçu du cachet" title="Aperçu du cachet" src="assets/cachet_centre.png" style="max-height:50px; max-width:80px; object-fit:contain;">
                                 </div>
                                 <div style="flex:1; text-align:center; border-left:1px solid var(--border-color); padding-left:12px;">
                                     <p style="font-size:0.68rem; color:var(--text-secondary); margin-bottom:3px; font-weight:600;">SIGNATURE</p>
-                                    <img id="sig-preview-img" src="assets/signature.png" style="max-height:50px; max-width:80px; object-fit:contain;">
+                                    <img id="sig-preview-img" alt="Aperçu de la signature" title="Aperçu de la signature" src="assets/signature.png" style="max-height:50px; max-width:80px; object-fit:contain;">
                                 </div>
                                 <div style="flex:1; text-align:left; border-left:1px solid var(--border-color); padding-left:10px;">
                                     <p id="sig-preview-nom" style="font-size:0.78rem; font-weight:800; color:var(--text-primary); margin:0 0 2px 0;">Dr Gipsy AGAVOEDO</p>

@@ -7,7 +7,7 @@ from docx.oxml.ns import qn
 from datetime import datetime
 
 # File paths
-workspace_dir = r"c:\Users\Degnon\Documents\2.MERCY FIAT CLINIQUE\2. Dr Gipsy"
+workspace_dir = r"c:\Users\Farus\Documents\2.MERCY FIAT CLINIQUE\2. Dr Gipsy"
 docx_path = os.path.join(workspace_dir, "RAPPORT HOSPI CMF", "RAPPORT D'HOSPI CMF.docx")
 excel_path = os.path.join(workspace_dir, "EXEMPLAIRE PROFORMA.xlsx")
 
@@ -88,19 +88,36 @@ months_map = {
 }
 
 def parse_french_date(text):
+    if not text:
+        return None
     m_slashes = re.search(r"(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})", text)
     if m_slashes:
         day = f"{int(m_slashes.group(1)):02d}"
         month = f"{int(m_slashes.group(2)):02d}"
         year = m_slashes.group(3)
         return f"{year}-{month}-{day}"
-    m_words = re.search(r"le\s+(\d{1,2})\s+([a-zA-Zéûûôâêîñéèàç]+)\s+(\d{4})", text, re.IGNORECASE)
+    m_words = re.search(r"le\s+(\d{1,2})\s+(\S+)\s+(\d{4})", text, re.IGNORECASE)
     if m_words:
         day = f"{int(m_words.group(1)):02d}"
-        month_name = m_words.group(2).lower()
+        m_name = m_words.group(2).lower()
         year = m_words.group(3)
-        month = months_map.get(month_name, "02")
-        return f"{year}-{month}-{day}"
+        
+        month_val = None
+        if m_name.startswith("juin"):
+            month_val = 6
+        elif m_name.startswith("juil"):
+            month_val = 7
+        else:
+            months_prefixes = {
+                "jan": 1, "fev": 2, "fév": 2, "mar": 3, "avr": 4, "mai": 5, "jui": 6,
+                "ao": 8, "sep": 9, "oct": 10, "nov": 11, "dec": 12, "déc": 12
+            }
+            for pref, val in months_prefixes.items():
+                if m_name.startswith(pref):
+                    month_val = val
+                    break
+        if month_val:
+            return f"{year}-{month_val:02d}-{day}"
     return None
 
 def clean_patient_name(name):
@@ -391,7 +408,7 @@ for sheetname in wb.sheetnames:
     
     # Scan the top part of sheet for metadata
     for r in range(1, 35):
-        for c in range(1, 6):
+        for c in range(1, 13):
             val = sheet.cell(r, c).value
             if not val or not isinstance(val, str):
                 continue
@@ -399,7 +416,7 @@ for sheetname in wb.sheetnames:
             
             if val_clean.lower().startswith("patient:") or val_clean.lower().startswith("patient :"):
                 patient_name = val_clean.split(":", 1)[1].strip()
-            elif val_clean.lower().startswith("client:") or val_clean.lower().startswith("client :"):
+            elif val_clean.lower().startswith("client:") or val_clean.lower().startswith("client :") or val_clean.lower().startswith("assurance:") or val_clean.lower().startswith("assurance :"):
                 insurance = map_insurance(val_clean.split(":", 1)[1].strip())
             elif val_clean.lower().startswith("intervention:") or val_clean.lower().startswith("intervention :"):
                 intervention = val_clean.split(":", 1)[1].strip()
@@ -485,6 +502,16 @@ for sheetname in wb.sheetnames:
         gross_total = 210000
         items = [{"name": "Frais de soins cliniques standards", "price": 210000, "qty": 1, "subtotal": 210000}]
         
+    # Fallback si l'assurance n'est pas détectée dans les cellules mais est présente dans le nom de l'onglet
+    if insurance == "PRIVE":
+        sheet_insurance = None
+        for ins_id in ["SANLAM", "ASCOMA", "SUNU", "NSIA", "ATLANTIQUE", "AFG", "LOTTO", "COTON", "NOBILA", "GRAS SAVOYE", "OLEA", "TRANSVIE", "SOBEMAP", "PORT_AUTONOME_COTONOU"]:
+            if ins_id.lower().replace("_", "") in sheetname.lower().replace("-", "").replace(" ", ""):
+                sheet_insurance = ins_id
+                break
+        if sheet_insurance:
+            insurance = sheet_insurance
+            
     coverage = 80 if insurance != "PRIVE" else 0
     part_assurance = 0
     part_patient = gross_total

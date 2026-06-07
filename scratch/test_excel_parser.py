@@ -1,7 +1,7 @@
 import openpyxl
 import re
 
-wb_path = r"c:\Users\Degnon\Documents\2.MERCY FIAT CLINIQUE\2. Dr Gipsy\EXEMPLAIRE PROFORMA.xlsx"
+wb_path = r"c:\Users\Farus\Documents\2.MERCY FIAT CLINIQUE\2. Dr Gipsy\EXEMPLAIRE PROFORMA.xlsx"
 wb = openpyxl.load_workbook(wb_path, data_only=True)
 
 def parse_sheet(sheet):

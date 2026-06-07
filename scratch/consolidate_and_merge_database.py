@@ -5,7 +5,7 @@ import openpyxl
 import difflib
 import unicodedata
 
-workspace_dir = r"c:\Users\Degnon\Documents\2.MERCY FIAT CLINIQUE\2. Dr Gipsy"
+workspace_dir = r"c:\Users\Farus\Documents\2.MERCY FIAT CLINIQUE\2. Dr Gipsy"
 app_dir = os.path.join(workspace_dir, "MercyFiatMedSuiteDesktop")
 
 patients_db_path = os.path.join(app_dir, "patients_db.json")

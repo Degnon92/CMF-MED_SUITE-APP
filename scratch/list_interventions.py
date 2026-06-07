@@ -1,7 +1,7 @@
 import re
 import os
 
-database_path = r"c:\Users\Degnon\Documents\2.MERCY FIAT CLINIQUE\2. Dr Gipsy\MercyFiatMedSuiteDesktop\database.js"
+database_path = r"c:\Users\Farus\Documents\2.MERCY FIAT CLINIQUE\2. Dr Gipsy\MercyFiatMedSuiteDesktop\database.js"
 
 with open(database_path, "r", encoding="utf-8") as f:
     content = f.read()

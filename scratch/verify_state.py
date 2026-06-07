@@ -2,7 +2,7 @@ import json
 import os
 import re
 
-desktop = r"c:\Users\Degnon\Documents\2.MERCY FIAT CLINIQUE\2. Dr Gipsy\MercyFiatMedSuiteDesktop"
+desktop = r"c:\Users\Farus\Documents\2.MERCY FIAT CLINIQUE\2. Dr Gipsy\MercyFiatMedSuiteDesktop"
 
 # ── 1. documents_db.json ─────────────────────────────────────────────────────
 print("=" * 60)

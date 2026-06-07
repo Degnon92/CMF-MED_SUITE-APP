@@ -3,7 +3,7 @@ from PIL import Image
 import numpy as np
 
 def inspect_others():
-    brain_dir = r"C:\Users\Degnon\.gemini\antigravity-ide\brain\7cd223db-09d4-4d6d-b877-ad294933360a"
+    brain_dir = r"C:\Users\Farus\.gemini\antigravity-ide\brain\7cd223db-09d4-4d6d-b877-ad294933360a"
     for fn in ["media__1780516233833.png", "media__1780515659220.png", "media__1780515749271.png"]:
         p = os.path.join(brain_dir, fn)
         if os.path.exists(p):

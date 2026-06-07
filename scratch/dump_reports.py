@@ -1,7 +1,7 @@
 import docx
 from docx.oxml.ns import qn
 
-file_path = r"c:\Users\Degnon\Documents\2.MERCY FIAT CLINIQUE\2. Dr Gipsy\RAPPORT CONS\RAPPORT DE CONSULTATION CMF.docx"
+file_path = r"c:\Users\Farus\Documents\2.MERCY FIAT CLINIQUE\2. Dr Gipsy\RAPPORT CONS\RAPPORT DE CONSULTATION CMF.docx"
 doc = docx.Document(file_path)
 tb_texts = []
 root = doc.element

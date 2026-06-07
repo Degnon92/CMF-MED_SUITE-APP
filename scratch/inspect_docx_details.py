@@ -1,7 +1,7 @@
 import docx
 import os
 
-docx_path = r"c:\Users\Degnon\Documents\2.MERCY FIAT CLINIQUE\2. Dr Gipsy\RAPPORT CONS\RAPPORT CS BATIA IBRAHIM.docx"
+docx_path = r"c:\Users\Farus\Documents\2.MERCY FIAT CLINIQUE\2. Dr Gipsy\RAPPORT CONS\RAPPORT CS BATIA IBRAHIM.docx"
 doc = docx.Document(docx_path)
 print(f"Number of paragraphs: {len(doc.paragraphs)}")
 print(f"Number of tables: {len(doc.tables)}")

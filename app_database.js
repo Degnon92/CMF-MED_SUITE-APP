@@ -2,10 +2,27 @@
    app_database.js - Persistance Physique, Nettoyage & Assainissement
    ============================================================ */
 
-// 1. Fonctions de nettoyage clinique des patients, diagnostics et interventions
 function cleanPatientName(name) {
     if (!name || typeof name !== 'string') return '';
-    let clean = name.trim();
+    
+    // 0. Enlever tout contenu entre parenthèses
+    let clean = name.replace(/\(.*?\)/g, '').trim();
+    
+    // Étape 0 — Nettoyage structurel et préliminaire (rejets de bruit)
+    clean = clean.replace(/\[\d+\]/g, ''); // Supprime les indices de fichier (ex: [1])
+    clean = clean.replace(/^_+/, '');      // Supprime les underscores initiaux
+    clean = clean.replace(/\.docx$/i, ''); // Supprime l'extension .docx
+    clean = clean.replace(/\s*\bHOSPI\b\s*/gi, ' '); // Supprime la mention HOSPI
+    clean = clean.replace(/\s*\bFACTURE\b\s*/gi, ' '); // Supprime la mention FACTURE
+    
+    // Retirer les préfixes CMI, CMC, CMF en début de chaîne
+    clean = clean.replace(/^(?:CMC|CMI|CMF)\b\s*/i, '');
+    
+    // Supprime les dates de type "MOIS 202X" ou "202X" avec word boundary
+    const monthsPattern = '\\b(JANVIER|FEVRIER|MARS|AVRIL|MAI|JUIN|JUILLET|AOUT|SEPTEMBRE|OCTOBRE|NOVEMBRE|DECEMBRE)\\b';
+    clean = clean.replace(new RegExp('\\s*' + monthsPattern + '\\s+\\d{4}', 'gi'), '');
+    clean = clean.replace(/\s*\b\d{4}\b/g, '');
+    clean = clean.trim();
     
     const prefixPatterns = [
         /^(?:CERTIFICAT\s+DE\s+MARIAGE|CERTIFICAT\s+DE\s+NON\s+BEGAIEMENT|CERTIFICAT\s+MEDICAL\s+INITIAL\s+DE\s+CONSTATATION\s+DE\s+COUPS\s+ET\s+BLESSURES|CERTIFICAT\s+MEDICAL\s+POUR\s+COUPS\s+ET\s+BLESSURES|CERTIFICAT\s+MEDICAL\s+DE\s+L[’']ETAT\s+ACTUEL|CERTIFICAT\s+MEDICAL\s+INITIAL|CERTIFICAT\s+MEDICAL|CERTIFICAT\s+MED\s+INITIAL|CERTIFICAT\s+DE\s+REPOS|CERTIFICAT\s+DE\s+REPRISE|CERTIFICAT\s+DE\s+GUERISON|CERTIFICAT\s+DE\s+GUÉRISON|CERTIFICAT\s+DE|CERTIFICAT|RAPPORT\s+MEDICAL|RAPPORT\s+DE\s+MONSIEUR|RAPPORT\s+DE\s+MME|RAPPORT\s+DE|RAPPORT\s+D'HOSPI|RAPPORT\s+D'HOSPITALISATION|RAPPORT\s+DE\s+CONSULTATION|RAPPORT|CRO\s+MODELE|CRO|CMI|MEDICAL|MED\s+INITIAL|GUERISON\s+DE\s+MONSIEUR|GUERISON\s+DE\s+MME|GUERISON\s+DE|GUERISON|GUÉRISON|DECES\s+DE\s+MONSIEUR|DECES\s+DE\s+MME|DECES\s+DE|DECES|DÉCÈS|D'HOSPI\s+TYPE|D'HOSPI|DHOSPI|ATTESTATION\s+DE\s+GUERISON|ATTESTATION\s+DE\s+GUÉRISON|ATTESTATION\s+DE|ATTESTATION)\s+/i
@@ -217,12 +234,29 @@ function sanitizeEntireDatabase() {
         const uniquePatients = [];
         const seenKeys = new Set();
         
+        // Mots-clés administratifs stricts
+        const adminExclusions = ["REPONSE", "TARIFAIRE", "RAPPORT", "DOSSIER", "FACTURE", "MODELE", "CONTRAT", "CURRICULUM", "LETTRE", "ENTETE", "CV", "FEUIL", "SHEET", "TEMPLATE", "NOMÉ", "NOME", "PRENOM", "PRENOMS", "PATIENT", "CLIENT", "DIAGNOSTIC", "INTERVENTION", "TOTAL", "GRAND TOTAL"];
+        
+        // Exclure aussi les corporates/clubs
+        const corpExclusions = ["SOBEMAP", "LOTO FC", "LOTO FOOTBALL", "UNITEVA", "ENERGIE BASKETBALL", "ENERGIE BASKET", "WINSU SPORTS", "MUTUELLE", "ASSURANCE", "SOCIETE", "SOCIÉTÉ"];
+        
         window.MercyFiatDB.PATIENTS.forEach(p => {
             const rawName = p.name || '';
             const cleaned = window.cleanPatientName(rawName);
             if (!cleaned || cleaned.length < 2 || cleaned.length > 40) return;
             
             const key = cleaned.toUpperCase();
+            
+            // Règle de filtrage stricte sur les mots-clés administratifs et corporatifs
+            if (adminExclusions.some(keyword => key.includes(keyword)) || corpExclusions.some(keyword => key.includes(keyword))) {
+                return;
+            }
+            
+            // Rejeter les placeholders de type NOM ou PRENOM avec des points ou des points de suspension
+            if (/\bNOM\b\s*[\.\…\-\_]*/i.test(key) || /\bPRENOM\b/i.test(key) || /\bNOME\b/i.test(key) || /\bPRENOMS\b/i.test(key)) {
+                return;
+            }
+            
             if (!seenKeys.has(key)) {
                 seenKeys.add(key);
                 p.name = cleaned;
@@ -396,7 +430,7 @@ function sanitizeEntireDatabase() {
         customPats = [];
     }
 
-    const adminKeywords = ["ECMV", "ENTETE", "EXAMEN", "EXTRAIT", "FACTURE", "PROFORMA", "PRO FORMA", "FRACTURE", "HEBERGEMENT", "HERNIE", "HYMNE", "INITIAL", "JUIN", "AOUT", "MARS", "FEV", "AVRIL", "KIT OPERATOIRE", "LAVAGE", "LETTRE", "LOGO ENREGISTRE", "MARIAGE", "MEDICAL", "MERCY FIAT GROUP", "NOMS ET PRENOMS", "NON BEGAIEMENT", "OFFRE", "PAGE DE GARDE", "PALPATION", "PHARMACIE", "PLAQUE", "PRESENTATION", "PRESENTEE ET SOUTENUE", "PROGRAMME", "PSEUDARTHROSE", "PTG", "RECU", "REGARDE LETOILE", "SIGNATURE", "STATISTIQUE", "STRATEGIES", "TARIF", "TYPE", "VIS", "VISSAGE", "COLLABORATEURS", "DOSSIER", "SUITES", "PRENOM", "TARIFAIRE", "GRILLE", "IMPLANTS", "CNHU", "TAMOU BIO", "DETAILS", "MODELE", "ANJAN", "BIOLOGIE", "NGAP", "BENIN", "FORMATION", "REUNION", "CONTRAT", "DECHARGE", "MISSION", "STOCK", "IDENTIFICATION", "CLINIQUE MERCY", "MANUEL", "ASSURANCES", "ACTES", "CHIRURGIEN", "AGENDA", "ANTISEPTIQUE", "ASSEMBLE", "CURRICULUM", "CONSENTEMENT", "COMPLEMENTAIRE", "COMPLEXE", "COMPTE RENDU", "MENISCECTOMIE", "DATE OP", "CV", "DEMANDE", "ORGANOGRAMME", "REPONSE", "LISTE", "JANVIER", "FEVRIER", "MARS", "AVRIL", "MAI", "JUIN", "JUILLET", "AOUT", "SEPTEMBRE", "OCTOBRE", "NOVEMBRE", "DECEMBRE", "DISPENSE", "RELANCE", "FACT"];
+    const adminKeywords = ["ECMV", "ENTETE", "EXAMEN", "EXTRAIT", "FACTURE", "PROFORMA", "PRO FORMA", "FRACTURE", "HEBERGEMENT", "HERNIE", "HYMNE", "INITIAL", "JUIN", "AOUT", "MARS", "FEV", "AVRIL", "KIT OPERATOIRE", "LAVAGE", "LETTRE", "LOGO ENREGISTRE", "MARIAGE", "MEDICAL", "MERCY FIAT GROUP", "NOMS ET PRENOMS", "NON BEGAIEMENT", "OFFRE", "PAGE DE GARDE", "PALPATION", "PHARMACIE", "PLAQUE", "PRESENTATION", "PRESENTEE ET SOUTENUE", "PROGRAMME", "PSEUDARTHROSE", "PTG", "RECU", "REGARDE LETOILE", "SIGNATURE", "STATISTIQUE", "STRATEGIES", "TARIF", "TYPE", "VIS", "VISSAGE", "COLLABORATEURS", "DOSSIER", "SUITES", "PRENOM", "TARIFAIRE", "GRILLE", "IMPLANTS", "CNHU", "TAMOU BIO", "DETAILS", "MODELE", "ANJAN", "BIOLOGIE", "NGAP", "BENIN", "FORMATION", "REUNION", "CONTRAT", "DECHARGE", "MISSION", "STOCK", "IDENTIFICATION", "CLINIQUE MERCY", "MANUEL", "ASSURANCES", "ACTES", "CHIRURGIEN", "AGENDA", "ANTISEPTIQUE", "ASSEMBLE", "CURRICULUM", "CONSENTEMENT", "COMPLEMENTAIRE", "COMPLEXE", "COMPTE RENDU", "MENISCECTOMIE", "DATE OP", "CV", "DEMANDE", "ORGANOGRAMME", "REPONSE", "LISTE", "JANVIER", "FEVRIER", "MARS", "AVRIL", "MAI", "JUIN", "JUILLET", "AOUT", "SEPTEMBRE", "OCTOBRE", "NOVEMBRE", "DECEMBRE", "DISPENSE", "RELANCE", "FACT", "RAPPORT"];
     
     const cleanedCustomPats = customPats.filter(p => {
         const rawName = p.name || '';

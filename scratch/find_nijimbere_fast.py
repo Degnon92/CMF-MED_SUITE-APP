@@ -2,7 +2,7 @@ import os
 import openpyxl
 from docx import Document
 
-workspace_dir = r"c:\Users\Degnon\Documents\2.MERCY FIAT CLINIQUE\2. Dr Gipsy"
+workspace_dir = r"c:\Users\Farus\Documents\2.MERCY FIAT CLINIQUE\2. Dr Gipsy"
 
 def search_excel(path):
     try:
