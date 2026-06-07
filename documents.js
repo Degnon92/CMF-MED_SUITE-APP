@@ -237,12 +237,7 @@ const MEDICAL_TEMPLATES = {
         category: "Rapport CS",
         diagnosis: "Rupture du ligament croisé antérieur (LCA) du genou droit",
         fields: ["hospi_days"],
-        text: `Patient : {{PATIENT_NOM}} {{PATIENT_PRENOM}}
-AGE : {{PATIENT_AGE}}
-
-RAPPORT DE CONSULTATION
-
-Je soussigné, Dr Gipsy AGAVOEDO, chirurgien orthopédiste à la Clinique Mercy Fiat de Cotonou, certifie avoir consulté le {{DATE_CONSULT}} {{CIVILITE}} {{PATIENT_NOM}} {{PATIENT_PRENOM}}, âgé(e) de {{PATIENT_AGE}}, pour {{MOTIF_CONSULTATION}}.
+        text: `Je soussigné, Dr Gipsy AGAVOEDO, chirurgien orthopédiste à la Clinique Mercy Fiat de Cotonou, certifie avoir consulté le {{DATE_CONSULT}} {{CIVILITE}} {{PATIENT_NOM}} {{PATIENT_PRENOM}}, âgé(e) de {{PATIENT_AGE}}, pour {{MOTIF_CONSULTATION}}.
 
 {{RAPPEL_ANTECEDENTS}}
 
@@ -265,12 +260,7 @@ Traumatologue`
         category: "Rapport CS",
         diagnosis: "Consultation de suivi post-opératoire",
         fields: [],
-        text: `Patient : {{PATIENT_NOM}} {{PATIENT_PRENOM}}
-AGE : {{PATIENT_AGE}}
-
-RAPPORT DE CONSULTATION
-
-Je soussigné, Dr Gipsy AGAVOEDO, chirurgien orthopédiste à la Clinique Mercy Fiat de Cotonou, certifie avoir consulté le {{DATE_CONSULT}} {{CIVILITE}} {{PATIENT_NOM}} {{PATIENT_PRENOM}}, âgé(e) de {{PATIENT_AGE}}.
+        text: `Je soussigné, Dr Gipsy AGAVOEDO, chirurgien orthopédiste à la Clinique Mercy Fiat de Cotonou, certifie avoir consulté le {{DATE_CONSULT}} {{CIVILITE}} {{PATIENT_NOM}} {{PATIENT_PRENOM}}, âgé(e) de {{PATIENT_AGE}}.
 
 Pour rappel, {{RAPPEL_HOSPITALISATION_OU_ANTECEDENTS}}.
 
@@ -294,11 +284,6 @@ Traumatologue`
         text: `À l'attention du Responsable des Sinistres
 {{COMPAGNIE_ASSURANCE}}
 Référence Sinistre / Dossier : {{NUM_SINISTRE}}
-
-Patient : {{PATIENT_NOM}} {{PATIENT_PRENOM}}
-AGE : {{PATIENT_AGE}}
-
-RAPPORT DE CONSULTATION
 
 Je soussigné, Dr Gipsy AGAVOEDO, chirurgien orthopédiste à la Clinique Mercy Fiat de Cotonou, certifie avoir consulté le {{DATE_CONSULT}} {{CIVILITE}} {{PATIENT_NOM}} {{PATIENT_PRENOM}}, âgé(e) de {{PATIENT_AGE}}, pour {{MOTIF_CONSULTATION}}.
 
@@ -327,12 +312,7 @@ Traumatologue`
         category: "Rapport HOSPI",
         diagnosis: "Fracture déplacée de la clavicule gauche",
         fields: ["date_entree", "date_sortie", "date_intervention", "convalescence"],
-        text: `Patient : {{PATIENT_NOM}} {{PATIENT_PRENOM}}
-AGE : {{PATIENT_AGE}}
-
-RAPPORT D'HOSPITALISATION
-
-Je, soussigné, Dr Gipsy AGAVOEDO, chirurgien orthopédiste à la Clinique Mercy Fiat de Cotonou, certifie avoir hospitalisé du {{DATE_ENTREE}} au {{DATE_SORTIE}} {{CIVILITE}} {{PATIENT_NOM}} {{PATIENT_PRENOM}}, âgé(e) de {{PATIENT_AGE}}, pour {{MOTIF_HOSPITALISATION}}.
+        text: `Je, soussigné, Dr Gipsy AGAVOEDO, chirurgien orthopédiste à la Clinique Mercy Fiat de Cotonou, certifie avoir hospitalisé du {{DATE_ENTREE}} au {{DATE_SORTIE}} {{CIVILITE}} {{PATIENT_NOM}} {{PATIENT_PRENOM}}, âgé(e) de {{PATIENT_AGE}}, pour {{MOTIF_HOSPITALISATION}}.
 
 Il/Elle a bénéficié, le {{DATE_INTERVENTION}}, {{INTERVENTION_REALISEE}}.
 
@@ -356,11 +336,6 @@ Traumatologue`
         text: `À l'attention du Responsable des Sinistres
 {{COMPAGNIE_ASSURANCE}}
 Référence Sinistre / Dossier : {{NUM_SINISTRE}}
-
-Patient : {{PATIENT_NOM}} {{PATIENT_PRENOM}}
-AGE : {{PATIENT_AGE}}
-
-RAPPORT D'HOSPITALISATION
 
 Je, soussigné, Dr Gipsy AGAVOEDO, chirurgien orthopédiste à la Clinique Mercy Fiat de Cotonou, certifie avoir hospitalisé du {{DATE_ENTREE}} au {{DATE_SORTIE}} {{CIVILITE}} {{PATIENT_NOM}} {{PATIENT_PRENOM}}, âgé(e) de {{PATIENT_AGE}}, pour {{MOTIF_HOSPITALISATION}}.
 
@@ -387,11 +362,6 @@ Traumatologue`
 {{COMPAGNIE_ASSURANCE}}
 Référence Sinistre / Dossier : {{NUM_SINISTRE}}
 
-Patient : {{PATIENT_NOM}} {{PATIENT_PRENOM}}
-AGE : {{PATIENT_AGE}}
-
-RAPPORT DE PROLONGATION DE PRISE EN CHARGE
-
 Je soussigné, Dr Gipsy AGAVOEDO, chirurgien orthopédiste à la Clinique Mercy Fiat de Cotonou, certifie que {{CIVILITE}} {{PATIENT_NOM}} {{PATIENT_PRENOM}}, âgé(e) de {{PATIENT_AGE}}, hospitalisé(e) depuis le {{DATE_ENTREE}} pour {{MOTIF_HOSPITALISATION}}, nécessite une prolongation de sa prise en charge médicale.
 
 {{JUSTIFICATION_PROLONGATION}}
@@ -411,12 +381,7 @@ Traumatologue`
         category: "Rapport Médical",
         diagnosis: "Bilan médical général",
         fields: ["date_entree", "date_sortie"],
-        text: `Patient : {{PATIENT_NOM}} {{PATIENT_PRENOM}}
-AGE : {{PATIENT_AGE}}
-
-RAPPORT MÉDICAL
-
-Je soussigné, Dr Gipsy AGAVOEDO, chirurgien orthopédiste à la Clinique Mercy Fiat de Cotonou, certifie avoir pris en charge {{CIVILITE}} {{PATIENT_NOM}} {{PATIENT_PRENOM}}, âgé(e) de {{PATIENT_AGE}}, du {{DATE_ENTREE}} au {{DATE_SORTIE}}, pour {{MOTIF_HOSPITALISATION}}.
+        text: `Je soussigné, Dr Gipsy AGAVOEDO, chirurgien orthopédiste à la Clinique Mercy Fiat de Cotonou, certifie avoir pris en charge {{CIVILITE}} {{PATIENT_NOM}} {{PATIENT_PRENOM}}, âgé(e) de {{PATIENT_AGE}}, du {{DATE_ENTREE}} au {{DATE_SORTIE}}, pour {{MOTIF_HOSPITALISATION}}.
 
 {{RAPPEL_ANTECEDENTS}}
 
@@ -441,9 +406,7 @@ Traumatologue`
         category: "Compte-Rendu Opératoire",
         diagnosis: "Rupture du ligament croisé antérieur (LCA) du genou gauche",
         fields: [],
-        text: `PATIENT : {{PATIENT_NOM}} {{PATIENT_PRENOM}}
-AGE : {{PATIENT_AGE}}
-DATE D'INTERVENTION : {{DATE}}
+        text: `DATE D'INTERVENTION : {{DATE}}
 OPÉRATEUR : Dr Gipsy AGAVOEDO (Chirurgien CMF / Traumatologie)
 ANESTHÉSIE : Rachi-anesthésie / Anesthésie Générale
 
@@ -479,9 +442,7 @@ SUITES OPÉRATOIRES :
         category: "Compte-Rendu Opératoire",
         diagnosis: "Fracture symphysaire mandibulaire déplacée",
         fields: [],
-        text: `PATIENT : {{PATIENT_NOM}} {{PATIENT_PRENOM}}
-AGE : {{PATIENT_AGE}}
-DATE D'INTERVENTION : {{DATE}}
+        text: `DATE D'INTERVENTION : {{DATE}}
 OPÉRATEUR : Dr Gipsy AGAVOEDO (Chirurgien Maxillo-Facial)
 ANESTHÉSIE : Anesthésie Générale avec intubation naso-trachéale
 
@@ -1085,19 +1046,24 @@ function updateDocPreview() {
         </div>
     `;
 
-    const patientInfoHtml = `
+    const category = template ? template.category : 'Rapport CS';
+    const isReport = category.startsWith('Rapport') || category.includes('Opératoire') || category.includes('Compte-Rendu');
+    const isCertif = category === 'Certificat';
+    const isLetter = category === 'Correspondance' || category === 'Lettre';
+
+    const patientInfoHtml = isReport ? `
         <div style="margin-bottom:10px; font-size:0.78rem; font-weight:700; font-family:'Times New Roman',serif;">
             <div><span style="text-transform:uppercase; text-decoration:underline;">Patient :</span> <strong>${patientNom} ${patientPrenom}</strong></div>
             <div><span style="text-decoration:underline;">Age :</span> <strong>${patientAge}</strong></div>
             ${assuranceInfo ? `<div><span style="text-decoration:underline;">Assurance :</span> <strong>${assuranceInfo.toUpperCase()}</strong></div>` : ''}
         </div>
-    `;
+    ` : '';
 
-    const titleHtml = `
+    const titleHtml = (!isLetter) ? `
         <div style="text-align:center; font-size:0.95rem; font-weight:900; text-transform:uppercase; text-decoration:underline; letter-spacing:0.5px; margin:12px 0 14px; font-family:'Times New Roman',serif;">
             ${titleText}
         </div>
-    `;
+    ` : '';
 
     preview.innerHTML = window.MercyFiatTemplates.paginateReport({
         paragraphs: paragraphs,

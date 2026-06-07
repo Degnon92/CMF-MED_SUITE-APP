@@ -187,13 +187,19 @@ function createPatientPrefilledProforma(name, age, diagnosis, intervention, kCod
     
     setTimeout(() => {
         const nomInput = document.getElementById('bill-patient-nom');
+        const prenomInput = document.getElementById('bill-patient-prenom');
         const ageInput = document.getElementById('bill-patient-age');
         const diagInput = document.getElementById('bill-patient-diagnostic');
         const insurerInput = document.getElementById('bill-insurer-select');
         const coverageInput = document.getElementById('bill-coverage-rate');
         const matriculeInput = document.getElementById('bill-patient-matricule');
         
-        if (nomInput) nomInput.value = name;
+        const parts = name.trim().split(' ');
+        const nom = parts[0] || name;
+        const prenom = parts.slice(1).join(' ') || '';
+        
+        if (nomInput) nomInput.value = nom;
+        if (prenomInput) prenomInput.value = prenom;
         if (ageInput) ageInput.value = age;
         if (diagInput) diagInput.value = diagnosis;
         if (insurerInput) {
@@ -223,14 +229,19 @@ function createPatientPrefilledDoc(name, age, diagnosis, intervention, kCode) {
     
     setTimeout(() => {
         const nomInput = document.getElementById('doc-patient-nom');
+        const prenomInput = document.getElementById('doc-patient-prenom');
         const ageInput = document.getElementById('doc-patient-age');
-        const diagInput = document.getElementById('doc-patient-diag');
+        const diagInput = document.getElementById('doc-diagnostique');
+        const intervInput = document.getElementById('doc-intervention');
         
-        if (nomInput) nomInput.value = name;
+        const parts = name.trim().split(' ');
+        const nom = parts[0] || name;
+        const prenom = parts.slice(1).join(' ') || '';
+        
+        if (nomInput) nomInput.value = nom;
+        if (prenomInput) prenomInput.value = prenom;
         if (ageInput) ageInput.value = age;
         if (diagInput) diagInput.value = diagnosis;
-        
-        const intervInput = document.getElementById('doc-patient-interv') || document.getElementById('doc-intervention-nomenclature');
         if (intervInput) intervInput.value = intervention;
         
         if (typeof showNotificationToast === 'function') showNotificationToast('📋 Rapport Médical pré-rempli avec succès');
