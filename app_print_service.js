@@ -209,8 +209,7 @@ function getConsolidatedHTMLForPDF() {
         .seal-img {
             position: absolute !important;
             top: 2px !important;
-            left: 50% !important;
-            transform: translateX(-50%) !important;
+            left: 10px !important;
             width: 85px !important;
             height: auto !important;
             opacity: 1 !important;
@@ -223,9 +222,8 @@ function getConsolidatedHTMLForPDF() {
         .signature-img {
             position: absolute !important;
             bottom: 2px !important;
-            left: 50% !important;
-            transform: translateX(-50%) !important;
-            width: 125px !important;
+            right: 10px !important;
+            width: 110px !important;
             height: auto !important;
             display: block !important;
             z-index: 10 !important;
@@ -567,8 +565,7 @@ function printDOMElement(elementId) {
             .seal-img {
                 position: absolute !important;
                 top: 2px !important;
-                left: 50% !important;
-                transform: translateX(-50%) !important;
+                left: 10px !important;
                 width: 85px !important;
                 height: auto !important;
                 opacity: 1 !important;
@@ -581,9 +578,8 @@ function printDOMElement(elementId) {
             .signature-img {
                 position: absolute !important;
                 bottom: 2px !important;
-                left: 50% !important;
-                transform: translateX(-50%) !important;
-                width: 125px !important;
+                right: 10px !important;
+                width: 110px !important;
                 height: auto !important;
                 display: block !important;
                 z-index: 10 !important;

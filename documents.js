@@ -16,7 +16,9 @@ const MEDECINS_CMF = [
         signature: 'assets/signature.png',
         cachet: 'assets/cachet_centre.png',
         hasSig: true,
-        avatar: '🏥'
+        avatar: '🏥',
+        genre: 'M',
+        signatureDetails: 'Chirurgien Orthopédiste\nTraumatologue'
     },
     {
         id: 'djedou',
@@ -27,7 +29,9 @@ const MEDECINS_CMF = [
         signature: 'assets/signature_djedou.png',
         cachet: 'assets/cachet_djedou.png',
         hasSig: true,
-        avatar: '👨‍⚕️'
+        avatar: '👨‍⚕️',
+        genre: 'M',
+        signatureDetails: 'Chirurgien Orthopédiste\nTraumatologue'
     },
     {
         id: 'hazoume',
@@ -38,7 +42,9 @@ const MEDECINS_CMF = [
         signature: 'assets/signature_hazoume.png',
         cachet: 'assets/cachet_hazoume.png',
         hasSig: true,
-        avatar: '👩‍⚕️'
+        avatar: '👩‍⚕️',
+        genre: 'F',
+        signatureDetails: 'Cardiologue'
     },
     {
         id: 'dah',
@@ -49,7 +55,9 @@ const MEDECINS_CMF = [
         signature: 'assets/signature_dah.png',
         cachet: 'assets/cachet_dah.png',
         hasSig: true,
-        avatar: '👩‍⚕️'
+        avatar: '👩‍⚕️',
+        genre: 'F',
+        signatureDetails: 'Médecin Généraliste'
     },
     {
         id: 'lassissi',
@@ -58,7 +66,9 @@ const MEDECINS_CMF = [
         specialite: 'Cardiologue',
         numONMB: '',
         signature: '', cachet: '', hasSig: false,
-        avatar: '👩‍⚕️'
+        avatar: '👩‍⚕️',
+        genre: 'F',
+        signatureDetails: 'Cardiologue'
     },
     {
         id: 'medenou',
@@ -67,7 +77,9 @@ const MEDECINS_CMF = [
         specialite: 'Endocrinologue Diabétologue',
         numONMB: '',
         signature: '', cachet: '', hasSig: false,
-        avatar: '👨‍⚕️'
+        avatar: '👨‍⚕️',
+        genre: 'M',
+        signatureDetails: 'Endocrinologue Diabétologue'
     },
     {
         id: 'sessinou',
@@ -76,7 +88,9 @@ const MEDECINS_CMF = [
         specialite: 'Neurologue',
         numONMB: '',
         signature: '', cachet: '', hasSig: false,
-        avatar: '👩‍⚕️'
+        avatar: '👩‍⚕️',
+        genre: 'F',
+        signatureDetails: 'Neurologue'
     },
     {
         id: 'chobli',
@@ -85,7 +99,9 @@ const MEDECINS_CMF = [
         specialite: 'Anesthésiste Réanimateur',
         numONMB: '',
         signature: '', cachet: '', hasSig: false,
-        avatar: '👨‍⚕️'
+        avatar: '👨‍⚕️',
+        genre: 'M',
+        signatureDetails: 'Anesthésiste Réanimateur'
     },
     {
         id: 'amoussou',
@@ -94,7 +110,9 @@ const MEDECINS_CMF = [
         specialite: 'Chirurgien Pédiatre',
         numONMB: '',
         signature: '', cachet: '', hasSig: false,
-        avatar: '👨‍⚕️'
+        avatar: '👨‍⚕️',
+        genre: 'M',
+        signatureDetails: 'Chirurgien Pédiatre'
     },
     {
         id: 'bacharou',
@@ -103,7 +121,9 @@ const MEDECINS_CMF = [
         specialite: 'Pédiatre',
         numONMB: '',
         signature: '', cachet: '', hasSig: false,
-        avatar: '👩‍⚕️'
+        avatar: '👩‍⚕️',
+        genre: 'F',
+        signatureDetails: 'Pédiatre'
     },
     {
         id: 'jacquet',
@@ -112,7 +132,9 @@ const MEDECINS_CMF = [
         specialite: 'Urologue',
         numONMB: '',
         signature: '', cachet: '', hasSig: false,
-        avatar: '👨‍⚕️'
+        avatar: '👨‍⚕️',
+        genre: 'M',
+        signatureDetails: 'Urologue'
     },
     {
         id: 'soumanou',
@@ -121,7 +143,9 @@ const MEDECINS_CMF = [
         specialite: 'Urologue',
         numONMB: '',
         signature: '', cachet: '', hasSig: false,
-        avatar: '👨‍⚕️'
+        avatar: '👨‍⚕️',
+        genre: 'M',
+        signatureDetails: 'Urologue'
     },
     {
         id: 'hounton',
@@ -130,7 +154,9 @@ const MEDECINS_CMF = [
         specialite: 'Radiologue',
         numONMB: '',
         signature: '', cachet: '', hasSig: false,
-        avatar: '👨‍⚕️'
+        avatar: '👨‍⚕️',
+        genre: 'M',
+        signatureDetails: 'Radiologue'
     },
     {
         id: 'kassein',
@@ -139,7 +165,9 @@ const MEDECINS_CMF = [
         specialite: 'Biologiste Médical',
         numONMB: '',
         signature: '', cachet: '', hasSig: false,
-        avatar: '👨‍⚕️'
+        avatar: '👨‍⚕️',
+        genre: 'M',
+        signatureDetails: 'Biologiste Médical'
     },
     {
         id: 'akpakpo',
@@ -148,7 +176,9 @@ const MEDECINS_CMF = [
         specialite: 'Collaborateur',
         numONMB: '',
         signature: '', cachet: '', hasSig: false,
-        avatar: '👨‍⚕️'
+        avatar: '👨‍⚕️',
+        genre: 'M',
+        signatureDetails: 'Collaborateur'
     },
     {
         id: 'hounsou',
@@ -157,7 +187,9 @@ const MEDECINS_CMF = [
         specialite: 'Médecine Physique',
         numONMB: '',
         signature: '', cachet: '', hasSig: false,
-        avatar: '👨‍⚕️'
+        avatar: '👨‍⚕️',
+        genre: 'M',
+        signatureDetails: 'Médecine Physique'
     }
 ];
 
@@ -237,7 +269,7 @@ const MEDICAL_TEMPLATES = {
         category: "Rapport CS",
         diagnosis: "Rupture du ligament croisé antérieur (LCA) du genou droit",
         fields: ["hospi_days"],
-        text: `Je soussigné, Dr Gipsy AGAVOEDO, chirurgien orthopédiste à la Clinique Mercy Fiat de Cotonou, certifie avoir consulté le {{DATE_CONSULT}} {{CIVILITE}} {{PATIENT_NOM}} {{PATIENT_PRENOM}}, âgé(e) de {{PATIENT_AGE}}, pour {{MOTIF_CONSULTATION}}.
+        text: `{{MEDECIN_SOUSSIGNE}}, {{MEDECIN_NOM}}, {{MEDECIN_SPECIALITE_LOWER}} à la Clinique Mercy Fiat de Cotonou, certifie avoir consulté le {{DATE_CONSULT}} {{CIVILITE}} {{PATIENT_NOM}} {{PATIENT_PRENOM}}, âgé(e) de {{PATIENT_AGE}}, pour {{MOTIF_CONSULTATION}}.
 
 {{RAPPEL_ANTECEDENTS}}
 
@@ -250,9 +282,8 @@ const MEDICAL_TEMPLATES = {
 Fait pour servir et valoir ce que de droit.
 Fait à Cotonou, le {{DATE}}
 
-Dr Gipsy AGAVOEDO
-Chirurgien Orthopédiste
-Traumatologue`
+{{MEDECIN_NOM}}
+{{MEDECIN_DETAILS}}`
     },
 
     rapport_cs_suivi: {
@@ -260,7 +291,7 @@ Traumatologue`
         category: "Rapport CS",
         diagnosis: "Consultation de suivi post-opératoire",
         fields: [],
-        text: `Je soussigné, Dr Gipsy AGAVOEDO, chirurgien orthopédiste à la Clinique Mercy Fiat de Cotonou, certifie avoir consulté le {{DATE_CONSULT}} {{CIVILITE}} {{PATIENT_NOM}} {{PATIENT_PRENOM}}, âgé(e) de {{PATIENT_AGE}}.
+        text: `{{MEDECIN_SOUSSIGNE}}, {{MEDECIN_NOM}}, {{MEDECIN_SPECIALITE_LOWER}} à la Clinique Mercy Fiat de Cotonou, certifie avoir consulté le {{DATE_CONSULT}} {{CIVILITE}} {{PATIENT_NOM}} {{PATIENT_PRENOM}}, âgé(e) de {{PATIENT_AGE}}.
 
 Pour rappel, {{RAPPEL_HOSPITALISATION_OU_ANTECEDENTS}}.
 
@@ -271,9 +302,8 @@ Actuellement, {{ETAT_ACTUEL_ET_PLAINTES}}.
 Fait pour servir et valoir ce que de droit.
 Fait à Cotonou, le {{DATE}}
 
-Dr Gipsy AGAVOEDO
-Chirurgien Orthopédiste
-Traumatologue`
+{{MEDECIN_NOM}}
+{{MEDECIN_DETAILS}}`
     },
 
     rapport_cs_assurance: {
@@ -285,7 +315,7 @@ Traumatologue`
 {{COMPAGNIE_ASSURANCE}}
 Référence Sinistre / Dossier : {{NUM_SINISTRE}}
 
-Je soussigné, Dr Gipsy AGAVOEDO, chirurgien orthopédiste à la Clinique Mercy Fiat de Cotonou, certifie avoir consulté le {{DATE_CONSULT}} {{CIVILITE}} {{PATIENT_NOM}} {{PATIENT_PRENOM}}, âgé(e) de {{PATIENT_AGE}}, pour {{MOTIF_CONSULTATION}}.
+{{MEDECIN_SOUSSIGNE}}, {{MEDECIN_NOM}}, {{MEDECIN_SPECIALITE_LOWER}} à la Clinique Mercy Fiat de Cotonou, certifie avoir consulté le {{DATE_CONSULT}} {{CIVILITE}} {{PATIENT_NOM}} {{PATIENT_PRENOM}}, âgé(e) de {{PATIENT_AGE}}, pour {{MOTIF_CONSULTATION}}.
 
 {{RAPPEL_ANTECEDENTS}}
 
@@ -298,9 +328,8 @@ Nous prévoyons une hospitalisation de {{NB_JOURS}} jours sous réserve de compl
 Fait pour servir et valoir ce que de droit.
 Fait à Cotonou, le {{DATE}}
 
-Dr Gipsy AGAVOEDO
-Chirurgien Orthopédiste
-Traumatologue`
+{{MEDECIN_NOM}}
+{{MEDECIN_DETAILS}}`
     },
 
     // ─────────────────────────────────────────────
@@ -312,7 +341,7 @@ Traumatologue`
         category: "Rapport HOSPI",
         diagnosis: "Fracture déplacée de la clavicule gauche",
         fields: ["date_entree", "date_sortie", "date_intervention", "convalescence"],
-        text: `Je, soussigné, Dr Gipsy AGAVOEDO, chirurgien orthopédiste à la Clinique Mercy Fiat de Cotonou, certifie avoir hospitalisé du {{DATE_ENTREE}} au {{DATE_SORTIE}} {{CIVILITE}} {{PATIENT_NOM}} {{PATIENT_PRENOM}}, âgé(e) de {{PATIENT_AGE}}, pour {{MOTIF_HOSPITALISATION}}.
+        text: `{{MEDECIN_SOUSSIGNE}}, {{MEDECIN_NOM}}, {{MEDECIN_SPECIALITE_LOWER}} à la Clinique Mercy Fiat de Cotonou, certifie avoir hospitalisé du {{DATE_ENTREE}} au {{DATE_SORTIE}} {{CIVILITE}} {{PATIENT_NOM}} {{PATIENT_PRENOM}}, âgé(e) de {{PATIENT_AGE}}, pour {{MOTIF_HOSPITALISATION}}.
 
 Il/Elle a bénéficié, le {{DATE_INTERVENTION}}, {{INTERVENTION_REALISEE}}.
 
@@ -323,9 +352,8 @@ Il ressort de ce qui précède une convalescence de {{DUREE_CONVALESCENCE}}.
 Fait pour servir et valoir ce que de droit.
 Fait à Cotonou, le {{DATE}}
 
-Dr Gipsy AGAVOEDO
-Chirurgien Orthopédiste
-Traumatologue`
+{{MEDECIN_NOM}}
+{{MEDECIN_DETAILS}}`
     },
 
     rapport_hospi_assurance: {
@@ -337,7 +365,7 @@ Traumatologue`
 {{COMPAGNIE_ASSURANCE}}
 Référence Sinistre / Dossier : {{NUM_SINISTRE}}
 
-Je, soussigné, Dr Gipsy AGAVOEDO, chirurgien orthopédiste à la Clinique Mercy Fiat de Cotonou, certifie avoir hospitalisé du {{DATE_ENTREE}} au {{DATE_SORTIE}} {{CIVILITE}} {{PATIENT_NOM}} {{PATIENT_PRENOM}}, âgé(e) de {{PATIENT_AGE}}, pour {{MOTIF_HOSPITALISATION}}.
+{{MEDECIN_SOUSSIGNE}}, {{MEDECIN_NOM}}, {{MEDECIN_SPECIALITE_LOWER}} à la Clinique Mercy Fiat de Cotonou, certifie avoir hospitalisé du {{DATE_ENTREE}} au {{DATE_SORTIE}} {{CIVILITE}} {{PATIENT_NOM}} {{PATIENT_PRENOM}}, âgé(e) de {{PATIENT_AGE}}, pour {{MOTIF_HOSPITALISATION}}.
 
 Il/Elle a bénéficié, le {{DATE_INTERVENTION}}, {{INTERVENTION_REALISEE}}.
 
@@ -348,9 +376,8 @@ Il ressort de ce qui précède une convalescence de {{DUREE_CONVALESCENCE}}.
 Fait pour servir et valoir ce que de droit.
 Fait à Cotonou, le {{DATE}}
 
-Dr Gipsy AGAVOEDO
-Chirurgien Orthopédiste
-Traumatologue`
+{{MEDECIN_NOM}}
+{{MEDECIN_DETAILS}}`
     },
 
     rapport_hospi_prolongation: {
@@ -362,7 +389,7 @@ Traumatologue`
 {{COMPAGNIE_ASSURANCE}}
 Référence Sinistre / Dossier : {{NUM_SINISTRE}}
 
-Je soussigné, Dr Gipsy AGAVOEDO, chirurgien orthopédiste à la Clinique Mercy Fiat de Cotonou, certifie que {{CIVILITE}} {{PATIENT_NOM}} {{PATIENT_PRENOM}}, âgé(e) de {{PATIENT_AGE}}, hospitalisé(e) depuis le {{DATE_ENTREE}} pour {{MOTIF_HOSPITALISATION}}, nécessite une prolongation de sa prise en charge médicale.
+{{MEDECIN_SOUSSIGNE}}, {{MEDECIN_NOM}}, {{MEDECIN_SPECIALITE_LOWER}} à la Clinique Mercy Fiat de Cotonou, certifie que {{CIVILITE}} {{PATIENT_NOM}} {{PATIENT_PRENOM}}, âgé(e) de {{PATIENT_AGE}}, hospitalisé(e) depuis le {{DATE_ENTREE}} pour {{MOTIF_HOSPITALISATION}}, nécessite une prolongation de sa prise en charge médicale.
 
 {{JUSTIFICATION_PROLONGATION}}
 
@@ -371,9 +398,8 @@ Une convalescence supplémentaire de {{DUREE_CONVALESCENCE}} est médicalement j
 Fait pour servir et valoir ce que de droit.
 Fait à Cotonou, le {{DATE}}
 
-Dr Gipsy AGAVOEDO
-Chirurgien Orthopédiste
-Traumatologue`
+{{MEDECIN_NOM}}
+{{MEDECIN_DETAILS}}`
     },
 
     rapport_medical: {
@@ -381,7 +407,7 @@ Traumatologue`
         category: "Rapport Médical",
         diagnosis: "Bilan médical général",
         fields: ["date_entree", "date_sortie"],
-        text: `Je soussigné, Dr Gipsy AGAVOEDO, chirurgien orthopédiste à la Clinique Mercy Fiat de Cotonou, certifie avoir pris en charge {{CIVILITE}} {{PATIENT_NOM}} {{PATIENT_PRENOM}}, âgé(e) de {{PATIENT_AGE}}, du {{DATE_ENTREE}} au {{DATE_SORTIE}}, pour {{MOTIF_HOSPITALISATION}}.
+        text: `{{MEDECIN_SOUSSIGNE}}, {{MEDECIN_NOM}}, {{MEDECIN_SPECIALITE_LOWER}} à la Clinique Mercy Fiat de Cotonou, certifie avoir pris en charge {{CIVILITE}} {{PATIENT_NOM}} {{PATIENT_PRENOM}}, âgé(e) de {{PATIENT_AGE}}, du {{DATE_ENTREE}} au {{DATE_SORTIE}}, pour {{MOTIF_HOSPITALISATION}}.
 
 {{RAPPEL_ANTECEDENTS}}
 
@@ -392,9 +418,8 @@ Traumatologue`
 Fait pour servir et valoir ce que de droit.
 Fait à Cotonou, le {{DATE}}
 
-Dr Gipsy AGAVOEDO
-Chirurgien Orthopédiste
-Traumatologue`
+{{MEDECIN_NOM}}
+{{MEDECIN_DETAILS}}`
     },
 
     // ─────────────────────────────────────────────
@@ -407,7 +432,7 @@ Traumatologue`
         diagnosis: "Rupture du ligament croisé antérieur (LCA) du genou gauche",
         fields: [],
         text: `DATE D'INTERVENTION : {{DATE}}
-OPÉRATEUR : Dr Gipsy AGAVOEDO (Chirurgien CMF / Traumatologie)
+OPÉRATEUR : {{MEDECIN_NOM}} ({{MEDECIN_SPECIALITE}})
 ANESTHÉSIE : Rachi-anesthésie / Anesthésie Générale
 
 DIAGNOSTIC PRÉ-OPÉRATOIRE : Instabilité chronique du genou gauche par rupture complète du ligament croisé antérieur.
@@ -443,7 +468,7 @@ SUITES OPÉRATOIRES :
         diagnosis: "Fracture symphysaire mandibulaire déplacée",
         fields: [],
         text: `DATE D'INTERVENTION : {{DATE}}
-OPÉRATEUR : Dr Gipsy AGAVOEDO (Chirurgien Maxillo-Facial)
+OPÉRATEUR : {{MEDECIN_NOM}} ({{MEDECIN_SPECIALITE}})
 ANESTHÉSIE : Anesthésie Générale avec intubation naso-trachéale
 
 DIAGNOSTIC PRÉ-OPÉRATOIRE : Fracture symphysaire de la mandibule avec déplacement articulaire et trouble de l'articulé dentaire suite à un traumatisme facial.
@@ -483,7 +508,7 @@ SUITES OPÉRATOIRES :
         category: "Certificat",
         diagnosis: "Nécessité de repos suite à une intervention chirurgicale",
         fields: ["convalescence"],
-        text: `Je soussigné, Dr AGAVOEDO Gipsy, Docteur en Médecine, Chirurgien Maxillo-Facial et Stomatologue, certifie avoir examiné ce jour le/la patient(e) :
+        text: `{{MEDECIN_SOUSSIGNE}}, {{MEDECIN_NOM}}, Docteur en Médecine, {{MEDECIN_SPECIALITE_LOWER}}, certifie avoir examiné ce jour le/la patient(e) :
 
 Nom : {{PATIENT_NOM}}
 Prénom : {{PATIENT_PRENOM}}
@@ -500,9 +525,8 @@ En foi de quoi, ce certificat est délivré à l'intéressé(e) pour servir et v
 
 Fait à Cotonou, le {{DATE}}
 
-Dr Gipsy AGAVOEDO
-Chirurgien Orthopédiste
-Traumatologue`
+{{MEDECIN_NOM}}
+{{MEDECIN_DETAILS}}`
     },
 
     certif_reprise: {
@@ -510,7 +534,7 @@ Traumatologue`
         category: "Certificat",
         diagnosis: "Aptitude physique constatée après repos",
         fields: [],
-        text: `Je soussigné, Dr AGAVOEDO Gipsy, Docteur en Médecine, Chirurgien Maxillo-Facial et Stomatologue, certifie avoir réexaminé ce jour :
+        text: `{{MEDECIN_SOUSSIGNE}}, {{MEDECIN_NOM}}, Docteur en Médecine, {{MEDECIN_SPECIALITE_LOWER}}, certifie avoir réexaminé ce jour :
 
 Nom : {{PATIENT_NOM}}
 Prénom : {{PATIENT_PRENOM}}
@@ -528,9 +552,8 @@ En foi de quoi, ce certificat est délivré à l'intéressé(e) pour servir et v
 
 Fait à Cotonou, le {{DATE}}
 
-Dr Gipsy AGAVOEDO
-Chirurgien Orthopédiste
-Traumatologue`
+{{MEDECIN_NOM}}
+{{MEDECIN_DETAILS}}`
     },
 
     relance_assurance: {
@@ -563,9 +586,8 @@ Dans l'attente d'un dénouement rapide de ce dossier, veuillez agréer, Madame, 
 
 Fait à Cotonou, le {{DATE}}
 
-Dr Gipsy AGAVOEDO
-Chirurgien Orthopédiste
-Traumatologue`
+{{MEDECIN_NOM}}
+{{MEDECIN_DETAILS}}`
     }
 };
 
@@ -858,6 +880,7 @@ function toggleReportFields(fields) {
 // GÉNÉRATION INTELLIGENTE DU TEXTE (REMPLACEMENT DES VARIABLES)
 // ============================================================
 function buildMergeData() {
+    const medecin = getSelectedMedecin();
     const patientNom = (document.getElementById('doc-patient-nom')?.value || 'NOM').toUpperCase();
     const patientPrenom = document.getElementById('doc-patient-prenom')?.value || 'Prénom';
     const patientAge = document.getElementById('doc-patient-age')?.value || '[AGE] ans';
@@ -946,6 +969,11 @@ function buildMergeData() {
         '{{ETAT_ACTUEL_ET_PLAINTES}}': etatActuel.trim(),
         '{{PREVISION_HOSPI}}': previsionBlock,
         '{{INTERVENTION_REALISEE}}': interventionBlock || '[intervention réalisée]',
+        '{{MEDECIN_NOM}}': medecin.nomAffichage || medecin.nom,
+        '{{MEDECIN_SOUSSIGNE}}': medecin.genre === 'F' ? 'Je soussignée' : 'Je soussigné',
+        '{{MEDECIN_SPECIALITE}}': medecin.specialite,
+        '{{MEDECIN_SPECIALITE_LOWER}}': medecin.specialite ? (medecin.specialite.charAt(0).toLowerCase() + medecin.specialite.slice(1)) : '',
+        '{{MEDECIN_DETAILS}}': medecin.signatureDetails || medecin.specialite,
     };
 }
 

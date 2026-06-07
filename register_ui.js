@@ -738,15 +738,24 @@ function printDMEConsolidated() {
         `;
     }
 
+    const medecin = typeof window.getSelectedMedecin === 'function' ? window.getSelectedMedecin() : {
+        nom: 'Dr AGAVOEDO Gipsy',
+        nomAffichage: 'Dr Gipsy AGAVOEDO',
+        specialite: 'Chirurgien Orthopédiste Traumatologue',
+        signature: 'assets/signature.png',
+        cachet: 'assets/cachet_centre.png',
+        hasSig: true
+    };
+
     // Bloc de signature officielle
     html += `
         <div style="margin-top: 25px; display: flex; justify-content: flex-end; page-break-inside: avoid;">
             <div style="text-align: center; min-width: 220px;">
-                <p style="font-size: 0.82rem; font-weight: 800; margin-bottom: 2px;">Dr Gipsy AGAVOEDO</p>
-                <p style="font-size: 0.72rem; color: #718096; margin-bottom: 4px;">Chirurgien Orthopédiste Traumatologue</p>
+                <p style="font-size: 0.82rem; font-weight: 800; margin-bottom: 2px;">${medecin.nomAffichage || medecin.nom}</p>
+                <p style="font-size: 0.72rem; color: #718096; margin-bottom: 4px;">${medecin.specialite}</p>
                 <div class="signature-seal-container">
-                    <img src="assets/cachet_centre.png?t=${Date.now()}" class="seal-img" style="display:block;">
-                    <img src="assets/signature.png?t=${Date.now()}" class="signature-img" style="display:block;">
+                    ${medecin.hasSig && medecin.cachet ? `<img src="${medecin.cachet}?t=${Date.now()}" class="seal-img" style="display:block;">` : ''}
+                    ${medecin.hasSig && medecin.signature ? `<img src="${medecin.signature}?t=${Date.now()}" class="signature-img" style="display:block;">` : ''}
                 </div>
             </div>
         </div>

@@ -1537,8 +1537,7 @@ body.emerald-theme .cmf-doctor-card.active-doctor { background: linear-gradient(
 .seal-img {
     position: absolute;
     top: 2px;
-    left: 50%;
-    transform: translateX(-50%);
+    left: 10px;
     width: 100px;
     height: auto;
     opacity: 1;
@@ -1550,9 +1549,8 @@ body.emerald-theme .cmf-doctor-card.active-doctor { background: linear-gradient(
 .signature-img {
     position: absolute;
     bottom: 2px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 150px;
+    right: 10px;
+    width: 130px;
     height: auto;
     display: block;
     z-index: 10;
