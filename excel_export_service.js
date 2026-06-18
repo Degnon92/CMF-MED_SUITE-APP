@@ -109,7 +109,7 @@ function exportFullRegisterToExcel() {
 }
 
 // Exporte une facture/proforma individuelle active sous forme de tableau Excel hautement stylé
-function exportSingleBillToExcel() {
+function exportSingleBillToExcel(bill = null) {
     try {
         if (!ExcelJS) {
             try {
@@ -120,121 +120,182 @@ function exportSingleBillToExcel() {
             }
         }
         
-        const patientNom = (document.getElementById('bill-patient-nom').value || "PARAISO").toUpperCase();
-        const patientPrenom = document.getElementById('bill-patient-prenom').value || "Alex";
-        const billType = document.getElementById('bill-type').value;
-        const insurance = document.getElementById('bill-insurance').value;
-        const coverage = parseFloat(document.getElementById('bill-coverage').value) || 0;
-        const patientType = document.getElementById('bill-patient-type')?.value || "PRIVE";
-        const useSplitRaw = document.getElementById('bill-use-split')?.checked || false;
-        const useSplit = (patientType !== 'PRIVE') && (billType === 'DETAIL_ASSUR' || useSplitRaw);
-        
-        // A. Collecte et validation des items (avec gestion de la remise et de l'assurance)
-        const items = [];
-        let grossTotal = 0;
-        let totalPartAssurance = 0;
-        let totalPartPatient = 0;
-        
-        const rows = document.querySelectorAll('#billing-items-container .item-row');
-        rows.forEach(row => {
-            const name = row.querySelector('.item-name')?.value.trim() || "";
-            const price = parseFloat(row.querySelector('.item-price')?.value) || 0;
-            const qty = parseInt(row.querySelector('.item-qty')?.value) || 1;
-            const subtotal = price * qty;
+        let patientNom, patientPrenom, billType, insurance, coverage, patientType, useSplit, items, grossTotal, totalPartAssurance, totalPartPatient, discountType, discountPct, reductionAmount, discountedTotal, discountLabel, paymentMethodId, amountPaidPatient, balancePatient, paymentName;
+        let billDateInput, refNumStr, diagStr, matriculeVal, interventionText, customTitle;
+
+        if (bill) {
+            patientNom = (bill.patientNom || "PARAISO").toUpperCase();
+            patientPrenom = bill.patientPrenom || "Alex";
+            billType = bill.type || 'PROFORMA';
+            insurance = bill.insurance || 'PRIVE';
+            coverage = parseFloat(bill.coverage) || 0;
+            patientType = bill.patientType || (bill.insurance === 'PRIVE' ? 'PRIVE' : 'MALADIE');
+            useSplit = bill.useSplit || false;
             
-            if (name) {
-                let partAssurance = 0;
-                let partPatient = subtotal;
-                let itemLimit = subtotal;
-                let itemRate = (patientType !== 'PRIVE') ? coverage : 0;
+            items = (bill.items || []).map(item => ({
+                name: item.name,
+                qty: item.qty,
+                price: item.price,
+                subtotal: item.subtotal,
+                limit: item.splitLimit !== undefined ? item.splitLimit : (item.limit !== undefined ? item.limit : item.subtotal),
+                rate: item.splitRate !== undefined ? item.splitRate : (item.rate !== undefined ? item.rate : 0),
+                partAssurance: item.partAssurance || 0,
+                partPatient: item.partPatient || item.subtotal
+            }));
+            
+            grossTotal = bill.grossTotal;
+            totalPartAssurance = bill.partAssurance || 0;
+            totalPartPatient = bill.partPatient || 0;
+            discountType = bill.discountType || 'PERCENT';
+            discountPct = bill.discountPct || 0;
+            reductionAmount = bill.reductionAmount || 0;
+            discountedTotal = bill.discountedTotal || grossTotal;
+            discountLabel = discountType === 'PERCENT' ? `(${Math.round(discountPct)}%)` : `(Remise)`;
+            paymentMethodId = bill.paymentMethod || "CASH";
+            
+            const totalPatientShare = (patientType !== 'PRIVE') ? totalPartPatient : discountedTotal;
+            amountPaidPatient = bill.amountPaidPatient !== undefined ? bill.amountPaidPatient : totalPatientShare;
+            balancePatient = totalPatientShare - amountPaidPatient;
+            
+            const paymentNames = {
+                CASH: 'Espèces (Cash)',
+                BANK_TRANSFER: 'Virement Bancaire',
+                CHECK: 'Chèque Bancaire',
+                MOBILE_MONEY: 'Mobile Money',
+                TIERS_PAYANT: 'Attente Tiers-Payant'
+            };
+            paymentName = paymentNames[paymentMethodId] || 'Espèces';
+
+            billDateInput = bill.date;
+            refNumStr = bill.reference;
+            diagStr = bill.diagnostic || bill.diagnosis || "";
+            matriculeVal = bill.matricule || "Non spécifié";
+            interventionText = bill.intervention || bill.interventionName || "";
+            customTitle = bill.customTitle || "Point Définitif d'Hospitalisation";
+        } else {
+            patientNom = (document.getElementById('bill-patient-nom').value || "PARAISO").toUpperCase();
+            patientPrenom = document.getElementById('bill-patient-prenom').value || "Alex";
+            billType = document.getElementById('bill-type').value;
+            insurance = document.getElementById('bill-insurance').value;
+            coverage = parseFloat(document.getElementById('bill-coverage').value) || 0;
+            patientType = document.getElementById('bill-patient-type')?.value || "PRIVE";
+            const useSplitRaw = document.getElementById('bill-use-split')?.checked || false;
+            useSplit = (patientType !== 'PRIVE') && (billType === 'DETAIL_ASSUR' || useSplitRaw);
+            
+            // A. Collecte et validation des items (avec gestion de la remise et de l'assurance)
+            items = [];
+            grossTotal = 0;
+            totalPartAssurance = 0;
+            totalPartPatient = 0;
+            
+            const rows = document.querySelectorAll('#billing-items-container .item-row');
+            rows.forEach(row => {
+                const name = row.querySelector('.item-name')?.value.trim() || "";
+                const price = parseFloat(row.querySelector('.item-price')?.value) || 0;
+                const qty = parseInt(row.querySelector('.item-qty')?.value) || 1;
+                const subtotal = price * qty;
                 
-                if (patientType !== 'PRIVE') {
-                    if (useSplit) {
-                        const limitRaw = parseFloat(row.querySelector('.item-split-limit')?.value);
-                        itemLimit = isNaN(limitRaw) ? subtotal : limitRaw;
-                        const rateRaw = parseFloat(row.querySelector('.item-split-rate')?.value);
-                        itemRate = isNaN(rateRaw) ? 0 : rateRaw;
-                        partAssurance = Math.round(itemLimit * (itemRate / 100));
-                        partPatient = subtotal - partAssurance;
-                    } else {
-                        partAssurance = Math.round(subtotal * (coverage / 100));
-                        partPatient = subtotal - partAssurance;
+                if (name) {
+                    let partAssurance = 0;
+                    let partPatient = subtotal;
+                    let itemLimit = subtotal;
+                    let itemRate = (patientType !== 'PRIVE') ? coverage : 0;
+                    
+                    if (patientType !== 'PRIVE') {
+                        if (useSplit) {
+                            const limitRaw = parseFloat(row.querySelector('.item-split-limit')?.value);
+                            itemLimit = isNaN(limitRaw) ? subtotal : limitRaw;
+                            const rateRaw = parseFloat(row.querySelector('.item-split-rate')?.value);
+                            itemRate = isNaN(rateRaw) ? 0 : rateRaw;
+                            partAssurance = Math.round(itemLimit * (itemRate / 100));
+                            partPatient = subtotal - partAssurance;
+                        } else {
+                            partAssurance = Math.round(subtotal * (coverage / 100));
+                            partPatient = subtotal - partAssurance;
+                        }
                     }
+                    
+                    grossTotal += subtotal;
+                    totalPartAssurance += partAssurance;
+                    totalPartPatient += partPatient;
+                    
+                    items.push({
+                        name,
+                        qty,
+                        price,
+                        subtotal,
+                        limit: itemLimit,
+                        rate: itemRate,
+                        partAssurance,
+                        partPatient
+                    });
                 }
+            });
+            
+            if (items.length === 0) {
+                alert("Veuillez saisir des frais avant d'exporter.");
+                return;
+            }
+            
+            // Calcul des réductions (identique à la logique applicative de billing.js)
+            const discountTypeEl = document.getElementById('bill-discount-type');
+            const discountValueEl = document.getElementById('bill-discount-value');
+            discountPct = 0;
+            reductionAmount = 0;
+            discountType = 'PERCENT';
+
+            if (discountTypeEl && discountValueEl) {
+                discountType = discountTypeEl.value;
+                const val = parseFloat(discountValueEl.value || 0);
+                if (discountType === 'PERCENT') {
+                    discountPct = val;
+                    reductionAmount = Math.round(grossTotal * (discountPct / 100));
+                } else {
+                    reductionAmount = Math.round(val);
+                    discountPct = grossTotal > 0 ? (reductionAmount / grossTotal) * 100 : 0;
+                }
+            }
+            discountedTotal = grossTotal - reductionAmount;
+            
+            // Ajustement proportionnel aux parts splitées/assurance
+            if (reductionAmount > 0) {
+                const splitDiscountRatio = grossTotal > 0 ? discountedTotal / grossTotal : 1;
+                totalPartAssurance = Math.round(totalPartAssurance * splitDiscountRatio);
+                totalPartPatient = discountedTotal - totalPartAssurance;
                 
-                grossTotal += subtotal;
-                totalPartAssurance += partAssurance;
-                totalPartPatient += partPatient;
-                
-                items.push({
-                    name,
-                    qty,
-                    price,
-                    subtotal,
-                    limit: itemLimit,
-                    rate: itemRate,
-                    partAssurance,
-                    partPatient
+                items.forEach(item => {
+                    const itemDiscountedSubtotal = Math.round(item.subtotal * splitDiscountRatio);
+                    item.partAssurance = Math.round(item.partAssurance * splitDiscountRatio);
+                    item.partPatient = itemDiscountedSubtotal - item.partAssurance;
                 });
             }
-        });
-        
-        if (items.length === 0) {
-            alert("Veuillez saisir des frais avant d'exporter.");
-            return;
-        }
-        
-        // Calcul des réductions (identique à la logique applicative de billing.js)
-        const discountTypeEl = document.getElementById('bill-discount-type');
-        const discountValueEl = document.getElementById('bill-discount-value');
-        let discountPct = 0;
-        let reductionAmount = 0;
-        let discountType = 'PERCENT';
-
-        if (discountTypeEl && discountValueEl) {
-            discountType = discountTypeEl.value;
-            const val = parseFloat(discountValueEl.value || 0);
-            if (discountType === 'PERCENT') {
-                discountPct = val;
-                reductionAmount = Math.round(grossTotal * (discountPct / 100));
-            } else {
-                reductionAmount = Math.round(val);
-                discountPct = grossTotal > 0 ? (reductionAmount / grossTotal) * 100 : 0;
-            }
-        }
-        const discountedTotal = grossTotal - reductionAmount;
-        
-        // Ajustement proportionnel aux parts splitées/assurance
-        if (reductionAmount > 0) {
-            const splitDiscountRatio = grossTotal > 0 ? discountedTotal / grossTotal : 1;
-            totalPartAssurance = Math.round(totalPartAssurance * splitDiscountRatio);
-            totalPartPatient = discountedTotal - totalPartAssurance;
             
-            items.forEach(item => {
-                const itemDiscountedSubtotal = Math.round(item.subtotal * splitDiscountRatio);
-                item.partAssurance = Math.round(item.partAssurance * splitDiscountRatio);
-                item.partPatient = itemDiscountedSubtotal - item.partAssurance;
-            });
+            discountLabel = discountType === 'PERCENT' ? `(${Math.round(discountPct)}%)` : `(Remise)`;
+            
+            // Mode de règlement et montants encaissés/reste à charge
+            paymentMethodId = document.getElementById('bill-payment-method')?.value || "CASH";
+            const rawAmountPaid = parseFloat(document.getElementById('bill-amount-paid-patient')?.value);
+            
+            const totalPatientShare = (patientType !== 'PRIVE') ? totalPartPatient : discountedTotal;
+            amountPaidPatient = isNaN(rawAmountPaid) ? totalPatientShare : Math.min(rawAmountPaid, totalPatientShare);
+            balancePatient = totalPatientShare - amountPaidPatient;
+            
+            const paymentNames = {
+                CASH: 'Espèces (Cash)',
+                BANK_TRANSFER: 'Virement Bancaire',
+                CHECK: 'Chèque Bancaire',
+                MOBILE_MONEY: 'Mobile Money',
+                TIERS_PAYANT: 'Attente Tiers-Payant'
+            };
+            paymentName = paymentNames[paymentMethodId] || 'Espèces';
+
+            billDateInput = document.getElementById('bill-date')?.value;
+            refNumStr = document.getElementById('bill-reference')?.value || `MF-PRO-${new Date().getFullYear()}${String(new Date().getMonth() + 1).padStart(2, '0')}-XXXX`;
+            diagStr = document.getElementById('bill-diagnostic')?.value?.trim() || "";
+            matriculeVal = document.getElementById('bill-matricule')?.value || "Non spécifié";
+            interventionText = document.getElementById('bill-intervention')?.value || "";
+            customTitle = document.getElementById('bill-title-custom')?.value || 'POINT DEFINITIF';
         }
-        
-        const discountLabel = discountType === 'PERCENT' ? `(${Math.round(discountPct)}%)` : `(Remise)`;
-        
-        // Mode de règlement et montants encaissés/reste à charge
-        const paymentMethodId = document.getElementById('bill-payment-method')?.value || "CASH";
-        const rawAmountPaid = parseFloat(document.getElementById('bill-amount-paid-patient')?.value);
-        
-        const totalPatientShare = (patientType !== 'PRIVE') ? totalPartPatient : discountedTotal;
-        const amountPaidPatient = isNaN(rawAmountPaid) ? totalPatientShare : Math.min(rawAmountPaid, totalPatientShare);
-        const balancePatient = totalPatientShare - amountPaidPatient;
-        
-        const paymentNames = {
-            CASH: 'Espèces (Cash)',
-            BANK_TRANSFER: 'Virement Bancaire',
-            CHECK: 'Chèque Bancaire',
-            MOBILE_MONEY: 'Mobile Money',
-            TIERS_PAYANT: 'Attente Tiers-Payant'
-        };
-        const paymentName = paymentNames[paymentMethodId] || 'Espèces';
         
         // B. Création du Workbook ExcelJS
         const workbook = new ExcelJS.Workbook();
@@ -352,9 +413,11 @@ function exportSingleBillToExcel() {
         worksheet.getRow(9).height = 12; // Vide
         
         // Patient & Date
-        const billDateInput = document.getElementById('bill-date')?.value;
+        if (!billDateInput) {
+            billDateInput = document.getElementById('bill-date')?.value;
+        }
         const dateFormatted = billDateInput
-            ? new Date(billDateInput + 'T12:00:00').toLocaleDateString('fr-FR')
+            ? new Date(billDateInput + (billDateInput.includes('T') ? '' : 'T12:00:00')).toLocaleDateString('fr-FR')
             : new Date().toLocaleDateString('fr-FR');
             
         worksheet.mergeCells(`A6:${useSplit ? 'D' : 'B'}6`);
@@ -384,7 +447,9 @@ function exportSingleBillToExcel() {
         
         worksheet.mergeCells(`${useSplit ? 'E' : 'C'}7:${lastColLetter}7`);
         const refCell = worksheet.getCell(`${useSplit ? 'E' : 'C'}7`);
-        const refNumStr = document.getElementById('bill-reference')?.value || `MF-PRO-${new Date().getFullYear()}${String(new Date().getMonth() + 1).padStart(2, '0')}-XXXX`;
+        if (!refNumStr) {
+            refNumStr = document.getElementById('bill-reference')?.value || `MF-PRO-${new Date().getFullYear()}${String(new Date().getMonth() + 1).padStart(2, '0')}-XXXX`;
+        }
         refCell.value = `Réf : ${refNumStr}`;
         refCell.font = { name: 'Inter', size: 10, bold: true, color: { argb: 'FF2D3748' } };
         refCell.alignment = { vertical: 'middle', horizontal: 'right' };
@@ -397,14 +462,16 @@ function exportSingleBillToExcel() {
                 return pName.includes(fullName) || fullName.includes(pName) || pName.includes(patientNom.toLowerCase());
             }) : null;
             
-        let diagStr = document.getElementById('bill-diagnostic')?.value?.trim() || "";
         if (!diagStr) {
-            if (dbPatient && dbPatient.diagnosis && dbPatient.diagnosis !== "N/A") {
-                diagStr = dbPatient.diagnosis;
-            } else {
-                const diagEl = document.getElementById('dme-patient-diagnosis');
-                if (diagEl && diagEl.textContent && diagEl.textContent !== '--' && diagEl.textContent !== 'N/A') {
-                    diagStr = diagEl.textContent;
+            diagStr = document.getElementById('bill-diagnostic')?.value?.trim() || "";
+            if (!diagStr) {
+                if (dbPatient && dbPatient.diagnosis && dbPatient.diagnosis !== "N/A") {
+                    diagStr = dbPatient.diagnosis;
+                } else {
+                    const diagEl = document.getElementById('dme-patient-diagnosis');
+                    if (diagEl && diagEl.textContent && diagEl.textContent !== '--' && diagEl.textContent !== 'N/A') {
+                        diagStr = diagEl.textContent;
+                    }
                 }
             }
         }
@@ -412,7 +479,9 @@ function exportSingleBillToExcel() {
         worksheet.mergeCells(`A8:${useSplit ? 'D' : 'B'}8`);
         const diagCell = worksheet.getCell('A8');
         let detailStr = "";
-        const matriculeVal = document.getElementById('bill-matricule')?.value || "Non spécifié";
+        if (!matriculeVal) {
+            matriculeVal = document.getElementById('bill-matricule')?.value || "Non spécifié";
+        }
         
         if (patientType === 'PRIVE') {
             detailStr = diagStr ? `Diagnostic : ${diagStr}` : "";
@@ -436,7 +505,9 @@ function exportSingleBillToExcel() {
         worksheet.getRow(10).height = 20;
         worksheet.mergeCells(`A10:${lastColLetter}10`);
         const intervCell = worksheet.getCell('A10');
-        const interventionText = document.getElementById('bill-intervention')?.value || "";
+        if (!interventionText) {
+            interventionText = document.getElementById('bill-intervention')?.value || "";
+        }
         intervCell.value = `INTERVENTION : ${interventionText.toUpperCase()}`;
         intervCell.font = { name: 'Inter', size: 10, bold: true, color: { argb: 'FF2D3748' } };
         intervCell.alignment = { vertical: 'middle', horizontal: 'left' };
@@ -466,7 +537,9 @@ function exportSingleBillToExcel() {
         worksheet.getRow(titleRowIdx).height = 25;
         worksheet.mergeCells(`A${titleRowIdx}:${lastColLetter}${titleRowIdx}`);
         const docTitleCell = worksheet.getCell(`A${titleRowIdx}`);
-        const customTitle = document.getElementById('bill-title-custom')?.value || 'POINT DEFINITIF';
+        if (!customTitle) {
+            customTitle = document.getElementById('bill-title-custom')?.value || 'POINT DEFINITIF';
+        }
         const titleStr = billType === 'PROFORMA' ? 'FACTURE PROFORMA' : 
                          (billType === 'DETAIL_ASSUR' ? (patientType === 'SINISTRE' ? 'DETAIL PRISE EN CHARGE SINISTRE AUTOMOBILE' : (patientType === 'PRIVE' ? 'DETAIL PRESTATIONS FACTURE PROFORMA' : 'DETAIL ASSURANCE FACTURE PROFORMA')) : customTitle.toUpperCase());
         docTitleCell.value = titleStr;
@@ -866,8 +939,20 @@ function exportDMEToExcel() {
     }
 }
 
+// Exporte une facture directement depuis le registre via son ID
+function exportBillToExcelDirectlyFromRegister(itemId) {
+    const bills = window.savedBills || [];
+    const bill = bills.find(b => b.id === itemId);
+    if (!bill) {
+        alert("Facture introuvable.");
+        return;
+    }
+    exportSingleBillToExcel(bill);
+}
+
 // Liaison globale à window
 window.getXLSXInstance = getXLSXInstance;
 window.exportFullRegisterToExcel = exportFullRegisterToExcel;
 window.exportSingleBillToExcel = exportSingleBillToExcel;
 window.exportDMEToExcel = exportDMEToExcel;
+window.exportBillToExcelDirectlyFromRegister = exportBillToExcelDirectlyFromRegister;

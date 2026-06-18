@@ -12,12 +12,12 @@ const MEDECINS_CMF = [
         nom: 'Dr AGAVOEDO Gipsy',
         nomAffichage: 'Dr Gipsy AGAVOEDO',
         specialite: 'Chirurgien Orthopédiste Traumatologue',
-        numONMB: '',
+        numONMB: 'N° 1091 / ONMB / ATL / 2012',
         signature: 'assets/signature.png',
-        cachet: 'assets/cachet_centre.png',
+        cachet: 'assets/cachet_gipsy.png',
         hasSig: true,
         avatar: '🏥',
-        genre: 'M',
+        genre: 'F',
         signatureDetails: 'Chirurgien Orthopédiste\nTraumatologue'
     },
     {
@@ -706,7 +706,8 @@ function populatePatientDocSelector() {
                         insurer: p.insurer || '',
                         diagnosis: p.diagnosis || '',
                         intervention: p.intervention || '',
-                        kCode: p.kCode || ''
+                        kCode: p.kCode || '',
+                        societe: p.societe || ''
                     });
                     opt.textContent = `${nom} ${prenom}`.trim() + (p.age ? ` (${p.age})` : '') + ` — [Patient Registre]`;
                     sel.appendChild(opt);
@@ -761,6 +762,10 @@ function autoFillFromPatient() {
             document.getElementById('doc-insurer').value = data.insurer;
             updateInsurerLabel();
         }
+        // Auto-fill société
+        if (document.getElementById('doc-societe') && data.societe) {
+            document.getElementById('doc-societe').value = data.societe;
+        }
         updateDocPreview();
         showToast('✅ Données patient chargées automatiquement !');
     } catch(e) { console.warn('autoFillFromPatient:', e); }
@@ -798,7 +803,7 @@ function loadDocumentTemplate() {
     // Vider les blocs de texte guidés à chaque changement de modèle
     ['doc-rappel', 'doc-examen', 'doc-conclusion', 'doc-recommandations',
      'doc-etat-actuel', 'doc-justification', 'doc-intervention',
-     'doc-motif', 'doc-hospi-days', 'doc-convalescence', 'doc-sinistre'].forEach(id => {
+     'doc-motif', 'doc-hospi-days', 'doc-convalescence', 'doc-sinistre', 'doc-societe'].forEach(id => {
         const el = document.getElementById(id);
         if (el) el.value = '';
     });
@@ -1005,10 +1010,36 @@ function updateDocPreview() {
         rawText = rawText.split(key).join(val);
     });
 
-    // Formatage HTML du texte (paragraphes justifiés)
-    // Formatage HTML du texte (paragraphes justifiés par ligne)
-    const paragraphs = rawText
-        .split(/\r?\n/)
+    // Extract metadata (SOCIETE/assurance, N° Dossier, etc.) from the first few lines to display at top and hide from body
+    let lines = rawText.split(/\r?\n/);
+    let extractedInsurance = '';
+    let extractedSinistre = '';
+    let bodyLines = [];
+    let metadataLinesCount = 0;
+    
+    for (let i = 0; i < lines.length; i++) {
+        const line = lines[i].trim();
+        const lineClean = line.replace(/\xa0/g, ' '); // replace non-breaking spaces
+        
+        const insuranceMatch = lineClean.match(/^(SOCIETE\/assurance|SOCIETE|Assurance|Mutuelle|Compagnie\s+d['’]assurance)\s*[:：]\s*(.*)$/i);
+        const sinistreMatch = lineClean.match(/^(N°\s*DOSSIER|N°\s*SINISTRE|Référence\s+Sinistre\s*\/\s*Dossier|Ref\s+Sinistre)\s*[:：]\s*(.*)$/i);
+        
+        if (insuranceMatch && metadataLinesCount < 5) {
+            const val = insuranceMatch[2].trim();
+            if (val) extractedInsurance = val;
+            metadataLinesCount++;
+        } else if (sinistreMatch && metadataLinesCount < 5) {
+            const val = sinistreMatch[2].trim();
+            if (val) extractedSinistre = val;
+            metadataLinesCount++;
+        } else if (lineClean === "" && metadataLinesCount > 0 && metadataLinesCount < 5) {
+            // skip empty lines immediately following extracted metadata
+        } else {
+            bodyLines.push(lines[i]);
+        }
+    }
+
+    const paragraphs = bodyLines
         .map(line => {
             const trimmed = line.trim();
             if (!trimmed) return '';
@@ -1048,7 +1079,12 @@ function updateDocPreview() {
     // Récupérer les infos assurance si disponibles
     const insurerName = document.getElementById('doc-insurer-name')?.value || '';
     const insurerSel  = document.getElementById('doc-insurer')?.value || '';
-    const assuranceInfo = insurerName || insurerSel;
+    const assuranceInfo = insurerName || insurerSel || extractedInsurance;
+    
+    const societeInfo = document.getElementById('doc-societe')?.value?.trim() || '';
+
+    const docSinistreVal = document.getElementById('doc-sinistre')?.value || '';
+    const sinistreInfo = docSinistreVal || extractedSinistre;
 
     // Date formatée
     const docDateRaw = document.getElementById('doc-date')?.value;
@@ -1083,7 +1119,9 @@ function updateDocPreview() {
         <div style="margin-bottom:10px; font-size:0.78rem; font-weight:700; font-family:'Times New Roman',serif;">
             <div><span style="text-transform:uppercase; text-decoration:underline;">Patient :</span> <strong>${patientNom} ${patientPrenom}</strong></div>
             <div><span style="text-decoration:underline;">Age :</span> <strong>${patientAge}</strong></div>
-            ${assuranceInfo ? `<div><span style="text-decoration:underline;">Assurance :</span> <strong>${assuranceInfo.toUpperCase()}</strong></div>` : ''}
+            ${societeInfo ? `<div><span style="text-decoration:underline;">Société :</span> <strong>${societeInfo.toUpperCase()}</strong> <span style="font-size:0.72rem; color:#c05621; font-weight:900;">(Prise en charge 100%)</span></div>` : ''}
+            ${assuranceInfo ? `<div><span style="text-decoration:underline;">Assurance/Société :</span> <strong>${assuranceInfo.toUpperCase()}</strong></div>` : ''}
+            ${sinistreInfo ? `<div><span style="text-decoration:underline;">N° Dossier/Sinistre :</span> <strong>${sinistreInfo.toUpperCase()}</strong></div>` : ''}
         </div>
     ` : '';
 

@@ -35,19 +35,19 @@
              ========================================== -->
         <aside class="sidebar">
             <div>
-                <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 40px; gap: 10px;">
-                    <div class="brand" style="margin-bottom: 0;">
-                        <div class="brand-icon">MF</div>
-                        <div class="brand-text">
-                            <h2>MERCY FIAT</h2>
-                            <span>MEDSUITE v1.0</span>
+                <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 20px; gap: 8px;">
+                    <div class="brand" style="margin-bottom: 0; padding: 6px 8px; gap: 8px; flex: 1; min-width: 0;">
+                        <div class="brand-icon" style="width:36px; height:36px; font-size:0.95rem; border-radius:10px; flex-shrink:0;">MF</div>
+                        <div class="brand-text" style="min-width:0; overflow:hidden;">
+                            <h2 style="font-size:0.9rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">MERCY FIAT</h2>
+                            <span style="font-size:0.6rem;">MEDSUITE v1.0</span>
                         </div>
                     </div>
                     <!-- Sélecteur de Thème Premium à 3 Segments -->
-                    <div class="theme-switcher" style="display: flex; background: rgba(74, 111, 165, 0.1); border: 1px solid var(--border-color); border-radius: 20px; padding: 3px; gap: 4px; transition: var(--transition-fast);">
-                        <button type="button" class="theme-btn active" id="theme-btn-light" onclick="setTheme('light')" style="background: none; border: none; cursor: pointer; font-size: 0.95rem; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: var(--transition-fast);" title="Thème Zen Clair (☀️)">☀️</button>
-                        <button type="button" class="theme-btn" id="theme-btn-dark" onclick="setTheme('dark')" style="background: none; border: none; cursor: pointer; font-size: 0.95rem; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: var(--transition-fast);" title="Thème Obsidienne Nuit (🌙)">🌙</button>
-                        <button type="button" class="theme-btn" id="theme-btn-emerald" onclick="setTheme('emerald')" style="background: none; border: none; cursor: pointer; font-size: 0.95rem; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: var(--transition-fast);" title="Thème Émeraude Impérial (🌲)">🌲</button>
+                    <div class="theme-switcher" style="display: flex; background: rgba(74, 111, 165, 0.1); border: 1px solid var(--border-color); border-radius: 20px; padding: 2px; gap: 2px; transition: var(--transition-fast); flex-shrink:0;">
+                        <button type="button" class="theme-btn active" id="theme-btn-light" onclick="setTheme('light')" style="background: none; border: none; cursor: pointer; font-size: 0.85rem; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: var(--transition-fast);" title="Thème Zen Clair (☀️)">☀️</button>
+                        <button type="button" class="theme-btn" id="theme-btn-dark" onclick="setTheme('dark')" style="background: none; border: none; cursor: pointer; font-size: 0.85rem; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: var(--transition-fast);" title="Thème Obsidienne Nuit (🌙)">🌙</button>
+                        <button type="button" class="theme-btn" id="theme-btn-emerald" onclick="setTheme('emerald')" style="background: none; border: none; cursor: pointer; font-size: 0.85rem; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: var(--transition-fast);" title="Thème Émeraude Impérial (🌲)">🌲</button>
                     </div>
                 </div>
                 
@@ -766,8 +766,15 @@
 
                             <!-- Card 4: Tiers-Payant & Assurances (Conditionnel) -->
                             <div class="form-card" style="margin-bottom: 15px;">
-                                <h4 class="form-card-title">🚗 Prise en Charge Tiers-Payant &amp; Séjour</h4>
+                                <h4 class="form-card-title">🚗 Prise en Charge Tiers-Payant & Séjour</h4>
                                 <div class="form-grid" style="gap: 12px;">
+                                    <!-- SOCIÉTÉ / EMPLOYEUR (toujours visible) -->
+                                    <div class="form-group col-12" style="background: linear-gradient(135deg, rgba(195,161,126,0.07), rgba(255,255,255,0.9)); padding: 8px 12px; border-radius: var(--radius-sm); border: 1px solid rgba(195,161,126,0.3);">
+                                        <label for="doc-societe" style="font-weight:700; color:var(--accent-gold); font-size:0.82rem; display:flex; align-items:center; gap:5px;">
+                                            🏢 Société / Employeur (couvre 100% des frais)
+                                        </label>
+                                        <input type="text" id="doc-societe" placeholder="Ex: SONACOP, BCEAO, SBEE... (laisser vide si privé)" oninput="updateDocPreview()" style="font-size:0.85rem; width: 100%; margin-top: 4px;">
+                                    </div>
                                     <!-- CHAMPS ASSURANCE -->
                                     <div class="col-12" id="field-insurer" style="display:none; gap:10px; grid-template-columns:1fr 1fr;">
                                         <div class="form-group" style="margin:0;">
@@ -807,6 +814,7 @@
                             </div>
                         </div> <!-- Fermeture de form-card -->
                         </div> <!-- Fermeture de form-cards-container -->
+
 
                         <!-- ── INTERVENTION + CONVALESCENCE + JOURS ── -->
                         <div class="form-group" id="field-intervention" style="margin:0;">
@@ -954,23 +962,23 @@
             <section id="register-section" class="content-section">
                 <div class="card" style="display:flex; flex-direction:column; gap:0;">
                     <!-- HEADER: Titre + Recherche -->
-                    <div style="display:flex; justify-content:space-between; align-items:center; padding:20px 20px 15px 20px; border-bottom:1px solid var(--border-color);">
-                        <h3 style="font-weight: 800; font-size: 1.15rem; color: var(--text-primary); margin:0;">Archives et Registre Général</h3>
-                        <div style="display:flex; gap:10px; align-items:center;">
-                            <span id="register-result-count" class="badge dark" style="font-size:0.75rem; padding:4px 10px;">0 fiche(s)</span>
-                            <button class="btn btn-primary btn-small" onclick="openNewPatientModal()" style="padding: 8px 12px; white-space: nowrap; font-size: 0.8rem; background: linear-gradient(135deg, var(--accent-teal), var(--accent-blue)); display: flex; align-items: center; gap: 4px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; padding:12px 16px 10px 16px; border-bottom:1px solid var(--border-color);">
+                        <h3 style="font-weight: 800; font-size: 1.05rem; color: var(--text-primary); margin:0;">Archives et Registre Général</h3>
+                        <div style="display:flex; gap:8px; align-items:center;">
+                            <span id="register-result-count" class="badge dark" style="font-size:0.72rem; padding:3px 8px;">0 fiche(s)</span>
+                            <button class="btn btn-primary btn-small" onclick="openNewPatientModal()" style="padding: 6px 10px; white-space: nowrap; font-size: 0.78rem; background: linear-gradient(135deg, var(--accent-teal), var(--accent-blue)); display: flex; align-items: center; gap: 4px;">
                                 <span>➕ Nouveau Patient</span>
                             </button>
-                            <input type="text" id="register-search" placeholder="🔍 Rechercher par nom, diagnostic, référence..." style="width:320px; padding:8px 12px;" oninput="renderRegisterTable()">
+                            <input type="text" id="register-search" placeholder="🔍 Rechercher par nom, référence..." style="width:220px; padding:6px 10px;" oninput="renderRegisterTable()">
                         </div>
                     </div>
 
                     <!-- ONGLETS PRINCIPAUX -->
-                    <div id="register-tabs-bar" style="display:flex; gap:0; border-bottom:2px solid var(--border-color); background:var(--bg-main); padding:0 20px;">
+                    <div id="register-tabs-bar" style="display:flex; gap:0; border-bottom:2px solid var(--border-color); background:var(--bg-main); padding:0 16px;">
                         <button class="register-tab active" data-tab="ALL" onclick="switchRegisterTab('ALL', this)">🔍 Tout</button>
                         <button class="register-tab" data-tab="BILLS_ONLY" onclick="switchRegisterTab('BILLS_ONLY', this)">📊 Mes Factures</button>
                         <button class="register-tab" data-tab="MY_DOCS" onclick="switchRegisterTab('MY_DOCS', this)">📋 Mes Rapports</button>
-                        <button class="register-tab" data-tab="ARCHIVES" onclick="switchRegisterTab('ARCHIVES', this)">📚 Archives Importées <span id="archive-count-badge" class="badge light" style="font-size:0.65rem; padding:2px 6px; margin-left:4px;">851</span></button>
+                        <button class="register-tab" data-tab="ARCHIVES" onclick="switchRegisterTab('ARCHIVES', this)">📚 Archives <span id="archive-count-badge" class="badge light" style="font-size:0.65rem; padding:2px 6px; margin-left:4px;">851</span></button>
                     </div>
 
                     <!-- SOUS-FILTRES PAR CATÉGORIE (visible uniquement en mode Archives) -->
@@ -984,9 +992,18 @@
                     </div>
 
                     <!-- TABLEAU DU REGISTRE -->
-                    <div style="padding:15px 20px 20px 20px;">
+                    <div style="padding:8px 12px 12px 12px;">
                         <div class="table-container">
-                            <table>
+                            <table id="register-main-table" style="table-layout:fixed; width:100%;">
+                                <colgroup>
+                                    <col style="width:18%">
+                                    <col style="width:20%">
+                                    <col style="width:22%">
+                                    <col style="width:10%">
+                                    <col style="width:12%">
+                                    <col style="width:8%">
+                                    <col style="width:10%">
+                                </colgroup>
                                 <thead>
                                     <tr>
                                         <th>Patient</th>
@@ -995,7 +1012,7 @@
                                         <th>Assurance / Taux</th>
                                         <th>Valeur brute</th>
                                         <th>Date</th>
-                                        <th style="width:160px;">Actions</th>
+                                        <th>Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody id="register-table-rows">
@@ -1148,7 +1165,7 @@
             <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--border-color); padding-bottom: 12px;">
                 <h3 style="font-weight: 800; font-size: 1.15rem; color: var(--text-primary); display: flex; align-items: center; gap: 8px;">
                     <svg viewBox="0 0 24 24" style="width: 20px; height: 20px; stroke: var(--accent-teal); stroke-width: 2.5; fill: none;"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="20" y1="8" x2="20" y2="14"></line><line x1="23" y1="11" x2="17" y2="11"></line></svg>
-                    ➕ Enregistrer un Patient
+                    <span id="new-patient-modal-title">➕ Enregistrer un Patient</span>
                 </h3>
                 <button class="btn btn-danger btn-small" onclick="closeNewPatientModal()" style="padding: 4px 8px; font-weight: 800; border-radius: 50%; border: none;">✕</button>
             </div>
@@ -1192,6 +1209,15 @@
                         </div>
                     </div>
 
+                    <!-- Société / Employeur (couvre 100% des frais) -->
+                    <div class="form-group col-12" style="background: linear-gradient(135deg, rgba(195,161,126,0.07), rgba(255,255,255,0.9)); padding: 10px 12px; border-radius: var(--radius-sm); border: 1px solid rgba(195,161,126,0.3);">
+                        <label for="new-patient-societe" style="font-size: 0.8rem; font-weight: 700; color: var(--accent-gold); display: flex; align-items: center; gap: 5px;">
+                            🏢 Société / Employeur (couvre 100% des frais)
+                        </label>
+                        <input type="text" id="new-patient-societe" placeholder="Ex: SONACOP, BCEAO, SBEE..." style="width: 100%; margin-top: 5px;">
+                        <span style="font-size: 0.68rem; color: var(--text-secondary); font-style: italic;">Laisser vide si le patient paie à titre personnel ou via une assurance</span>
+                    </div>
+
                     <div class="form-group col-12">
                         <label for="new-patient-diag" style="font-size: 0.8rem; font-weight: 700; color: var(--text-secondary);">Diagnostic par défaut</label>
                         <input type="text" id="new-patient-diag" placeholder="Ex: Rupture complète du LCA gauche" style="width: 100%;">
@@ -1208,7 +1234,7 @@
                 
                 <div style="display: flex; gap: 12px; margin-top: 15px; border-top: 1px solid var(--border-color); padding-top: 15px; justify-content: flex-end;">
                     <button type="button" class="btn btn-secondary" onclick="closeNewPatientModal()" style="font-weight: 700;">Annuler</button>
-                    <button type="submit" class="btn btn-primary" style="font-weight: 700; background: linear-gradient(135deg, var(--accent-teal), var(--accent-blue));">Enregistrer dans la base</button>
+                    <button type="submit" id="new-patient-submit-btn" class="btn btn-primary" style="font-weight: 700; background: linear-gradient(135deg, var(--accent-teal), var(--accent-blue));">Enregistrer dans la base</button>
                 </div>
             </form>
         </div>
@@ -1222,7 +1248,10 @@
                 <div style="display: flex; align-items: center; gap: 12px;">
                     <div class="dme-avatar" id="dme-patient-avatar">--</div>
                     <div>
-                        <h3 id="dme-patient-fullname" style="font-weight: 800; font-size: 1.15rem; color: var(--text-primary); line-height: 1.2;">NOM DU PATIENT</h3>
+                        <h3 style="font-weight: 800; font-size: 1.15rem; color: var(--text-primary); line-height: 1.2; display: flex; align-items: center; gap: 6px; margin: 0;">
+                            <span id="dme-patient-fullname">NOM DU PATIENT</span>
+                            <span onclick="editPatientFromDME()" style="cursor: pointer; font-size: 0.85rem; padding: 2px; opacity: 0.8; user-select: none;" title="Modifier les détails du patient">✏️</span>
+                        </h3>
                         <span id="dme-patient-age" style="font-size: 0.78rem; color: var(--text-secondary); font-weight: 600;">Âge: --</span>
                     </div>
                 </div>

@@ -297,12 +297,23 @@ function handleModalPriseEnChargeChange() {
     }
 }
 
+window.editingPatientName = null;
+
 function openNewPatientModal() {
     const modal = document.getElementById('new-patient-modal');
     if (modal) {
         document.getElementById('new-patient-form').reset();
         modal.style.display = 'flex';
         handleModalPriseEnChargeChange(); // initialiser l'affichage
+        
+        // Restore defaults
+        const titleEl = document.getElementById('new-patient-modal-title');
+        if (titleEl) titleEl.textContent = "➕ Enregistrer un Patient";
+        
+        const submitBtn = document.getElementById('new-patient-submit-btn');
+        if (submitBtn) submitBtn.textContent = "Enregistrer dans la base";
+        
+        window.editingPatientName = null;
     }
 }
 
@@ -310,8 +321,90 @@ function closeNewPatientModal() {
     const modal = document.getElementById('new-patient-modal');
     if (modal) {
         modal.style.display = 'none';
+        
+        // Restore defaults
+        const titleEl = document.getElementById('new-patient-modal-title');
+        if (titleEl) titleEl.textContent = "➕ Enregistrer un Patient";
+        
+        const submitBtn = document.getElementById('new-patient-submit-btn');
+        if (submitBtn) submitBtn.textContent = "Enregistrer dans la base";
+        
+        window.editingPatientName = null;
     }
 }
+
+function openEditPatientModal(patientName) {
+    const db = window.MercyFiatDB;
+    if (!db || !db.PATIENTS) return;
+
+    // Chercher d'abord dans la base principale, puis dans les patients personnalisés
+    let patient = db.PATIENTS.find(p => p.name.trim().toUpperCase() === patientName.trim().toUpperCase());
+    
+    if (!patient) {
+        // Chercher dans mercyfiat_custom_patients (localStorage)
+        const customPatients = JSON.parse(localStorage.getItem('mercyfiat_custom_patients')) || [];
+        patient = customPatients.find(p => p.name.trim().toUpperCase() === patientName.trim().toUpperCase());
+    }
+    
+    if (!patient) {
+        alert("Patient introuvable dans la base de données.");
+        return;
+    }
+
+    const modal = document.getElementById('new-patient-modal');
+    if (!modal) return;
+
+    // Reset and then populate the form
+    document.getElementById('new-patient-form').reset();
+
+    // Split name to nom/prenom
+    const parts = patient.name.trim().split(' ');
+    const nom = parts[0] || '';
+    const prenom = parts.slice(1).join(' ') || '';
+
+    document.getElementById('new-patient-nom').value = nom;
+    document.getElementById('new-patient-prenom').value = prenom;
+    document.getElementById('new-patient-age').value = patient.age || '';
+    document.getElementById('new-patient-diag').value = patient.diagnosis || '';
+    document.getElementById('new-patient-interv').value = patient.intervention || '';
+    document.getElementById('new-patient-kcode').value = patient.kCode || '';
+    
+    const pType = patient.priseEnCharge || (patient.insurer && patient.insurer !== 'PRIVE' ? 'MALADIE' : 'PRIVE');
+    document.getElementById('new-patient-type').value = pType;
+    
+    // Trigger modal layout change
+    if (typeof handleModalPriseEnChargeChange === 'function') {
+        handleModalPriseEnChargeChange();
+    }
+
+    if (pType !== 'PRIVE') {
+        document.getElementById('new-patient-insurer').value = patient.insurer || 'PRIVE';
+        document.getElementById('new-patient-matricule').value = patient.matricule || '';
+    }
+    
+    // Remplir le champ Société
+    const societeEl = document.getElementById('new-patient-societe');
+    if (societeEl) societeEl.value = patient.societe || '';
+
+
+    // Update modal UI labels
+    const titleEl = document.getElementById('new-patient-modal-title');
+    if (titleEl) titleEl.textContent = "✏️ Modifier le Patient";
+    
+    const submitBtn = document.getElementById('new-patient-submit-btn');
+    if (submitBtn) submitBtn.textContent = "Enregistrer les modifications";
+
+    window.editingPatientName = patientName;
+    modal.style.display = 'flex';
+}
+window.openEditPatientModal = openEditPatientModal;
+
+function editPatientFromDME() {
+    if (window.activeDMEPatientName) {
+        openEditPatientModal(window.activeDMEPatientName);
+    }
+}
+window.editPatientFromDME = editPatientFromDME;
 
 async function saveNewPatientFromModal() {
     const nom = (document.getElementById('new-patient-nom').value || "").toUpperCase().trim();
@@ -323,83 +416,238 @@ async function saveNewPatientFromModal() {
     const insurer = (document.getElementById('new-patient-insurer')?.value || "PRIVE");
     const type = (document.getElementById('new-patient-type')?.value || "PRIVE");
     const matricule = (document.getElementById('new-patient-matricule')?.value || "");
+    const societe = (document.getElementById('new-patient-societe')?.value || "").trim();
 
     if (!nom || !prenom) {
         alert("Le nom et le prénom sont requis.");
         return;
     }
 
-    if (!await confirm(`Voulez-vous vraiment enregistrer le patient "${nom} ${prenom}" dans la base de données ?`)) {
-        return;
+    const fullName = `${nom} ${prenom}`;
+
+    if (window.editingPatientName) {
+        // Mode ÉDITION
+        if (!await confirm(`Voulez-vous vraiment enregistrer les modifications pour le patient "${fullName}" ?`)) {
+            return;
+        }
+
+        const db = window.MercyFiatDB;
+        if (!db || !db.PATIENTS) return;
+
+        const originalNameUpper = window.editingPatientName.trim().toUpperCase();
+        const newNameUpper = fullName.trim().toUpperCase();
+
+        // Trouver l'index dans la liste globale (ou dans customPatients)
+        let patientIndex = db.PATIENTS.findIndex(p => p.name.trim().toUpperCase() === originalNameUpper);
+        let isCustomOnly = false;
+        if (patientIndex === -1) {
+            // Patient enregistré seulement en localStorage
+            isCustomOnly = true;
+        }
+
+        // Mettre à jour l'objet patient
+        const updatedPatient = {
+            name: fullName,
+            age: age,
+            diagnosis: diag,
+            intervention: interv,
+            kCode: kcode,
+            insurer: type === 'PRIVE' ? 'PRIVE' : insurer,
+            priseEnCharge: type,
+            matricule: type === 'PRIVE' ? '' : matricule,
+            societe: societe || ''
+        };
+
+        if (!isCustomOnly) {
+            db.PATIENTS[patientIndex] = updatedPatient;
+        } else {
+            // Ajouter au registre principal s'il n'y était pas
+            db.PATIENTS.unshift(updatedPatient);
+        }
+
+        // Sauvegarder dans mercyfiat_custom_patients (localStorage)
+        let customPatients = JSON.parse(localStorage.getItem('mercyfiat_custom_patients')) || [];
+        const customIndex = customPatients.findIndex(p => p.name.trim().toUpperCase() === originalNameUpper);
+        if (customIndex !== -1) {
+            customPatients[customIndex] = updatedPatient;
+        } else {
+            customPatients.unshift(updatedPatient);
+        }
+        localStorage.setItem('mercyfiat_custom_patients', JSON.stringify(customPatients));
+
+        // Si le nom a changé, propager le changement sur les factures et documents associés
+        if (originalNameUpper !== newNameUpper) {
+            // Helper pour matcher les noms d'origine
+            const areNamesMatchingOriginal = (recNom, recPrenom) => {
+                const normRec = `${recNom || ''} ${recPrenom || ''}`.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9\s]/g, " ").replace(/\s+/g, " ").trim();
+                const normOrig = window.editingPatientName.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9\s]/g, " ").replace(/\s+/g, " ").trim();
+                return normRec === normOrig;
+            };
+
+            // Factures (savedBills)
+            let billsChanged = false;
+            if (window.savedBills) {
+                window.savedBills.forEach(b => {
+                    if (areNamesMatchingOriginal(b.patientNom, b.patientPrenom)) {
+                        b.patientNom = nom;
+                        b.patientPrenom = prenom;
+                        billsChanged = true;
+                    }
+                });
+                if (billsChanged) {
+                    localStorage.setItem('mercyfiat_bills', JSON.stringify(window.savedBills));
+                }
+            }
+
+            // Documents (savedDocuments)
+            let docsChanged = false;
+            if (window.savedDocuments) {
+                window.savedDocuments.forEach(d => {
+                    if (areNamesMatchingOriginal(d.patientNom, d.patientPrenom)) {
+                        d.patientNom = nom;
+                        d.patientPrenom = prenom;
+                        docsChanged = true;
+                    }
+                });
+                if (docsChanged) {
+                    localStorage.setItem('mercyfiat_docs', JSON.stringify(window.savedDocuments));
+                }
+            }
+            console.log(`Propagated name change to matching bills (${billsChanged}) and docs (${docsChanged})`);
+        }
+
+        // Sauvegarder sur le disque
+        if (db.savePatients) db.savePatients();
+
+        showNotificationToast(`Patient ${fullName} mis à jour avec succès !`);
+        
+        // Si le Dossier DME est actuellement ouvert, le rafraîchir
+        const drawer = document.getElementById('patient-dme-drawer');
+        if (drawer && drawer.classList.contains('open')) {
+            if (typeof openPatientDMEDrawer === 'function') {
+                openPatientDMEDrawer(fullName);
+            }
+        }
+
+        closeNewPatientModal();
+
+    } else {
+        // Mode CRÉATION
+        if (!await confirm(`Voulez-vous vraiment enregistrer le patient "${nom} ${prenom}" dans la base de données ?`)) {
+            return;
+        }
+
+        const db = window.MercyFiatDB;
+        const finalInsurer = type === 'PRIVE' ? 'PRIVE' : insurer;
+        const finalMatricule = type === 'PRIVE' ? '' : matricule;
+
+        // Si le patient existe déjà, forcer une mise à jour complète de toutes ses données
+        if (db && db.PATIENTS) {
+            const existingIdx = db.PATIENTS.findIndex(p => p.name.trim().toUpperCase() === fullName.trim().toUpperCase());
+            if (existingIdx !== -1) {
+                const updatedPatient = {
+                    ...db.PATIENTS[existingIdx],
+                    age: age || db.PATIENTS[existingIdx].age,
+                    diagnosis: diag || db.PATIENTS[existingIdx].diagnosis,
+                    intervention: interv || db.PATIENTS[existingIdx].intervention,
+                    kCode: kcode || db.PATIENTS[existingIdx].kCode,
+                    insurer: finalInsurer,
+                    priseEnCharge: type,
+                    matricule: finalMatricule,
+                    societe: societe || db.PATIENTS[existingIdx].societe || ''
+                };
+                db.PATIENTS[existingIdx] = updatedPatient;
+                if (db.savePatients) db.savePatients();
+                
+                // Mettre à jour dans localStorage
+                const customPatients = JSON.parse(localStorage.getItem('mercyfiat_custom_patients')) || [];
+                const cIdx = customPatients.findIndex(p => p.name.trim().toUpperCase() === fullName.trim().toUpperCase());
+                if (cIdx !== -1) {
+                    customPatients[cIdx] = updatedPatient;
+                } else {
+                    customPatients.unshift(updatedPatient);
+                }
+                localStorage.setItem('mercyfiat_custom_patients', JSON.stringify(customPatients));
+                showNotificationToast(`✅ Patient ${nom} ${prenom} mis à jour avec succès !`);
+                closeNewPatientModal();
+                if (typeof renderPatientsTable === 'function') renderPatientsTable();
+                return;
+            }
+        }
+
+        dynamicallyLearnNewData(nom, prenom, age, diag, interv, kcode, finalInsurer, type, finalMatricule, societe);
+        showNotificationToast(`Patient ${nom} ${prenom} enregistré avec succès !`);
+        closeNewPatientModal();
+
+        
+        // Remplissage automatique des formulaires actifs
+        const billNomEl = document.getElementById('bill-patient-nom');
+        const billPrenomEl = document.getElementById('bill-patient-prenom');
+        if (billNomEl) {
+            billNomEl.value = nom;
+            if (billPrenomEl) billPrenomEl.value = prenom;
+            
+            const billTypeEl = document.getElementById('bill-patient-type');
+            if (billTypeEl) {
+                billTypeEl.value = type;
+                if (typeof handleBillPriseEnChargeChange === 'function') {
+                    handleBillPriseEnChargeChange();
+                }
+            }
+
+            if (interv) {
+                const intEl = document.getElementById('bill-intervention');
+                if (intEl) {
+                    intEl.value = interv;
+                    intEl.dispatchEvent(new Event('change'));
+                }
+            }
+
+            const insEl = document.getElementById('bill-insurance');
+            if (insEl) {
+                insEl.value = insurer;
+                insEl.dispatchEvent(new Event('change'));
+            }
+
+            const matEl = document.getElementById('bill-matricule');
+            if (matEl) {
+                matEl.value = (type !== 'PRIVE' && matricule) ? matricule : (kcode ? `K-Code: ${kcode}` : "");
+            }
+            
+            if (typeof updateBillPreview === 'function') {
+                updateBillPreview();
+            }
+        }
+        
+        const docNomEl = document.getElementById('doc-patient-nom');
+        const docPrenomEl = document.getElementById('doc-patient-prenom');
+        if (docNomEl) {
+            docNomEl.value = nom;
+            if (docPrenomEl) docPrenomEl.value = prenom;
+            if (age) {
+                const docAgeEl = document.getElementById('doc-patient-age');
+                if (docAgeEl) docAgeEl.value = age;
+            }
+            if (diag) {
+                const docDiagEl = document.getElementById('doc-diagnostique');
+                if (docDiagEl) docDiagEl.value = diag;
+            }
+            if (insurer && insurer !== 'PRIVE') {
+                const docInsEl = document.getElementById('doc-insurer');
+                if (docInsEl) {
+                    docInsEl.value = insurer;
+                    updateInsurerLabel();
+                }
+            }
+            
+            if (typeof updateDocPreview === 'function') {
+                updateDocPreview();
+            }
+        }
     }
 
-    dynamicallyLearnNewData(nom, prenom, age, diag, interv, kcode, insurer, type, matricule);
-    showNotificationToast(`Patient ${nom} ${prenom} enregistré avec succès !`);
-    closeNewPatientModal();
-    
-    // Remplissage automatique des formulaires actifs
-    const billNomEl = document.getElementById('bill-patient-nom');
-    const billPrenomEl = document.getElementById('bill-patient-prenom');
-    if (billNomEl) {
-        billNomEl.value = nom;
-        if (billPrenomEl) billPrenomEl.value = prenom;
-        
-        const billTypeEl = document.getElementById('bill-patient-type');
-        if (billTypeEl) {
-            billTypeEl.value = type;
-            if (typeof handleBillPriseEnChargeChange === 'function') {
-                handleBillPriseEnChargeChange();
-            }
-        }
-
-        if (interv) {
-            const intEl = document.getElementById('bill-intervention');
-            if (intEl) {
-                intEl.value = interv;
-                intEl.dispatchEvent(new Event('change'));
-            }
-        }
-
-        const insEl = document.getElementById('bill-insurance');
-        if (insEl) {
-            insEl.value = insurer;
-            insEl.dispatchEvent(new Event('change'));
-        }
-
-        const matEl = document.getElementById('bill-matricule');
-        if (matEl) {
-            matEl.value = (type !== 'PRIVE' && matricule) ? matricule : (kcode ? `K-Code: ${kcode}` : "");
-        }
-        
-        if (typeof updateBillPreview === 'function') {
-            updateBillPreview();
-        }
-    }
-    
-    const docNomEl = document.getElementById('doc-patient-nom');
-    const docPrenomEl = document.getElementById('doc-patient-prenom');
-    if (docNomEl) {
-        docNomEl.value = nom;
-        if (docPrenomEl) docPrenomEl.value = prenom;
-        if (age) {
-            const docAgeEl = document.getElementById('doc-patient-age');
-            if (docAgeEl) docAgeEl.value = age;
-        }
-        if (diag) {
-            const docDiagEl = document.getElementById('doc-diagnostique');
-            if (docDiagEl) docDiagEl.value = diag;
-        }
-        if (insurer && insurer !== 'PRIVE') {
-            const docInsEl = document.getElementById('doc-insurer');
-            if (docInsEl) {
-                docInsEl.value = insurer;
-                updateInsurerLabel();
-            }
-        }
-        
-        if (typeof updateDocPreview === 'function') {
-            updateDocPreview();
-        }
+    if (typeof renderPatientsTable === 'function') {
+        renderPatientsTable();
     }
 
     if (typeof renderRegisterTable === 'function') {
@@ -652,7 +900,7 @@ function openArchiveDocPreview(docId) {
     }
     
     const medecins = window.MEDECINS_CMF || [
-        { id: 'agavoedo', nomAffichage: 'Dr Gipsy AGAVOEDO', nom: 'Dr AGAVOEDO Gipsy', specialite: 'Chirurgien Orthopédiste Traumatologue', signature: 'assets/signature.png', cachet: 'assets/cachet_centre.png', hasSig: true },
+        { id: 'agavoedo', nomAffichage: 'Dr Gipsy AGAVOEDO', nom: 'Dr AGAVOEDO Gipsy', specialite: 'Chirurgien Orthopédiste Traumatologue', numONMB: 'N° 1091 / ONMB / ATL / 2012', signature: 'assets/signature.png', cachet: 'assets/cachet_gipsy.png', hasSig: true },
         { id: 'djedou', nomAffichage: 'Dr Arnaud DJEDOU', nom: 'Dr DJEDOU Arnaud', specialite: 'Chirurgien Orthopédiste Traumatologue', numONMB: 'N° 1134 / ONMB / ATL / 2012', signature: 'assets/signature_djedou.png', cachet: 'assets/cachet_djedou.png', hasSig: true },
         { id: 'hazoume', nomAffichage: 'Dr Michèle HAZOUME', nom: 'Dr HAZOUME Michèle', specialite: 'Cardiologue', signature: 'assets/signature_hazoume.png', cachet: 'assets/cachet_hazoume.png', hasSig: true },
         { id: 'dah', nomAffichage: 'Dr Judith DAH', nom: 'Dr DAH Judith', specialite: 'Médecin Généraliste', signature: 'assets/signature_dah.png', cachet: 'assets/cachet_dah.png', hasSig: true },
@@ -677,10 +925,10 @@ function openArchiveDocPreview(docId) {
     ];
     
     const sidebarHtml = `
-        <div class="doc-sidebar" style="width:145px; flex-shrink:0; border-right:1px solid #2d3748; padding:10px 8px 10px 2px; font-family:'Times New Roman',serif; align-self:stretch;">
+        <div class="doc-sidebar" style="width:180px; flex-shrink:0; border-right:1px solid #2d3748; padding:10px 8px 10px 2px; font-family:'Times New Roman',serif; align-self:stretch;">
             ${specialites.map(s => `
                 <div style="margin-bottom:16px;">
-                    <div style="font-weight:900; text-decoration:underline; font-size:13px; color:#2d3748; margin-bottom:4px;">${s.spec}</div>
+                    <div style="font-weight:900; text-decoration:underline; font-size:11.5px; color:#2d3748; margin-bottom:4px; white-space:nowrap;">${s.spec}</div>
                     ${s.doctors.map(d => `<div style="font-size:12px; color:#2d3748; padding-left:2px; margin-bottom:2px;">${d}</div>`).join('')}
                 </div>
             `).join('')}
@@ -723,9 +971,31 @@ function openArchiveDocPreview(docId) {
         </div>
     `;
 
+    // Nettoyer le titre du document pour supprimer le nom du patient (ex: "Consultation - DZASSI Maurice" -> "RAPPORT DE CONSULTATION")
+    let displayTitle = '';
+    const lookupTemplates = (typeof MEDICAL_TEMPLATES !== 'undefined') ? MEDICAL_TEMPLATES : (window.MEDICAL_TEMPLATES || {});
+    if (doc.templateId && lookupTemplates[doc.templateId]) {
+        displayTitle = lookupTemplates[doc.templateId].title;
+    } else {
+        const rawTitle = doc.title || catLabel || 'RAPPORT CLINIQUE';
+        if (rawTitle.includes(' - ')) {
+            displayTitle = rawTitle.split(' - ')[0].trim();
+        } else {
+            displayTitle = rawTitle;
+        }
+    }
+    // Retirer les emojis du titre pour l'en-tête de la page
+    displayTitle = displayTitle.replace(/[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDC00-\uDFFF]/g, '').trim();
+    displayTitle = displayTitle.toUpperCase();
+    if (displayTitle === 'CONSULTATION') {
+        displayTitle = 'RAPPORT DE CONSULTATION';
+    } else if (displayTitle === 'HOSPITALISATION') {
+        displayTitle = "RAPPORT D'HOSPITALISATION";
+    }
+
     const titleHtml = `
         <div style="text-align:center; font-size:0.95rem; font-weight:900; text-transform:uppercase; text-decoration:underline; letter-spacing:0.5px; margin:12px 0 14px; font-family:'Times New Roman',serif;">
-            ${doc.title || catLabel}
+            ${displayTitle}
         </div>
     `;
 
@@ -776,15 +1046,4 @@ window.resetDocEditorForm = resetDocEditorForm;
 window.openArchiveDocPreview = openArchiveDocPreview;
 window.printArchiveDoc = printArchiveDoc;
 
-// Auto-open first document preview for screen validation
-document.addEventListener('DOMContentLoaded', () => {
-    setTimeout(() => {
-        const docs = window.savedDocuments || [];
-        if (docs.length > 0) {
-            console.log("[DEBUG] Auto-previewing first document for validation:", docs[0].id);
-            if (typeof openArchiveDocPreview === 'function') {
-                openArchiveDocPreview(docs[0].id);
-            }
-        }
-    }, 2000);
-});
+

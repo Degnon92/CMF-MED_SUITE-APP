@@ -794,10 +794,9 @@ function updateBillPreview() {
     const showDiag = document.getElementById('bill-show-diag')?.checked || false;
     const showInterv = document.getElementById('bill-show-interv')?.checked || false;
 
-    // Récupérer le médecin sélectionné pour le cachet/signature
-    const medecinSel = (typeof getSelectedMedecin === 'function') ? getSelectedMedecin() : null;
-    const sigSrc     = (medecinSel?.signature || 'assets/signature.png') + '?t=' + Date.now();
-    const cachetSrc  = (medecinSel?.cachet    || 'assets/cachet_centre.png') + '?t=' + Date.now();
+    // Les factures et proformas émises par la caisse utilisent toujours le cachet et la signature de la caisse
+    const sigSrc     = 'assets/signature_caisse.png?t=' + Date.now();
+    const cachetSrc  = 'assets/cachet_caisse.png?t=' + Date.now();
 
     // Bloc diagnostic/intervention optionnel
     let diagBlock = '';

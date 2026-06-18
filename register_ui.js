@@ -200,6 +200,7 @@ function renderRegisterTable() {
     const pageRecords = filteredRecords.slice((registerCurrentPage - 1) * registerPageSize, registerCurrentPage * registerPageSize);
 
     pageRecords.forEach(rec => {
+        const escapedName = rec.name.replace(/'/g, "\\'");
         // 1. Déterminer les initiales pour l'avatar premium
         const initials = (rec.name || 'P')
             .split(' ')
@@ -266,34 +267,43 @@ function renderRegisterTable() {
                 const isImpaye = rec.status === 'IMPAYÉ';
                 dropdownItemsHtml = `
                     <button onclick="printBillDirectlyFromRegister('${rec.id}');"><span style="font-size:0.95rem;">🖨️</span> Imprimer / PDF</button>
+                    <button onclick="exportBillToExcelDirectlyFromRegister('${rec.id}');"><span style="font-size:0.95rem;">📥</span> Exporter en Excel</button>
                     <button onclick="duplicateBillFromRegister('${rec.id}');"><span style="font-size:0.95rem;">👯</span> Dupliquer</button>
                     <button onclick="generateReportFromBill('${rec.id}');"><span style="font-size:0.95rem;">📋</span> Rapport Médical</button>
                     ${isImpaye ? `<button onclick="launchAssuranceRecovery('${rec.id}');"><span style="font-size:0.95rem;">✉️</span> Relance Mutuelle</button>` : ''}
+                    <button onclick="toggleBillPaymentStatus('${rec.id}');"><span style="font-size:0.95rem;">🔄</span> Caisse : ${isImpaye ? 'Marquer Réglé' : 'Marquer Impayé'}</button>
+                    <button onclick="openPatientDMEDrawer('${escapedName}');"><span style="font-size:0.95rem;">📂</span> Dossier Patient (DME)</button>
                     <div class="divider"></div>
                     <button class="btn-danger-hover" onclick="cancelBillAndGenerateCreditNote('${rec.id}');"><span style="font-size:0.95rem;">🚫</span> Annuler (Avoir)</button>
                 `;
             } else if (rec.rawBill.type === 'AVOIR') {
                 dropdownItemsHtml = `
                     <button onclick="printBillDirectlyFromRegister('${rec.id}');"><span style="font-size:0.95rem;">🖨️</span> Imprimer / PDF</button>
+                    <button onclick="exportBillToExcelDirectlyFromRegister('${rec.id}');"><span style="font-size:0.95rem;">📥</span> Exporter en Excel</button>
                     <button onclick="duplicateBillFromRegister('${rec.id}');"><span style="font-size:0.95rem;">👯</span> Dupliquer</button>
+                    <button onclick="openPatientDMEDrawer('${escapedName}');"><span style="font-size:0.95rem;">📂</span> Dossier Patient (DME)</button>
                     <div class="divider"></div>
                     <button disabled style="opacity:0.5; cursor:not-allowed;"><span style="font-size:0.95rem;">🔒</span> Fiche d'Avoir verrouillée</button>
                 `;
             } else if (rec.rawBill.type === 'DETAIL_ASSUR') {
                 dropdownItemsHtml = `
                     <button onclick="printBillDirectlyFromRegister('${rec.id}');"><span style="font-size:0.95rem;">🖨️</span> Imprimer / PDF</button>
+                    <button onclick="exportBillToExcelDirectlyFromRegister('${rec.id}');"><span style="font-size:0.95rem;">📥</span> Exporter en Excel</button>
                     <button onclick="duplicateBillFromRegister('${rec.id}');"><span style="font-size:0.95rem;">👯</span> Dupliquer</button>
                     <button onclick="convertProformaToDefinitifSplit('${rec.id}');"><span style="font-size:0.95rem;">📄</span> Facturer (Point)</button>
+                    <button onclick="openPatientDMEDrawer('${escapedName}');"><span style="font-size:0.95rem;">📂</span> Dossier Patient (DME)</button>
                     <div class="divider"></div>
                     <button class="btn-danger-hover" onclick="deleteRegisterItem('BILL', '${rec.id}');"><span style="font-size:0.95rem;">❌</span> Supprimer</button>
                 `;
             } else { // PROFORMA
                 dropdownItemsHtml = `
                     <button onclick="printBillDirectlyFromRegister('${rec.id}');"><span style="font-size:0.95rem;">🖨️</span> Imprimer / PDF</button>
+                    <button onclick="exportBillToExcelDirectlyFromRegister('${rec.id}');"><span style="font-size:0.95rem;">📥</span> Exporter en Excel</button>
                     <button onclick="duplicateBillFromRegister('${rec.id}');"><span style="font-size:0.95rem;">👯</span> Dupliquer</button>
                     <button onclick="generateReportFromBill('${rec.id}');"><span style="font-size:0.95rem;">📋</span> Rapport Médical</button>
                     <button onclick="convertProformaToDetailAssurance('${rec.id}');"><span style="font-size:0.95rem;">📊</span> Détail Assurance</button>
                     <button onclick="convertProformaToDefinitifSplit('${rec.id}');"><span style="font-size:0.95rem;">📄</span> Facturer (Point)</button>
+                    <button onclick="openPatientDMEDrawer('${escapedName}');"><span style="font-size:0.95rem;">📂</span> Dossier Patient (DME)</button>
                     <div class="divider"></div>
                     <button class="btn-danger-hover" onclick="deleteRegisterItem('BILL', '${rec.id}');"><span style="font-size:0.95rem;">❌</span> Supprimer</button>
                 `;
@@ -304,43 +314,46 @@ function renderRegisterTable() {
             dropdownItemsHtml = `
                 <button onclick="printArchiveDoc('${rec.id}');"><span style="font-size:0.95rem;">🖨️</span> Imprimer / PDF</button>
                 <button onclick="duplicateDocFromRegister('${rec.id}');"><span style="font-size:0.95rem;">👯</span> Dupliquer comme nouveau</button>
+                <button onclick="openPatientDMEDrawer('${escapedName}');"><span style="font-size:0.95rem;">📂</span> Dossier Patient (DME)</button>
             `;
         } else {
             // MES RAPPORTS : édition complète
             primaryActionCallback = `viewRecentItem('DOC', '${rec.id}'); window.activeBillReference='';`;
             dropdownItemsHtml = `
                 <button onclick="duplicateDocFromRegister('${rec.id}');"><span style="font-size:0.95rem;">👯</span> Dupliquer</button>
+                <button onclick="openPatientDMEDrawer('${escapedName}');"><span style="font-size:0.95rem;">📂</span> Dossier Patient (DME)</button>
+                <div class="divider"></div>
                 <button class="btn-danger-hover" onclick="deleteRegisterItem('DOC', '${rec.id}');"><span style="font-size:0.95rem;">❌</span> Supprimer</button>
             `;
         }
         
         const tr = document.createElement('tr');
         tr.innerHTML = `
-            <td style="max-width:240px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
-                <strong onclick="openPatientDMEDrawer('${rec.name.replace(/'/g, "\\'")}')" class="patient-link" title="${rec.name}" style="display:inline-flex; align-items:center; gap:8px; max-width:100%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
+            <td style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
+                <strong onclick="openPatientDMEDrawer('${escapedName}')" class="patient-link" title="${rec.name}" style="display:inline-flex; align-items:center; gap:6px; max-width:100%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
                     <span class="patient-avatar">${initials}</span>
                     <span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${rec.name}</span>
                 </strong>
             </td>
-            <td>
-                <span class="badge ${badgeClass}">${categoryText}</span>
+            <td style="overflow:hidden;">
+                <span class="badge ${badgeClass}" style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:100%; display:inline-block;">${categoryText}</span>
                 ${rec.isArchive ? '<span class="badge light" style="font-size:0.6rem; padding:2px 5px; margin-left:3px; opacity:0.7;">📚 Archive</span>' : ''}
                 ${statusBadgeHtml}
                 ${refHtml}
             </td>
-            <td style="max-width:280px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="${rec.detail}">
-                <span style="font-size:0.85rem; color:var(--text-secondary);">${rec.detail}</span>
+            <td style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="${rec.detail}">
+                <span style="font-size:0.82rem; color:var(--text-secondary);">${rec.detail}</span>
             </td>
-            <td>${insuranceHtml}</td>
-            <td style="font-weight:700; color:var(--text-primary); white-space:nowrap;">${rec.value !== 0 ? formatCurrency(rec.value) : '-'}</td>
-            <td style="font-weight:500; font-size:0.82rem; color:var(--text-secondary);">${new Date(rec.date).toLocaleDateString('fr-FR')}</td>
+            <td style="overflow:hidden;">${insuranceHtml}</td>
+            <td style="font-weight:700; color:var(--text-primary); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${rec.value !== 0 ? formatCurrency(rec.value) : '-'}</td>
+            <td style="font-weight:500; font-size:0.8rem; color:var(--text-secondary); white-space:nowrap;">${new Date(rec.date).toLocaleDateString('fr-FR')}</td>
             <td>
                 <div class="actions-cell-wrapper">
-                    <button class="btn btn-secondary btn-small" onclick="${primaryActionCallback}" style="padding:6px 12px; font-weight:800; font-size:0.78rem; display:flex; align-items:center; gap:4px;">
+                    <button class="btn btn-secondary btn-small" onclick="${primaryActionCallback}" style="padding:5px 8px; font-weight:800; font-size:0.75rem; display:flex; align-items:center; gap:3px; white-space:nowrap;">
                         <span>${rec.isArchive ? '📖 Lire' : 'Ouvrir'}</span>
                     </button>
                     <div class="dropdown-actions">
-                        <button class="dropdown-trigger" onclick="toggleRowDropdown(event, '${rec.id}')" title="Plus d'options">⋮</button>
+                        <button class="dropdown-trigger" onclick="toggleRowDropdown(event, '${rec.id}', this)" title="Plus d'options">⋮</button>
                         <div id="dropdown-menu-${rec.id}" class="dropdown-menu-content">
                             ${dropdownItemsHtml}
                         </div>
@@ -500,30 +513,51 @@ async function deleteRegisterItem(category, itemId) {
 }
 
 // Gestion du menu déroulant d'actions premium
-function toggleRowDropdown(event, id) {
+function toggleRowDropdown(event, id, triggerEl) {
     event.stopPropagation();
-    const dropdown = document.getElementById(`dropdown-menu-${id}`);
+    const dropdown = document.getElementById('dropdown-menu-' + id);
     if (!dropdown) return;
     
-    const wasShowing = dropdown.classList.contains('show');
+    // Store original parent if not already stored
+    if (!dropdown._originalParent) {
+        dropdown._originalParent = dropdown.parentElement;
+    }
     
-    // Fermer tous les menus ouverts et nettoyer leurs styles inline
-    document.querySelectorAll('.dropdown-menu-content').forEach(menu => {
-        menu.classList.remove('show');
-        menu.style.position = '';
-        menu.style.top = '';
-        menu.style.right = '';
-        menu.style.left = '';
-    });
+    const wasShowing = dropdown.classList.contains('show');
+    closeAllDropdowns(true);
     
     if (!wasShowing) {
-        const trigger = event.currentTarget;
-        const rect = trigger.getBoundingClientRect();
+        // Teleport to body to avoid container constraint bugs (transforms, filters, etc.)
+        if (dropdown.parentElement !== document.body) {
+            document.body.appendChild(dropdown);
+        }
+        
+        // triggerEl = this (le bouton), passe en argument pour eviter event.currentTarget=null
+        const btn = triggerEl || event.target;
+        const rect = btn.getBoundingClientRect();
+        
+        // Record scroll position
+        const tableContainer = dropdown._originalParent ? dropdown._originalParent.closest('.table-container') : null;
+        dropdown.dataset.openTableScrollTop = tableContainer ? tableContainer.scrollTop : 0;
+        dropdown.dataset.openTableScrollLeft = tableContainer ? tableContainer.scrollLeft : 0;
+        dropdown.dataset.openScrollTop = window.scrollY || document.documentElement.scrollTop;
+        dropdown.dataset.openScrollLeft = window.scrollX || document.documentElement.scrollLeft;
+
+        const MENU_W = 220;
+        // Aligner le bord droit du menu avec le bord droit du bouton, clamp dans viewport
+        let left = rect.right - MENU_W;
+        if (left < 8) left = 8;
+        if (left + MENU_W > window.innerWidth - 8) left = window.innerWidth - MENU_W - 8;
+        
         dropdown.style.position = 'fixed';
-        dropdown.style.top = (rect.bottom + 6) + 'px'; // Décale de 6px sous le déclencheur
-        dropdown.style.right = (window.innerWidth - rect.right) + 'px';
-        dropdown.style.left = 'auto';
+        dropdown.style.top = (rect.bottom + 4) + 'px';
+        dropdown.style.left = left + 'px';
+        dropdown.style.right = 'auto';
+        dropdown.style.width = MENU_W + 'px';
+        dropdown.style.zIndex = '99999';
         dropdown.classList.add('show');
+        dropdown.dataset.justOpened = '1';
+        setTimeout(function() { dropdown.dataset.justOpened = '0'; }, 250);
     }
 }
 
@@ -743,7 +777,7 @@ function printDMEConsolidated() {
         nomAffichage: 'Dr Gipsy AGAVOEDO',
         specialite: 'Chirurgien Orthopédiste Traumatologue',
         signature: 'assets/signature.png',
-        cachet: 'assets/cachet_centre.png',
+        cachet: 'assets/cachet_gipsy.png',
         hasSig: true
     };
 
@@ -867,20 +901,60 @@ async function duplicateDocFromRegister(itemId) {
     }
 }
 
-// Fermer tous les menus ouverts lors d'un clic ailleurs dans l'application ou lors du défilement
-function closeAllDropdowns() {
+// Fermer tous les menus ouverts lors d'un clic ailleurs ou défilement
+function closeAllDropdowns(force) {
     document.querySelectorAll('.dropdown-menu-content').forEach(menu => {
+        if (!force && menu.classList.contains('show')) {
+            const openTop = parseFloat(menu.dataset.openScrollTop || 0);
+            const openLeft = parseFloat(menu.dataset.openScrollLeft || 0);
+            const currentTop = window.scrollY || document.documentElement.scrollTop;
+            const currentLeft = window.scrollX || document.documentElement.scrollLeft;
+            
+            const tableContainer = menu._originalParent ? menu._originalParent.closest('.table-container') : null;
+            const currentTableTop = tableContainer ? tableContainer.scrollTop : 0;
+            const currentTableLeft = tableContainer ? tableContainer.scrollLeft : 0;
+            
+            const openTableTop = parseFloat(menu.dataset.openTableScrollTop || 0);
+            const openTableLeft = parseFloat(menu.dataset.openTableScrollLeft || 0);
+            
+            const diffWin = Math.abs(currentTop - openTop) + Math.abs(currentLeft - openLeft);
+            const diffTable = Math.abs(currentTableTop - openTableTop) + Math.abs(currentTableLeft - openTableLeft);
+            
+            if (diffWin < 15 && diffTable < 15) {
+                // Scroll insignifiant, on ne ferme pas !
+                return;
+            }
+        }
+
+        if (menu.dataset.justOpened === '1') return;
         menu.classList.remove('show');
         menu.style.position = '';
         menu.style.top = '';
         menu.style.right = '';
         menu.style.left = '';
+        menu.style.width = '';
+        menu.style.zIndex = '';
+        
+        // Put back to original parent to maintain DOM integrity when page re-renders/destroys, or remove if orphan
+        if (menu._originalParent) {
+            if (document.body.contains(menu._originalParent)) {
+                if (menu.parentElement !== menu._originalParent) {
+                    menu._originalParent.appendChild(menu);
+                }
+            } else {
+                menu.remove();
+            }
+        }
     });
 }
 
-document.addEventListener('click', closeAllDropdowns);
-window.addEventListener('scroll', closeAllDropdowns, { passive: true });
-document.addEventListener('scroll', closeAllDropdowns, { capture: true, passive: true });
+document.addEventListener('click', function(e) {
+    // Ne pas fermer si on clique dans un menu ouvert
+    if (e.target.closest('.dropdown-menu-content') || e.target.closest('.dropdown-actions')) return;
+    closeAllDropdowns(true);
+});
+window.addEventListener('scroll', () => closeAllDropdowns(false), { passive: true });
+document.addEventListener('scroll', () => closeAllDropdowns(false), { capture: true, passive: true });
 
 // Liaison globale à window
 window.switchRegisterTab = switchRegisterTab;

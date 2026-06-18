@@ -6,10 +6,11 @@ let mainWindow;
 
 function createWindow() {
   mainWindow = new BrowserWindow({
-    width: 1350,
-    height: 900,
+    width: 1440,
+    height: 920,
     minWidth: 1000,
     minHeight: 700,
+    center: true,
     icon: path.join(__dirname, 'assets', 'icon.png'),
     webPreferences: {
       nodeIntegration: true,
@@ -21,10 +22,13 @@ function createWindow() {
     autoHideMenuBar: true // Cache la barre de menu classique alt pour faire place à notre UI scandinave
   });
 
+  // Démarrer en plein écran pour utiliser tout l'espace disponible
+  mainWindow.maximize();
+
   // Charger le point d'entrée HTML principal
   mainWindow.loadFile('index.html');
 
-  // Ouvrir/fermer l'inspecteur via F12 ou Ctrl+Shift+I (insensible à la casse)
+  // Ouvrir/fermer l'inspecteur via F12 ou Ctrl+Shift+I, et recharger via Ctrl+R
   mainWindow.webContents.on('before-input-event', (event, input) => {
     const key = input.key.toLowerCase();
     const isCmdOrCtrl = input.control || input.meta;
@@ -37,6 +41,11 @@ function createWindow() {
         } else {
           mainWindow.webContents.openDevTools();
         }
+        event.preventDefault();
+      }
+      // Ctrl+R = recharger la fenêtre (utile en développement)
+      if (key === 'r' && isCmdOrCtrl && !isShift) {
+        mainWindow.webContents.reload();
         event.preventDefault();
       }
     }

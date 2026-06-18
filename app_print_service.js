@@ -197,12 +197,12 @@ function getConsolidatedHTMLForPDF() {
         th:nth-child(8), td:nth-child(8) { text-align: right !important; }
         .doc-flex-header { display: flex; align-items: center; gap: 12px; border-bottom: 3px solid #2d3748; padding-bottom: 10px; margin-bottom: 0; }
         .doc-flex-body { display: flex; flex-grow: 1 !important; border-bottom: 2px solid #2d3748; }
-        .doc-sidebar { width: 145px; flex-shrink: 0; border-right: 1px solid #2d3748; padding: 10px 8px; font-size: 0.62rem; }
+        .doc-sidebar { width: 180px; flex-shrink: 0; border-right: 1px solid #2d3748; padding: 10px 8px; font-size: 0.62rem; }
         .doc-main { flex: 1; padding: 10px 14px; }
         img { display: inline-block; }
         .signature-seal-container {
-            width: 150px;
-            height: 90px;
+            width: 220px;
+            height: 140px;
             position: relative;
             margin: 2px auto;
         }
@@ -210,12 +210,14 @@ function getConsolidatedHTMLForPDF() {
             position: absolute !important;
             top: 2px !important;
             left: 10px !important;
-            width: 85px !important;
+            width: 155px !important;
             height: auto !important;
             opacity: 1 !important;
             display: block !important;
             z-index: 5 !important;
             mix-blend-mode: multiply !important;
+            image-rendering: -webkit-optimize-contrast !important;
+            image-rendering: crisp-edges !important;
             -webkit-print-color-adjust: exact !important;
             print-color-adjust: exact !important;
         }
@@ -223,7 +225,7 @@ function getConsolidatedHTMLForPDF() {
             position: absolute !important;
             bottom: 2px !important;
             right: 10px !important;
-            width: 110px !important;
+            width: 160px !important;
             height: auto !important;
             display: block !important;
             z-index: 10 !important;
@@ -566,12 +568,14 @@ function printDOMElement(elementId) {
                 position: absolute !important;
                 top: 2px !important;
                 left: 10px !important;
-                width: 85px !important;
+                width: 105px !important;
                 height: auto !important;
                 opacity: 1 !important;
                 display: block !important;
                 z-index: 5 !important;
                 mix-blend-mode: multiply !important;
+                image-rendering: -webkit-optimize-contrast !important;
+                image-rendering: crisp-edges !important;
                 -webkit-print-color-adjust: exact !important;
                 print-color-adjust: exact !important;
             }

@@ -54,7 +54,7 @@ window.MercyFiatTemplates = {
 
         const sidebarContentHtml = specialites.map(s => `
             <div style="margin-bottom:16px;">
-                <div style="font-weight:900; text-decoration:underline; font-size:13px; color:#1a202c; margin-bottom:4px; line-height:1.25;">${s.spec}</div>
+                <div style="font-weight:900; text-decoration:underline; font-size:11.5px; color:#1a202c; margin-bottom:4px; line-height:1.25; white-space:nowrap;">${s.spec}</div>
                 ${s.doctors.map(d => `<div style="font-size:12px; color:#2d3748; padding-left:2px; margin-bottom:2px; font-weight:600; line-height:1.25;">${d}</div>`).join('')}
             </div>
         `).join('');
@@ -92,7 +92,7 @@ window.MercyFiatTemplates = {
             pageDiv.innerHTML = `
                 ${window.MercyFiatTemplates.getPrintHeaderHtml()}
                 <div class="doc-flex-body" style="display:flex; gap:0; flex-grow:1 !important; align-items:stretch; border-bottom:2px solid #2d3748; overflow:hidden;">
-                    <div class="doc-sidebar" style="width:150px; flex-shrink:0; border-right:1px solid #2d3748; padding:10px 8px 10px 2px; font-family:'Times New Roman',serif; align-self:stretch;">
+                    <div class="doc-sidebar" style="width:180px; flex-shrink:0; border-right:1px solid #2d3748; padding:10px 8px 10px 2px; font-family:'Times New Roman',serif; align-self:stretch;">
                         ${sidebarContentHtml}
                     </div>
                     <div class="doc-content-col" style="flex:1; padding:10px 12px; display:flex; flex-direction:column; overflow:hidden;">

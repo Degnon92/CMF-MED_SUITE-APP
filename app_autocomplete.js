@@ -679,7 +679,7 @@ function initializeDatalists() {
 window.initializeDatalists = initializeDatalists;
 
 // 3. Apprentissage automatique à l'enregistrement
-function dynamicallyLearnNewData(nom, prenom, age = "", diagnosis = "", intervention = "", kCode = "", insurer = "PRIVE", priseEnCharge = "PRIVE", matricule = "") {
+function dynamicallyLearnNewData(nom, prenom, age = "", diagnosis = "", intervention = "", kCode = "", insurer = "PRIVE", priseEnCharge = "PRIVE", matricule = "", societe = "") {
     const db = window.MercyFiatDB;
     if (!db) return;
 
@@ -687,8 +687,9 @@ function dynamicallyLearnNewData(nom, prenom, age = "", diagnosis = "", interven
     
     // A. Apprentissage patient
     if (fullName.trim() !== "") {
-        const patientExists = db.PATIENTS.some(p => p.name.toUpperCase() === fullName.toUpperCase());
-        if (!patientExists) {
+        const patientIndex = db.PATIENTS.findIndex(p => p.name.toUpperCase() === fullName.toUpperCase());
+        if (patientIndex === -1) {
+            // Nouveau patient → créer
             const newPatient = {
                 name: fullName,
                 diagnosis: diagnosis,
@@ -697,7 +698,8 @@ function dynamicallyLearnNewData(nom, prenom, age = "", diagnosis = "", interven
                 age: age,
                 insurer: insurer,
                 priseEnCharge: priseEnCharge,
-                matricule: matricule
+                matricule: matricule,
+                societe: societe || ''
             };
             db.PATIENTS.unshift(newPatient);
             if (db.savePatients) db.savePatients();
@@ -706,6 +708,36 @@ function dynamicallyLearnNewData(nom, prenom, age = "", diagnosis = "", interven
             customPatients.unshift(newPatient);
             localStorage.setItem('mercyfiat_custom_patients', JSON.stringify(customPatients));
             console.log("Appris nouveau patient :", fullName);
+        } else {
+            // Patient existant → mettre à jour les champs manquants ou enrichir
+            const existing = db.PATIENTS[patientIndex];
+            let updated = false;
+            if (age && !existing.age)           { existing.age = age; updated = true; }
+            if (diagnosis && !existing.diagnosis) { existing.diagnosis = diagnosis; updated = true; }
+            if (intervention && !existing.intervention) { existing.intervention = intervention; updated = true; }
+            if (kCode && !existing.kCode)       { existing.kCode = kCode; updated = true; }
+            if (insurer && insurer !== 'PRIVE' && existing.insurer === 'PRIVE') { existing.insurer = insurer; updated = true; }
+            if (priseEnCharge && priseEnCharge !== 'PRIVE' && (!existing.priseEnCharge || existing.priseEnCharge === 'PRIVE')) {
+                existing.priseEnCharge = priseEnCharge; updated = true;
+            }
+            if (matricule && !existing.matricule) { existing.matricule = matricule; updated = true; }
+            if (societe && !existing.societe)   { existing.societe = societe; updated = true; }
+            
+            if (updated) {
+                db.PATIENTS[patientIndex] = existing;
+                if (db.savePatients) db.savePatients();
+                
+                // Mettre à jour dans localStorage également
+                const customPatients = JSON.parse(localStorage.getItem('mercyfiat_custom_patients')) || [];
+                const cIdx = customPatients.findIndex(p => p.name.toUpperCase() === fullName.toUpperCase());
+                if (cIdx !== -1) {
+                    customPatients[cIdx] = existing;
+                } else {
+                    customPatients.unshift(existing);
+                }
+                localStorage.setItem('mercyfiat_custom_patients', JSON.stringify(customPatients));
+                console.log("Mis à jour patient :", fullName);
+            }
         }
     }
 

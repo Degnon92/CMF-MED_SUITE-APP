@@ -506,10 +506,10 @@ body {
    =========================================================================== */
 .sidebar {
 
-    width: 280px;
+    width: 240px;
     background-color: var(--bg-sidebar);
     border-right: 1px solid var(--border-color);
-    padding: 28px 16px;
+    padding: 22px 12px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -906,19 +906,19 @@ body.emerald-theme .nav-item.sub-item.active {
     flex-grow: 1;
     flex-shrink: 1;
     min-width: 0;
-    margin-left: 280px;
-    width: calc(100vw - 280px);
-    padding: 40px;
+    margin-left: 240px;
+    width: calc(100vw - 240px);
+    padding: 24px;
     overflow-y: auto;
     max-height: 100vh;
     display: flex;
     flex-direction: column;
-    gap: 30px;
+    gap: 24px;
     transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1), width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 body.sidebar-collapsed .sidebar {
-    transform: translateX(-280px) !important;
+    transform: translateX(-240px) !important;
 }
 
 body.sidebar-collapsed .main-content {
@@ -1528,8 +1528,8 @@ body.emerald-theme .cmf-doctor-card.active-doctor { background: linear-gradient(
 }
 
 .signature-seal-container {
-    width: 180px;
-    height: 110px;
+    width: 250px;
+    height: 160px;
     position: relative;
     margin: 4px auto;
 }
@@ -1538,19 +1538,21 @@ body.emerald-theme .cmf-doctor-card.active-doctor { background: linear-gradient(
     position: absolute;
     top: 2px;
     left: 10px;
-    width: 100px;
+    width: 155px;
     height: auto;
     opacity: 1;
     display: block;
     mix-blend-mode: multiply; /* efface le fond blanc - supprime le cadre visible */
     z-index: 5;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
 }
 
 .signature-img {
     position: absolute;
     bottom: 2px;
     right: 10px;
-    width: 130px;
+    width: 160px;
     height: auto;
     display: block;
     z-index: 10;
@@ -1566,22 +1568,23 @@ body.emerald-theme .cmf-doctor-card.active-doctor { background: linear-gradient(
 table {
     width: 100%;
     border-collapse: collapse;
-    margin: 15px 0;
+    margin: 6px 0;
 }
 
 th {
     background-color: rgba(234, 230, 223, 0.6);
     color: #3f4e64;
     text-align: left;
-    padding: 12px;
-    font-size: 0.85rem;
+    padding: 8px 10px;
+    font-size: 0.78rem;
     font-weight: 700;
     border-bottom: 2px solid var(--border-color);
+    white-space: nowrap;
 }
 
 td {
-    padding: 12px;
-    font-size: 0.9rem;
+    padding: 8px 10px;
+    font-size: 0.85rem;
     border-bottom: 1px solid var(--border-color);
     color: #4a5568;
 }
@@ -2438,6 +2441,28 @@ body.emerald-theme .autocomplete-suggestion.active {
     justify-content: center;
     font-size: 0.72rem;
     font-weight: 800;
+}
+
+/* Kebab menu patients (···) */
+.patient-kebab-btn {
+    font-size: 1.1rem !important;
+    letter-spacing: 2px;
+    padding: 4px 14px !important;
+    border-radius: 8px !important;
+    color: var(--text-secondary) !important;
+    border-color: var(--border-color) !important;
+    background: var(--bg-main) !important;
+    transition: all 0.15s ease !important;
+    line-height: 1;
+}
+.patient-kebab-btn:hover {
+    background: var(--border-color) !important;
+    color: var(--text-primary) !important;
+    transform: none !important;
+}
+.patient-menu-item:hover {
+    background: var(--bg-main) !important;
+    filter: brightness(0.97);
 }
 
 /* Boutons & Dropdowns d'Actions alignés au Pixel Près */
