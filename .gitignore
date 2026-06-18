@@ -6,7 +6,16 @@ npm-debug.log*
 *.json
 !package.json
 !package-lock.json
-scratch/*.json
+
+# Scripts temporaires et fichiers de travail
+scratch/
+
+# Dossier cachets source
+CACHET CMF/
+
+# Fichiers backup d'assets (cachets, signatures)
+assets/*_backup.png
+assets/*_orig_backup.png
 
 # Fichiers volumineux, builds et installateurs
 dist/
@@ -19,8 +28,6 @@ dist/
 *.pdf
 *.xlsx
 *.xls
-scratch/*.pdf
-scratch/*.xlsx
 
 # Fichiers système et logs
 *.log
